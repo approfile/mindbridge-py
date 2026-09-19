@@ -7,6 +7,13 @@ every job against the risk policy and records the outcome.
 
 The suite is self-contained: it provisions its own database directory and forces
 the provider to `mock`, so it does not depend on the caller's environment.
+
+Note on the database: `app/services/tool_queue.py` resolves its sessions with a
+module-level `from app.core.database import SessionLocal`, which captures the
+object bound at import time. A test therefore must NOT rebind
+`app.core.database.SessionLocal` and expect the worker to follow - the worker
+keeps its own reference. Keeping everything on one file-backed SQLite database
+means every import site already agrees, including the worker's own threads.
 """
 
 import os
@@ -15,11 +22,17 @@ import unittest
 import uuid
 from pathlib import Path
 
-# A clean checkout has no `target/` directory (it is git-ignored) and SQLite
-# cannot create a database file inside a directory that does not exist.
-_TEMP_DIR = Path(tempfile.mkdtemp(prefix="mindbridge-tool-governance-")).resolve()
+# The worker and the test must talk to the same file. Prefer the system temp
+# directory and fall back to a git-ignored directory inside the repository,
+# because some locked-down environments deny writes to the system temp dir.
+try:
+    _TEMP_DIR = Path(tempfile.mkdtemp(prefix="mindbridge-tool-governance-")).resolve()
+except OSError:
+    _TEMP_DIR = Path(__file__).resolve().parents[1] / ".verify-tmp" / f"tool-governance-{os.getpid()}"
 (_TEMP_DIR / "data").mkdir(parents=True, exist_ok=True)
 
+# A clean checkout has no target/ directory (it is git-ignored) and SQLite cannot
+# create a database file inside a directory that does not exist.
 os.environ["DATABASE_URL"] = "sqlite:///%s" % (_TEMP_DIR / "governance.sqlite3").as_posix()
 os.environ["AI_PROVIDER"] = "mock"
 os.environ["KNOWLEDGE_VECTOR_ENABLED"] = "false"
@@ -28,39 +41,29 @@ os.environ["TOOL_QUEUE_ENABLED"] = "false"
 os.environ["ALERT_EMAIL_DELIVERY_MODE"] = "log"
 os.environ["EXCEL_PATH"] = (_TEMP_DIR / "data" / "ledger.xlsx").as_posix()
 
-from sqlalchemy import create_engine  # noqa: E402
-from sqlalchemy.orm import sessionmaker  # noqa: E402
-
 from app.core.config import get_settings  # noqa: E402
 
+# Other test modules may have imported the app first, so the settings cache can
+# already hold a different DATABASE_URL. Clear it before the engine is built.
 get_settings.cache_clear()
 
-from app.core.database import Base  # noqa: E402
+from app.core.database import Base, SessionLocal, engine  # noqa: E402
 from app.core.enums import EmotionLabel, IntentType, RiskLevel, ToolJobKind, ToolJobStatus  # noqa: E402
 from app.models.entities import ChatSession, PsychologicalReport, ToolAuditRecord, ToolJob, UserAccount  # noqa: E402
 from app.services.tool_governance import ToolPolicyRegistry  # noqa: E402
 from app.services.tool_queue import ToolQueueService, ToolQueueWorker  # noqa: E402
 
-# A single shared connection pool keeps every session pointed at the same
-# in-memory database, which is what the worker uses when it opens its own.
-_ENGINE = create_engine("sqlite://", connect_args={"check_same_thread": False})
-_SESSION_FACTORY = sessionmaker(bind=_ENGINE, autoflush=False, autocommit=False)
-
 
 class ToolGovernanceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        # The worker opens its own sessions through app.core.database.SessionLocal,
-        # so point that module at the same in-memory database used here.
-        import app.core.database as database
-
-        database.engine = _ENGINE
-        database.SessionLocal = _SESSION_FACTORY
+        get_settings.cache_clear()
+        Base.metadata.create_all(bind=engine)
 
     def setUp(self):
-        Base.metadata.drop_all(bind=_ENGINE)
-        Base.metadata.create_all(bind=_ENGINE)
-        self.db = _SESSION_FACTORY()
+        Base.metadata.drop_all(bind=engine)
+        Base.metadata.create_all(bind=engine)
+        self.db = SessionLocal()
         user = UserAccount(username="student", display_name="Demo Student", password_hash="x", roles_csv="ROLE_USER")
         self.db.add(user)
         self.db.commit()
@@ -114,7 +117,9 @@ class ToolGovernanceTests(unittest.TestCase):
 
         worker = ToolQueueWorker(get_settings())
         try:
-            prepared = _SESSION_FACTORY()
+            # Mark the job RUNNING the way the dispatcher does, then let the
+            # worker execute it through its own session.
+            prepared = SessionLocal()
             prepared.query(ToolJob).filter(ToolJob.id == job.id).update({ToolJob.status: ToolJobStatus.RUNNING.value})
             prepared.commit()
             prepared.close()
@@ -123,9 +128,10 @@ class ToolGovernanceTests(unittest.TestCase):
         finally:
             worker.stop()
 
-        verify = _SESSION_FACTORY()
+        verify = SessionLocal()
         try:
             refreshed = verify.get(ToolJob, job.id)
+            self.assertIsNotNone(refreshed, "worker could not see the job; check that both use the same database")
             self.assertEqual(refreshed.status, ToolJobStatus.SUCCESS.value)
             audits = verify.query(ToolAuditRecord).filter(ToolAuditRecord.job_id == job.id).all()
             self.assertEqual(len(audits), 1)

@@ -18,11 +18,22 @@ import tempfile
 import unittest
 from pathlib import Path
 
-# Provision a guaranteed-writable directory. A clean checkout does not contain
-# `target/` (it is git-ignored), and SQLite cannot create a database file inside
-# a directory that does not exist.
-_TEMP_DIR = Path(tempfile.mkdtemp(prefix="mindbridge-admin-api-")).resolve()
-(_TEMP_DIR / "data").mkdir(parents=True, exist_ok=True)
+def _provision_directory(prefix: str) -> Path:
+    """Return a writable directory for the test database.
+
+    Prefers the system temp directory but falls back to a git-ignored directory
+    inside the repository, because some locked-down environments deny writes to
+    the system temp directory.
+    """
+    try:
+        candidate = Path(tempfile.mkdtemp(prefix=prefix)).resolve()
+    except OSError:
+        candidate = Path(__file__).resolve().parents[1] / ".verify-tmp" / f"{prefix}{os.getpid()}"
+    (candidate / "data").mkdir(parents=True, exist_ok=True)
+    return candidate
+
+
+_TEMP_DIR = _provision_directory("mindbridge-admin-api-")
 
 os.environ["DATABASE_URL"] = "sqlite:///%s" % (_TEMP_DIR / "admin-api.sqlite3").as_posix()
 os.environ["AI_PROVIDER"] = "mock"

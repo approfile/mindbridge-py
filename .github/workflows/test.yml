@@ -35,7 +35,9 @@ jobs:
           DATABASE_URL: sqlite:///./target/ci-test.sqlite3
           REDIS_URL: redis://127.0.0.1:6379/15
           KNOWLEDGE_VECTOR_ENABLED: "false"
-        run: python -m unittest discover -s tests -v
+        run: |
+          set -o pipefail
+          python -m unittest discover -s tests -v 2>&1 | tee target/test-output.txt
 
       # The engineering harness runs entirely on the mock provider, a temporary
       # SQLite file and in-memory short-term memory, so it needs no service or
@@ -44,12 +46,17 @@ jobs:
         env:
           AI_PROVIDER: mock
           REDIS_URL: redis://127.0.0.1:6379/15
-        run: python -m app.harness.runner
+        run: |
+          set -o pipefail
+          python -m app.harness.runner 2>&1 | tee target/harness-output.txt
 
-      - name: Upload harness reports
+      - name: Upload test and harness output
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: harness-reports
-          path: target/harness/
+          name: test-output
+          path: |
+            target/test-output.txt
+            target/harness-output.txt
+            target/harness/
           if-no-files-found: warn
