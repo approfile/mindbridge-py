@@ -703,6 +703,7 @@ GET /api/admin/conversations/{id}    → AttributeError → 500
 
 - 无 Alembic 迁移（依赖 `create_all`）；无结构化日志 / 请求 ID / Prometheus 指标；
 - LLM 调用无重试与熔断；`ChatService` 中工具分派异常只记 warning，调用方不可见；
+- MCP 工具服务基于 `mcp` 1.x 的 `FastMCP` API，因此 `requirements.txt` 将其限制在 `<2.0.0`。mcp 2.x 把它改名为 `MCPServer`（位于 `mcp.server.mcpserver`），直接升级会让工具服务启动即退出（因为降级设计，聊天不受影响，但异常只在日志里）。迁移到 2.x API 属于待办；
 - 无覆盖率门禁、无 lint / type check 配置。
 
 **产品化**

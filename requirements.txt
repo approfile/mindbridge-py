@@ -10,4 +10,8 @@ python-multipart==0.0.20
 httpx==0.28.1
 openpyxl==3.1.5
 pypdf==5.1.0
-mcp>=1.2.0; python_version >= "3.10"
+# Pin mcp below 2.0: app/mcp_tools/server.py imports FastMCP from
+# mcp.server.fastmcp, which was renamed to MCPServer in the 2.x line. Without an
+# upper bound a fresh install silently resolves to 2.x and the MCP tool server
+# fails to start.
+mcp>=1.2.0,<2.0.0; python_version >= "3.10"
