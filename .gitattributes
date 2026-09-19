@@ -1,0 +1,20 @@
+# Normalize line endings so Windows checkouts do not rewrite the whole tree and
+# shell scripts stay executable on Linux/macOS runners.
+* text=auto eol=lf
+
+*.sh text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+Dockerfile text eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.gguf binary
+*.xlsx binary
+*.sqlite3 binary
+*.bin binary

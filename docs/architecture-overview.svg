@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 700" width="1240" height="700" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" role="img" aria-label="MindBridge request pipeline architecture">
+  <title>MindBridge — end-to-end request pipeline</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6b7c"/>
+    </marker>
+    <marker id="arrowTeal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0f766e"/>
+    </marker>
+    <marker id="arrowViolet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6d28d9"/>
+    </marker>
+  </defs>
+
+  <rect width="1240" height="700" fill="#ffffff"/>
+  <text x="30" y="42" font-size="22" font-weight="700" fill="#1f2933">MindBridge — student message to safe reply (end-to-end pipeline)</text>
+  <text x="30" y="66" font-size="13" fill="#5b6b7c">Python · FastAPI · SSE · claim-based multi-agent runtime · safety gate · RAG · tool queue</text>
+  <line x1="30" y1="80" x2="1210" y2="80" stroke="#e3e8ee" stroke-width="1.5"/>
+
+  <!-- Layer 1 -->
+  <text x="30" y="106" font-size="12" font-weight="700" fill="#0f766e" letter-spacing="1">1 · CLIENT / STATIC FRONTEND</text>
+  <rect x="30" y="114" width="1180" height="74" rx="9" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.5"/>
+  <rect x="48" y="130" width="250" height="44" rx="6" fill="#ffffff" stroke="#99f6e4"/>
+  <text x="62" y="150" font-size="13" font-weight="600" fill="#134e4a">student.html · student.js</text>
+  <text x="62" y="167" font-size="11" fill="#475569">SSE typewriter stream · Basic Auth</text>
+  <rect x="314" y="130" width="250" height="44" rx="6" fill="#ffffff" stroke="#99f6e4"/>
+  <text x="328" y="150" font-size="13" font-weight="600" fill="#134e4a">admin.html · admin.js</text>
+  <text x="328" y="167" font-size="11" fill="#475569">reports · cases · tool jobs · traces</text>
+  <rect x="580" y="130" width="250" height="44" rx="6" fill="#ffffff" stroke="#99f6e4"/>
+  <text x="594" y="150" font-size="13" font-weight="600" fill="#134e4a">index.html · app.js</text>
+  <text x="594" y="167" font-size="11" fill="#475569">entry / landing shell</text>
+  <rect x="846" y="130" width="346" height="44" rx="6" fill="#ffffff" stroke="#99f6e4"/>
+  <text x="860" y="150" font-size="13" font-weight="600" fill="#134e4a">HTTP Basic Auth (roles: ROLE_USER / ROLE_ADMIN)</text>
+  <text x="860" y="167" font-size="11" fill="#475569">HTTP API also reachable via curl / TestClient</text>
+
+  <!-- Layer 2 -->
+  <text x="30" y="216" font-size="12" font-weight="700" fill="#1d4ed8" letter-spacing="1">2 · HTTP LAYER</text>
+  <rect x="30" y="224" width="1180" height="72" rx="9" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+  <rect x="48" y="240" width="268" height="42" rx="6" fill="#ffffff" stroke="#bfdbfe"/>
+  <text x="62" y="258" font-size="13" font-weight="600" fill="#1e3a8a">POST /api/chat/stream</text>
+  <text x="62" y="274" font-size="11" fill="#475569">StreamingResponse(text/event-stream)</text>
+  <rect x="332" y="240" width="268" height="42" rx="6" fill="#ffffff" stroke="#bfdbfe"/>
+  <text x="346" y="258" font-size="13" font-weight="600" fill="#1e3a8a">GET /api/profile · /api/agent/status</text>
+  <text x="346" y="274" font-size="11" fill="#475569">identity, runtime + skill readiness</text>
+  <rect x="616" y="240" width="268" height="42" rx="6" fill="#ffffff" stroke="#bfdbfe"/>
+  <text x="630" y="258" font-size="13" font-weight="600" fill="#1e3a8a">GET /api/reports/me</text>
+  <text x="630" y="274" font-size="11" fill="#475569">student-visible report history</text>
+  <rect x="900" y="240" width="292" height="42" rx="6" fill="#ffffff" stroke="#bfdbfe"/>
+  <text x="914" y="258" font-size="13" font-weight="600" fill="#1e3a8a">/api/admin/* (14 routes)</text>
+  <text x="914" y="274" font-size="11" fill="#475569">reports · cases · jobs · traces · knowledge</text>
+
+  <!-- Layer 3 -->
+  <text x="30" y="326" font-size="12" font-weight="700" fill="#b45309" letter-spacing="1">3 · AGENT RUNTIME HARNESS — app/agents/harness.py</text>
+  <rect x="30" y="334" width="1180" height="86" rx="9" fill="#fffbeb" stroke="#b45309" stroke-width="1.5"/>
+  <text x="48" y="358" font-size="14" font-weight="700" fill="#78350f">MindBridgeAgentHarness.run()</text>
+  <text x="48" y="380" font-size="11.5" fill="#57534e">sanitize input → resolve session → invoke agent runtime → persist messages → create psychological report</text>
+  <text x="48" y="399" font-size="11.5" fill="#57534e">→ save agent trace → build tool plan → dispatch tools after the stream ends</text>
+  <text x="48" y="414" font-size="11" fill="#92400e">The HTTP layer stays thin: authentication + SSE framing only.</text>
+
+  <!-- Layer 4 -->
+  <text x="30" y="452" font-size="12" font-weight="700" fill="#6d28d9" letter-spacing="1">4 · CLAIM-BASED MULTI-AGENT RUNTIME</text>
+  <rect x="30" y="460" width="1180" height="112" rx="9" fill="#f5f3ff" stroke="#6d28d9" stroke-width="1.5"/>
+  <rect x="48" y="478" width="196" height="78" rx="6" fill="#ffffff" stroke="#ddd6fe"/>
+  <text x="62" y="498" font-size="13" font-weight="600" fill="#4c1d95">CoordinatorAgent</text>
+  <text x="62" y="516" font-size="10.5" fill="#475569">task board, budget,</text>
+  <text x="62" y="531" font-size="10.5" fill="#475569">safety gate, conflict</text>
+  <text x="62" y="546" font-size="10.5" fill="#475569">arbitration, acceptance</text>
+  <rect x="256" y="478" width="176" height="78" rx="6" fill="#ffffff" stroke="#ddd6fe"/>
+  <text x="270" y="498" font-size="13" font-weight="600" fill="#4c1d95">UnderstandingAgent</text>
+  <text x="270" y="516" font-size="10.5" fill="#475569">intent artifact</text>
+  <text x="270" y="531" font-size="10.5" fill="#475569">CHAT / CONSULT / RISK</text>
+  <rect x="444" y="478" width="176" height="78" rx="6" fill="#ffffff" stroke="#ddd6fe"/>
+  <text x="458" y="498" font-size="13" font-weight="600" fill="#4c1d95">SafetyAgent</text>
+  <text x="458" y="516" font-size="10.5" fill="#475569">risk artifact,</text>
+  <text x="458" y="531" font-size="10.5" fill="#475569">SAFETY_OVERRIDE,</text>
+  <text x="458" y="546" font-size="10.5" fill="#475569">response critique</text>
+  <rect x="632" y="478" width="176" height="78" rx="6" fill="#ffffff" stroke="#ddd6fe"/>
+  <text x="646" y="498" font-size="13" font-weight="600" fill="#4c1d95">ContextAgent</text>
+  <text x="646" y="516" font-size="10.5" fill="#475569">memory brief,</text>
+  <text x="646" y="531" font-size="10.5" fill="#475569">RAG evidence,</text>
+  <text x="646" y="546" font-size="10.5" fill="#475569">skill constraints</text>
+  <rect x="820" y="478" width="176" height="78" rx="6" fill="#ffffff" stroke="#ddd6fe"/>
+  <text x="834" y="498" font-size="13" font-weight="600" fill="#4c1d95">ResponseAgent</text>
+  <text x="834" y="516" font-size="10.5" fill="#475569">response_proposal</text>
+  <text x="834" y="531" font-size="10.5" fill="#475569">prompt plan</text>
+  <rect x="1008" y="478" width="184" height="78" rx="6" fill="#ffffff" stroke="#ddd6fe"/>
+  <text x="1022" y="498" font-size="13" font-weight="600" fill="#4c1d95">CollaborationBlackboard</text>
+  <text x="1022" y="516" font-size="10.5" fill="#475569">append-only: tasks,</text>
+  <text x="1022" y="531" font-size="10.5" fill="#475569">events, messages,</text>
+  <text x="1022" y="546" font-size="10.5" fill="#475569">artifacts</text>
+
+  <!-- Layer 5 -->
+  <text x="30" y="600" font-size="12" font-weight="700" fill="#0e7490" letter-spacing="1">5 · SERVICES &amp; PERSISTENCE</text>
+  <rect x="30" y="608" width="1180" height="66" rx="9" fill="#ecfeff" stroke="#0e7490" stroke-width="1.5"/>
+  <rect x="48" y="622" width="216" height="40" rx="6" fill="#ffffff" stroke="#a5f3fc"/>
+  <text x="62" y="640" font-size="12" font-weight="600" fill="#155e75">KnowledgeService</text>
+  <text x="62" y="655" font-size="10.5" fill="#475569">BM25 + vector fusion + rerank</text>
+  <rect x="276" y="622" width="200" height="40" rx="6" fill="#ffffff" stroke="#a5f3fc"/>
+  <text x="290" y="640" font-size="12" font-weight="600" fill="#155e75">AiClient / Provider</text>
+  <text x="290" y="655" font-size="10.5" fill="#475569">ollama · openai-compatible · mock</text>
+  <rect x="488" y="622" width="200" height="40" rx="6" fill="#ffffff" stroke="#a5f3fc"/>
+  <text x="502" y="640" font-size="12" font-weight="600" fill="#155e75">ToolQueueService</text>
+  <text x="502" y="655" font-size="10.5" fill="#475569">retry · rate limit · dead letter</text>
+  <rect x="700" y="622" width="200" height="40" rx="6" fill="#ffffff" stroke="#a5f3fc"/>
+  <text x="714" y="640" font-size="12" font-weight="600" fill="#155e75">ToolGovernanceService</text>
+  <text x="714" y="655" font-size="10.5" fill="#475569">risk-scoped policy + audit</text>
+  <rect x="912" y="622" width="280" height="40" rx="6" fill="#ffffff" stroke="#a5f3fc"/>
+  <text x="926" y="640" font-size="12" font-weight="600" fill="#155e75">MySQL/SQLAlchemy · Redis · Chroma · xlsx · SMTP</text>
+  <text x="926" y="655" font-size="10.5" fill="#475569">13 ORM tables · 24h short-term memory · vector store</text>
+
+  <!-- Vertical flow arrows -->
+  <line x1="620" y1="188" x2="620" y2="220" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <line x1="620" y1="296" x2="620" y2="330" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <line x1="620" y1="420" x2="620" y2="456" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <line x1="620" y1="572" x2="620" y2="604" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- SSE return path -->
+  <path d="M 100 224 L 100 196 L 240 196 L 240 188" fill="none" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrowTeal)"/>
+  <text x="112" y="212" font-size="10.5" fill="#0f766e">SSE: meta → token → done</text>
+</svg>
