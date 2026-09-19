@@ -4,6 +4,9 @@
 the queue worker, so `tool_audit_records` stayed permanently empty and
 `GET /api/admin/tool-audits` always returned nothing. The worker now authorizes
 every job against the risk policy and records the outcome.
+
+The suite is self-contained: it provisions its own database directory and forces
+the provider to `mock`, so it does not depend on the caller's environment.
 """
 
 import os
@@ -12,38 +15,52 @@ import unittest
 import uuid
 from pathlib import Path
 
-_TEMP_DIR = Path(tempfile.mkdtemp(prefix="mindbridge-tool-governance-"))
-os.environ["DATABASE_URL"] = f"sqlite:///{(_TEMP_DIR / 'governance.sqlite3').as_posix()}"
+# A clean checkout has no `target/` directory (it is git-ignored) and SQLite
+# cannot create a database file inside a directory that does not exist.
+_TEMP_DIR = Path(tempfile.mkdtemp(prefix="mindbridge-tool-governance-")).resolve()
+(_TEMP_DIR / "data").mkdir(parents=True, exist_ok=True)
+
+os.environ["DATABASE_URL"] = "sqlite:///%s" % (_TEMP_DIR / "governance.sqlite3").as_posix()
 os.environ["AI_PROVIDER"] = "mock"
 os.environ["KNOWLEDGE_VECTOR_ENABLED"] = "false"
+os.environ["KNOWLEDGE_VECTOR_REQUIRED"] = "false"
 os.environ["TOOL_QUEUE_ENABLED"] = "false"
 os.environ["ALERT_EMAIL_DELIVERY_MODE"] = "log"
-os.environ["EXCEL_PATH"] = (_TEMP_DIR / "ledger.xlsx").as_posix()
+os.environ["EXCEL_PATH"] = (_TEMP_DIR / "data" / "ledger.xlsx").as_posix()
 
 from sqlalchemy import create_engine  # noqa: E402
 from sqlalchemy.orm import sessionmaker  # noqa: E402
 
 from app.core.config import get_settings  # noqa: E402
+
+get_settings.cache_clear()
+
 from app.core.database import Base  # noqa: E402
 from app.core.enums import EmotionLabel, IntentType, RiskLevel, ToolJobKind, ToolJobStatus  # noqa: E402
 from app.models.entities import ChatSession, PsychologicalReport, ToolAuditRecord, ToolJob, UserAccount  # noqa: E402
 from app.services.tool_governance import ToolPolicyRegistry  # noqa: E402
 from app.services.tool_queue import ToolQueueService, ToolQueueWorker  # noqa: E402
 
+# A single shared connection pool keeps every session pointed at the same
+# in-memory database, which is what the worker uses when it opens its own.
+_ENGINE = create_engine("sqlite://", connect_args={"check_same_thread": False})
+_SESSION_FACTORY = sessionmaker(bind=_ENGINE, autoflush=False, autocommit=False)
+
 
 class ToolGovernanceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        get_settings.cache_clear()
-        cls.settings = get_settings()
-        cls.engine = create_engine(cls.settings.database_url, connect_args={"check_same_thread": False})
-        cls.Session = sessionmaker(bind=cls.engine, autoflush=False, autocommit=False)
-        Base.metadata.create_all(bind=cls.engine)
+        # The worker opens its own sessions through app.core.database.SessionLocal,
+        # so point that module at the same in-memory database used here.
+        import app.core.database as database
+
+        database.engine = _ENGINE
+        database.SessionLocal = _SESSION_FACTORY
 
     def setUp(self):
-        Base.metadata.drop_all(bind=self.engine)
-        Base.metadata.create_all(bind=self.engine)
-        self.db = self.Session()
+        Base.metadata.drop_all(bind=_ENGINE)
+        Base.metadata.create_all(bind=_ENGINE)
+        self.db = _SESSION_FACTORY()
         user = UserAccount(username="student", display_name="Demo Student", password_hash="x", roles_csv="ROLE_USER")
         self.db.add(user)
         self.db.commit()
@@ -91,13 +108,13 @@ class ToolGovernanceTests(unittest.TestCase):
         self.assertEqual(policy.allowed_risks, (RiskLevel.HIGH.value,))
 
     def test_worker_writes_an_audit_record_for_each_executed_job(self):
-        jobs = ToolQueueService(self.db, self.settings).enqueue_report(self.report.id, self.report.risk_level)
+        jobs = ToolQueueService(self.db, get_settings()).enqueue_report(self.report.id, self.report.risk_level)
         self.assertEqual(len(jobs), 3)
         job = next(item for item in jobs if item.kind == ToolJobKind.EXCEL_REPORT.value)
 
-        worker = ToolQueueWorker(self.settings)
+        worker = ToolQueueWorker(get_settings())
         try:
-            prepared = self.Session()
+            prepared = _SESSION_FACTORY()
             prepared.query(ToolJob).filter(ToolJob.id == job.id).update({ToolJob.status: ToolJobStatus.RUNNING.value})
             prepared.commit()
             prepared.close()
@@ -106,7 +123,7 @@ class ToolGovernanceTests(unittest.TestCase):
         finally:
             worker.stop()
 
-        verify = self.Session()
+        verify = _SESSION_FACTORY()
         try:
             refreshed = verify.get(ToolJob, job.id)
             self.assertEqual(refreshed.status, ToolJobStatus.SUCCESS.value)

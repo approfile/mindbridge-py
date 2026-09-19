@@ -5,27 +5,45 @@ declared at module level by mistake, so every admin request that used them
 raised `AttributeError` and returned HTTP 500. The engineering harness never
 covered those three routes, so the breakage stayed invisible. These tests call
 the real routes through `TestClient` to keep that from happening again.
+
+The suite is self-contained: it provisions its own database directory under the
+system temp directory and forces the provider to `mock`, so it does not depend
+on any environment variable the caller happens to have set.
 """
 
 import base64
 import os
+import re
 import tempfile
 import unittest
 from pathlib import Path
 
-_TEMP_DIR = Path(tempfile.mkdtemp(prefix="mindbridge-admin-api-"))
-os.environ["DATABASE_URL"] = f"sqlite:///{(_TEMP_DIR / 'admin-api.sqlite3').as_posix()}"
+# Provision a guaranteed-writable directory. A clean checkout does not contain
+# `target/` (it is git-ignored), and SQLite cannot create a database file inside
+# a directory that does not exist.
+_TEMP_DIR = Path(tempfile.mkdtemp(prefix="mindbridge-admin-api-")).resolve()
+(_TEMP_DIR / "data").mkdir(parents=True, exist_ok=True)
+
+os.environ["DATABASE_URL"] = "sqlite:///%s" % (_TEMP_DIR / "admin-api.sqlite3").as_posix()
 os.environ["AI_PROVIDER"] = "mock"
 os.environ["AGENT_FRAMEWORK"] = "event_driven_multi_agent"
 os.environ["KNOWLEDGE_VECTOR_ENABLED"] = "false"
 os.environ["KNOWLEDGE_VECTOR_REQUIRED"] = "false"
 os.environ["TOOL_QUEUE_ENABLED"] = "false"
 os.environ["ALERT_EMAIL_DELIVERY_MODE"] = "log"
-os.environ["EXCEL_PATH"] = (_TEMP_DIR / "ledger.xlsx").as_posix()
+os.environ["EXCEL_PATH"] = (_TEMP_DIR / "data" / "ledger.xlsx").as_posix()
+
+from app.core.config import get_settings  # noqa: E402
+
+# Other test modules may have imported the app package first, so the settings
+# cache can already hold a different DATABASE_URL. Clear it before the app and
+# the database engine are built.
+get_settings.cache_clear()
 
 from fastapi.testclient import TestClient  # noqa: E402
 
-from app.core.config import get_settings  # noqa: E402
+from app.core.bootstrap import create_schema, seed_data  # noqa: E402
+from app.core.database import SessionLocal  # noqa: E402
 from app.main import create_app  # noqa: E402
 
 
@@ -37,7 +55,12 @@ def basic_auth(username: str, password: str) -> dict[str, str]:
 class AdminApiRouteTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        get_settings.cache_clear()
+        create_schema()
+        db = SessionLocal()
+        try:
+            seed_data(db)
+        finally:
+            db.close()
         cls.app = create_app()
         cls.client = TestClient(cls.app)
         cls.client.__enter__()
@@ -55,7 +78,9 @@ class AdminApiRouteTests(unittest.TestCase):
             json={"message": "我最近压力很大，晚上总是睡不着。"},
         )
         self.assertEqual(chat.status_code, 200)
-        session_id = chat.text.split('"sessionId": "')[1].split('"')[0]
+        match = re.search(r'"sessionId":\s*"([0-9a-f]+)"', chat.text)
+        self.assertIsNotNone(match, "chat stream did not expose a sessionId: %r" % chat.text[:200])
+        session_id = match.group(1)
 
         traces = self.client.get("/api/admin/agent-traces", headers=self.admin_auth)
         self.assertEqual(traces.status_code, 200)

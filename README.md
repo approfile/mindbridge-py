@@ -601,7 +601,9 @@ harness 的 RAG suite 会对这些指标断言阈值（`hitRate ≥ 0.95`、`rec
 
 ### 全量 Harness 结果
 
-`python -m app.harness.runner` 在 mock 模型 + 临时 SQLite 环境下运行 6 组 suite（Risk Safety / Agent Routing / Standard Skills / RAG / API / Tool Queue），任一组失败进程返回非 0。产物写入 `target/harness/harness-report.json` 与 `target/harness/rag-eval-report.json`；CI 中的 `python -m unittest discover -s tests` 覆盖单元测试与路由回归测试。
+`python -m app.harness.runner` 在 mock 模型 + 临时 SQLite 环境下运行 6 组 suite（Risk Safety / Agent Routing / Standard Skills / RAG / API / Tool Queue），任一组失败进程返回非 0。产物写入 `target/harness/harness-report.json` 与 `target/harness/rag-eval-report.json`。
+
+CI（`.github/workflows/test.yml`）在每次 push 时依次执行：依赖安装 → 编译检查 → `python -m unittest discover -s tests` → `python -m app.harness.runner`，并把 harness 报告作为 build artifact 上传。**harness 全部使用 mock provider、临时 SQLite 和内存版短期记忆，因此 CI 不需要任何外部服务或 API Key。**
 
 上表中的 RAG 指标另行由 `python scripts/verify_offline.py` 实测产出——该脚本在**缺少 FastAPI / Redis / Chroma 依赖的环境**下用最小桩模块跑通真实代码路径（黑板的 claim 写回、工具策略门闸与审计落库、`ReportService` 管理方法、以及 60 条评测集的完整检索评测），因此可以在这类受限环境中复现。完整 harness 与单元测试需要先 `pip install -r requirements.txt`。
 
