@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 772" width="1100" height="772" font-family="Segoe UI, Roboto, Helvetica, Arial, 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif" role="img" aria-label="RAG pipeline: retrieval routing, hybrid vector + BM25 recall, normalization, weighted fusion, deterministic rerank, context expansion and a three-layer degradation ladder">
+  <title>MindBridge — routed hybrid retrieval with explicit fallbacks</title>
+  <defs>
+    <marker id="mk-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path class="mg" d="M 0 0 L 10 5 L 0 10 z"/></marker>
+    <marker id="mk-violet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path class="mv" d="M 0 0 L 10 5 L 0 10 z"/></marker>
+    <marker id="mk-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path class="mr" d="M 0 0 L 10 5 L 0 10 z"/></marker>
+    <marker id="mk-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path class="mb" d="M 0 0 L 10 5 L 0 10 z"/></marker>
+    <marker id="mk-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path class="mt" d="M 0 0 L 10 5 L 0 10 z"/></marker>
+    <marker id="mk-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path class="mgr" d="M 0 0 L 10 5 L 0 10 z"/></marker>
+    <marker id="mk-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path class="ma" d="M 0 0 L 10 5 L 0 10 z"/></marker>
+    <marker id="mk-slate" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path class="ms" d="M 0 0 L 10 5 L 0 10 z"/></marker>
+  </defs>
+  <style>
+  svg {
+    --bg:#ffffff; --ink:#1c2530; --ink-strong:#0f172a; --muted:#5b6b7c; --muted-2:#64748b;
+    --line:#e3e8ee; --card:#ffffff; --card-border:#cbd5e1; --arrow:#5b6b7c; --arrow-strong:#334155;
+    --violet:#6d28d9; --violet-fill:#f5f3ff; --violet-line:#ddd6fe; --violet-ink:#4c1d95;
+    --red:#b91c1c; --red-fill:#fef2f2; --red-line:#fecaca; --red-ink:#7f1d1d;
+    --blue:#1d4ed8; --blue-fill:#eff6ff; --blue-line:#bfdbfe; --blue-ink:#1e3a8a;
+    --teal:#0f766e; --teal-fill:#f0fdfa; --teal-line:#99f6e4; --teal-ink:#134e4a;
+    --green:#15803d; --green-fill:#f0fdf4; --green-line:#bbf7d0; --green-ink:#14532d;
+    --amber:#b45309; --amber-fill:#fffbeb; --amber-line:#fde68a; --amber-ink:#78350f;
+    --slate:#334155; --slate-fill:#f8fafc; --slate-line:#cbd5e1; --slate-ink:#0f172a;
+    --cyan:#0e7490; --cyan-fill:#ecfeff; --cyan-line:#a5f3fc; --cyan-ink:#155e75;
+  }
+  @media (prefers-color-scheme: dark) {
+    svg {
+      --bg:#0d1117; --ink:#e6edf3; --ink-strong:#f0f6fc; --muted:#9da9b6; --muted-2:#8b949e;
+      --line:#30363d; --card:#151b23; --card-border:#30363d; --arrow:#8b949e; --arrow-strong:#c9d1d9;
+      --violet:#a78bfa; --violet-fill:#1b1630; --violet-line:#4c1d95; --violet-ink:#c4b5fd;
+      --red:#f87171; --red-fill:#2a1316; --red-line:#7f1d1d; --red-ink:#fca5a5;
+      --blue:#60a5fa; --blue-fill:#0f1a33; --blue-line:#1e3a8a; --blue-ink:#93c5fd;
+      --teal:#2dd4bf; --teal-fill:#082420; --teal-line:#115e59; --teal-ink:#5eead4;
+      --green:#4ade80; --green-fill:#0b2415; --green-line:#14532d; --green-ink:#86efac;
+      --amber:#fbbf24; --amber-fill:#271d0b; --amber-line:#78350f; --amber-ink:#fcd34d;
+      --slate:#94a3b8; --slate-fill:#151b23; --slate-line:#30363d; --slate-ink:#e6edf3;
+      --cyan:#22d3ee; --cyan-fill:#07222a; --cyan-line:#155e75; --cyan-ink:#67e8f9;
+    }
+  }
+  .bg{fill:var(--bg)}
+  .ink{fill:var(--ink)} .inks{fill:var(--ink-strong)} .mut{fill:var(--muted)} .mut2{fill:var(--muted-2)}
+  .div{stroke:var(--line)}
+  .card{fill:var(--card)} .cardline{stroke:var(--card-border)}
+  .fv{fill:var(--violet-fill)} .sv{stroke:var(--violet)} .tv{fill:var(--violet-ink)}
+  .fr{fill:var(--red-fill)} .sr{stroke:var(--red)} .tr{fill:var(--red-ink)}
+  .fb{fill:var(--blue-fill)} .sb{stroke:var(--blue)} .tb{fill:var(--blue-ink)}
+  .ft{fill:var(--teal-fill)} .st{stroke:var(--teal)} .tt{fill:var(--teal-ink)}
+  .fg{fill:var(--green-fill)} .sg{stroke:var(--green)} .tg{fill:var(--green-ink)}
+  .fa{fill:var(--amber-fill)} .sa{stroke:var(--amber)} .ta{fill:var(--amber-ink)}
+  .fs{fill:var(--slate-fill)} .ss{stroke:var(--slate)} .ts{fill:var(--slate-ink)}
+  .fc{fill:var(--cyan-fill)} .sc{stroke:var(--cyan)} .tc{fill:var(--cyan-ink)}
+  .lg{stroke:var(--arrow)} .lv{stroke:var(--violet)} .lr{stroke:var(--red)} .lb{stroke:var(--blue)}
+  .lt{stroke:var(--teal)} .lgr{stroke:var(--green)} .la{stroke:var(--amber)} .ls{stroke:var(--slate)}
+  .mg{fill:var(--arrow)} .mv{fill:var(--violet)} .mr{fill:var(--red)} .mb{fill:var(--blue)}
+  .mt{fill:var(--teal)} .mgr{fill:var(--green)} .ma{fill:var(--amber)} .ms{fill:var(--slate)}
+</style>
+  <rect class="bg" width="1100" height="772"/>
+  <text x="28" y="36" font-size="23" class="inks" font-weight="700">Routed hybrid retrieval — BM25 + vector fusion, with explicit fallbacks</text>
+  <text x="28" y="60" font-size="13.5" class="mut">ContextAgent retrieves only when evidence matters; at a few-hundred-chunk corpus the rerank step is a deterministic formula, not a cross-encoder</text>
+  <text x="1072" y="36" font-size="10.5" class="mut2" text-anchor="end" letter-spacing="1.6">MINDBRIDGE · RAG PIPELINE</text>
+  <line x1="28" y1="76" x2="1072" y2="76" class="div" stroke-width="1.4"/>
+  <rect x="28" y="90" width="1044" height="74" rx="10" class="ft st" stroke-width="1.6"/>
+  <text x="44" y="114" font-size="14" class="tt" font-weight="700">Routing — retrieve only when evidence is likely to matter</text>
+  <rect x="44" y="124" width="410" height="28" rx="6" class="card ct" stroke-width="1.0"/>
+  <text x="54" y="143" font-size="12.5" class="ink">intent ∈ {CONSULT, RISK}   OR   risk ∈ {MEDIUM, HIGH}</text>
+  <rect x="500" y="100" width="250" height="54" rx="7" class="card cardline" stroke-width="1.0"/>
+  <text x="512" y="118" font-size="12" class="inks" font-weight="700">CHAT / low risk</text>
+  <text x="512" y="134" font-size="11.5" class="mut">skip retrieval · 0 docs</text>
+  <text x="512" y="148" font-size="11" class="mut2">asserted by harness</text>
+  <rect x="770" y="100" width="284" height="54" rx="7" class="card ct" stroke-width="1.2"/>
+  <text x="782" y="118" font-size="12" class="tt" font-weight="700">CONSULT / RISK</text>
+  <text x="782" y="134" font-size="11.5" class="mut">hybrid recall + rerank below</text>
+  <text x="782" y="148" font-size="11" class="mut2">MEDIUM risk also retrieves</text>
+  <rect x="28" y="198" width="330" height="88" rx="9" class="fb sb" stroke-width="1.5"/>
+  <text x="44" y="222" font-size="13.5" class="tb" font-weight="700">1 · Query rewrite</text>
+  <text x="44" y="243" font-size="12" class="mut">LLM rewrite into Chinese retrieval terms</text>
+  <text x="44" y="260" font-size="12" class="mut">truncated to 60 characters</text>
+  <rect x="390" y="198" width="350" height="88" rx="9" class="ft st" stroke-width="1.5"/>
+  <text x="406" y="222" font-size="13.5" class="tt" font-weight="700">2 · Hybrid recall</text>
+  <text x="406" y="243" font-size="12" class="mut">vector: Chroma cosine, 1 / (1 + distance)</text>
+  <text x="406" y="260" font-size="12" class="mut">BM25: k1=1.5 · b=0.75 · CJK bigrams</text>
+  <rect x="772" y="198" width="300" height="88" rx="9" class="fs ss" stroke-width="1.5"/>
+  <text x="788" y="222" font-size="13.5" class="ts" font-weight="700">3 · Normalize</text>
+  <text x="788" y="243" font-size="12" class="mut">min-max per channel, separately</text>
+  <text x="788" y="260" font-size="12" class="mut">so fusion compares like with like</text>
+  <line x1="358" y1="242" x2="386" y2="242" class="lgray" stroke-width="1.6" marker-end="url(#mk-gray)"/>
+  <line x1="740" y1="242" x2="768" y2="242" class="lgray" stroke-width="1.6" marker-end="url(#mk-gray)"/>
+  <rect x="28" y="342" width="300" height="88" rx="9" class="fv sv" stroke-width="1.5"/>
+  <text x="44" y="366" font-size="13.5" class="tv" font-weight="700">4 · Weighted fusion</text>
+  <text x="44" y="387" font-size="12" class="mut">0.65 × vector + 0.35 × BM25</text>
+  <text x="44" y="404" font-size="12" class="mut">vector empty → vector weight 0</text>
+  <rect x="360" y="342" width="360" height="88" rx="9" class="fg sg" stroke-width="1.5"/>
+  <text x="376" y="366" font-size="13.5" class="tg" font-weight="700">5 · Deterministic rerank</text>
+  <text x="376" y="387" font-size="12" class="mut">0.55 base + 0.25 lexical</text>
+  <text x="376" y="404" font-size="12" class="mut">+ 0.15 coverage + 0.05 phrase</text>
+  <rect x="752" y="342" width="320" height="88" rx="9" class="fc sc" stroke-width="1.5"/>
+  <text x="768" y="366" font-size="13.5" class="tc" font-weight="700">6 · Context expand</text>
+  <text x="768" y="387" font-size="12" class="mut">top-1 + one adjacent chunk (±1)</text>
+  <text x="768" y="404" font-size="12" class="mut">→ evidence handed to ContextAgent</text>
+  <line x1="328" y1="386" x2="356" y2="386" class="lgray" stroke-width="1.6" marker-end="url(#mk-gray)"/>
+  <line x1="720" y1="386" x2="748" y2="386" class="lgray" stroke-width="1.6" marker-end="url(#mk-gray)"/>
+  <path d="M 922 286 V 312 H 178 V 338" fill="none" class="lg" stroke-width="1.6" marker-end="url(#mk-gray)"/>
+  <text x="550" y="306" font-size="11.5" class="mut2" text-anchor="middle">ranked candidates</text>
+  <rect x="28" y="456" width="1044" height="62" rx="9" class="fa sa" stroke-width="1.4"/>
+  <text x="44" y="478" font-size="13.5" class="ta" font-weight="700">Design trade-off — no cross-encoder reranker</text>
+  <text x="44" y="499" font-size="12" class="ink">At a few hundred chunks a formula is cheaper, predictable and auditable; a ~500 MB reranker would not pay for itself in deploy cost or latency.</text>
+  <rect x="28" y="536" width="1044" height="178" rx="10" class="fr sr" stroke-width="1.6"/>
+  <text x="44" y="560" font-size="14" class="tr" font-weight="700">Three-layer fallback — degradation is explicit, never silent</text>
+  <rect x="44" y="574" width="497" height="58" rx="7" class="card cr" stroke-width="1.2"/>
+  <text x="56" y="591" font-size="10.5" class="tr" font-weight="700" letter-spacing="0.8">CONSTRUCT</text>
+  <text x="56" y="608" font-size="12" class="ink">no OPENAI_API_KEY or chromadb missing → can_embed = False,</text>
+  <text x="56" y="624" font-size="12" class="mut">readable reason is recorded</text>
+  <rect x="555" y="574" width="497" height="58" rx="7" class="card cr" stroke-width="1.2"/>
+  <text x="567" y="591" font-size="10.5" class="tr" font-weight="700" letter-spacing="0.8">CONSTRUCT + REQUIRED</text>
+  <text x="567" y="608" font-size="12" class="ink">KNOWLEDGE_VECTOR_REQUIRED=true → VectorStoreUnavailable,</text>
+  <text x="567" y="624" font-size="12" class="mut">fast fail for acceptance runs</text>
+  <rect x="44" y="642" width="497" height="58" rx="7" class="card cr" stroke-width="1.2"/>
+  <text x="56" y="659" font-size="10.5" class="tr" font-weight="700" letter-spacing="0.8">RETRIEVAL</text>
+  <text x="56" y="676" font-size="12" class="ink">embedding / Chroma error → BM25-only + warning; required=true</text>
+  <text x="56" y="692" font-size="12" class="mut">→ exception is re-thrown</text>
+  <rect x="555" y="642" width="497" height="58" rx="7" class="card cr" stroke-width="1.2"/>
+  <text x="567" y="659" font-size="10.5" class="tr" font-weight="700" letter-spacing="0.8">FUSION</text>
+  <text x="567" y="676" font-size="12" class="ink">vector candidates empty → vector weight drops to 0</text>
+  <text x="567" y="692" font-size="12" class="mut">→ equivalent to pure BM25 + rerank</text>
+  <rect x="28" y="726" width="1044" height="32" rx="8" class="fs ss" stroke-width="1.0"/>
+  <text x="44" y="746" font-size="11" class="mut">Status: GET /api/admin/knowledge/status → primaryRetrieval · fallbackRetrieval · vectorAvailable · vectorError        |        Eval: 60 cases · HitRate@4 · Recall@4 · Precision@4 · MRR · NDCG@4</text>
+</svg>
