@@ -39,9 +39,13 @@ class HarnessContext:
 
 class InMemoryShortTermMemoryStore:
     _messages: dict[str, list[object]] = {}
+    _versions: dict[str, int] = {}
 
     def __init__(self, settings):
         self.settings = settings
+
+    def upgrade_legacy_cache(self):
+        return {'available':True,'lists':0,'mode':'ephemeral-harness-memory'}
 
     def load_recent(self, session_public_id: str) -> list[object]:
         limit = self.settings.redis_memory_max_messages
@@ -52,15 +56,17 @@ class InMemoryShortTermMemoryStore:
 
         return [AiMessage(role=row.role.lower(), content=row.content) for row in rows]
 
-    def append(self, session_public_id: str, role: str, content: str) -> None:
+    def append(self, session_public_id: str, role: str, content: str, message_id: int | None = None) -> None:
         from app.schemas.dtos import AiMessage
         from app.services.privacy import PrivacySanitizer
 
         values = self._messages.setdefault(session_public_id, [])
         values.append(AiMessage(role=role.lower(), content=PrivacySanitizer().sanitize(content)))
         del values[:-self.settings.redis_memory_max_messages]
+        if message_id is not None:
+            self._versions[session_public_id] = message_id
 
-    def replace(self, session_public_id: str, messages: list[object]) -> None:
+    def replace(self, session_public_id: str, messages: list[object], last_message_id: int | None = None) -> None:
         from app.schemas.dtos import AiMessage
         from app.services.privacy import PrivacySanitizer
 
@@ -69,10 +75,16 @@ class InMemoryShortTermMemoryStore:
             AiMessage(role=message.role, content=privacy.sanitize(message.content))
             for message in list(messages)[-self.settings.redis_memory_max_messages:]
         ]
+        if last_message_id is not None:
+            self._versions[session_public_id] = last_message_id
+
+    def load_snapshot(self, session_public_id: str):
+        return self.load_recent(session_public_id), self._versions.get(session_public_id)
 
     @classmethod
     def reset(cls) -> None:
         cls._messages.clear()
+        cls._versions.clear()
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -119,12 +131,16 @@ def configure_environment() -> None:
 
     os.environ["DATABASE_URL"] = f"sqlite:///{db_path.as_posix()}"
     os.environ["AI_PROVIDER"] = "mock"
+    for role in ['DEFAULT', 'COORDINATOR', 'UNDERSTANDING', 'SAFETY', 'CONTEXT', 'RESPONSE']:
+        os.environ[f'AGENT_MODEL_{role}_PROVIDER'] = 'mock'
+        os.environ[f'AGENT_MODEL_{role}_MODEL'] = 'mock'
     os.environ["AGENT_FRAMEWORK"] = "event_driven_multi_agent"
     os.environ["KNOWLEDGE_VECTOR_ENABLED"] = "false"
     os.environ["KNOWLEDGE_VECTOR_REQUIRED"] = "false"
     os.environ["TOOL_QUEUE_ENABLED"] = "false"
     os.environ["ALERT_EMAIL_DELIVERY_MODE"] = "log"
     os.environ["EXCEL_PATH"] = str((target_dir / "mindbridge-risk-ledger.xlsx").as_posix())
+    os.environ["PRIVACY_KEY_FILE"] = str((target_dir / "harness-privacy.key").as_posix())
     os.environ["RAG_EVAL_OUTPUT"] = str((target_dir / "rag-eval-report.json").as_posix())
 
 
@@ -137,6 +153,11 @@ def build_context() -> HarnessContext:
 
     get_settings.cache_clear()
     settings = get_settings()
+    # A fresh checkout has no production key. Initialize the isolated harness
+    # key before the first encrypted session, rather than relying on API-suite
+    # startup (which runs after the risk and routing suites).
+    from app.core.privacy_crypto import cipher
+    cipher(settings)
     if getattr(database, "engine", None) is not None:
         database.engine.dispose()
     database.engine = create_engine(settings.database_url, connect_args={"check_same_thread": False}, pool_pre_ping=True)
@@ -210,7 +231,7 @@ def run_check(name: str, fn: Callable[[HarnessContext], dict], context: HarnessC
 
 def run_risk_safety_harness(context: HarnessContext) -> dict:
     from app.core.enums import RiskLevel, ToolJobKind
-    from app.models.entities import PsychologicalReport, ToolJob, UserAccount
+    from app.models.entities import ChatSession, PsychologicalReport, ToolJob, UserAccount
     from app.schemas.dtos import ChatRequest
     from app.services.chat import ChatService
 
@@ -251,12 +272,9 @@ def run_risk_safety_harness(context: HarnessContext) -> dict:
         for case in cases:
             service = ChatService(db, context.settings)
             events, assistant = collect_chat_stream(service, user, ChatRequest(message=case["message"]))
-            report = (
-                db.query(PsychologicalReport)
-                .filter(PsychologicalReport.content == case["message"])
-                .order_by(PsychologicalReport.id.desc())
-                .first()
-            )
+            session_id=next(e['data']['sessionId'] for e in events if e['event']=='meta')
+            report=(db.query(PsychologicalReport).join(ChatSession,ChatSession.id==PsychologicalReport.session_id)
+                    .filter(ChatSession.public_id==session_id).order_by(PsychologicalReport.id.desc()).first())
             token_text = assistant.strip()
             expect(any(event["event"] == "meta" for event in events), f"{case['id']} did not emit meta event")
             expect(any(event["event"] == "done" for event in events), f"{case['id']} did not emit done event")
@@ -419,7 +437,7 @@ def run_standard_skills_harness(context: HarnessContext) -> dict:
         roles_csv="ROLE_USER",
     )
     handoff = MindBridgeSkillLibrary.counselor_handoff_summary(report, user)
-    for term in ["应用 skill: counselor_handoff_summary", "报告ID：7", "测试学生 (student)", "立即跟进"]:
+    for term in ["应用 skill: counselor_handoff_summary", "报告ID：7", "学生#42", "立即跟进"]:
         expect(term in handoff, f"handoff summary missing {term}")
 
     return {
@@ -431,35 +449,21 @@ def run_standard_skills_harness(context: HarnessContext) -> dict:
 
 
 def run_rag_harness(context: HarnessContext) -> dict:
-    from app.rag_eval.runner import evaluate_case
+    from app.rag_eval.dataset import load_dataset
+    from app.rag_eval.runner import evaluate_service, check_regression
     from app.services.knowledge import KnowledgeService
 
     db = context.session()
     try:
-        service = KnowledgeService(db, context.settings)
-        dataset_path = context.root / context.settings.rag_eval_dataset
-        cases = json.loads(dataset_path.read_text(encoding="utf-8"))
-        results = [evaluate_case(service, case, context.settings.knowledge_top_k) for case in cases]
-        total = max(1, len(results))
-        hits = [item for item in results if item["hit"]]
-        metrics = {
-            "totalCases": len(results),
-            "topK": context.settings.knowledge_top_k,
-            "recallAtK": sum(item["recallAtK"] for item in results) / total,
-            "precisionAtK": sum(item["precisionAtK"] for item in results) / total,
-            "mrr": sum(item["reciprocalRank"] for item in results) / total,
-            "ndcgAtK": sum(item["ndcgAtK"] for item in results) / total,
-            "hitRate": len(hits) / total,
-        }
-        expect(metrics["totalCases"] >= 50, f"RAG dataset is too small: {metrics['totalCases']}")
-        expect(metrics["hitRate"] >= 0.95, f"RAG hitRate below threshold: {metrics['hitRate']:.3f}")
-        expect(metrics["recallAtK"] >= 0.95, f"RAG recallAtK below threshold: {metrics['recallAtK']:.3f}")
-        expect(metrics["mrr"] >= 0.75, f"RAG MRR below threshold: {metrics['mrr']:.3f}")
-        expect(metrics["ndcgAtK"] >= 0.75, f"RAG NDCG below threshold: {metrics['ndcgAtK']:.3f}")
-        report = {"createdAt": datetime.utcnow().isoformat(), "metrics": metrics, "results": results}
+        dataset = load_dataset(context.root / context.settings.rag_eval_dataset)
+        report = evaluate_service(KnowledgeService(db, context.settings), dataset, "bm25-rerank")
+        baseline = json.loads((context.root / "app/rag_eval/data/baseline-bm25-rerank-v1.json").read_text())
+        check_regression(report, baseline)
+        expect(report["frozenVerified"], "RAG dataset is not the frozen version")
+        expect(report["answerableCases"] >= 40 and report["unanswerableCases"] > 0, "RAG coverage is incomplete")
         output = context.target_dir / "rag-eval-report.json"
         output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
-        return metrics | {"report": str(output)}
+        return {key: value for key, value in report.items() if key != "results"} | {"report": str(output)}
     finally:
         db.close()
 

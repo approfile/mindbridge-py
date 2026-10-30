@@ -1,0 +1,336 @@
+{
+  "date": "2026-10-25",
+  "implementedTxtItems": [
+    11,
+    13,
+    17
+  ],
+  "features": [
+    "Server-generated request_id and run_id; ASGI lifecycle, SQL trace, durable jobs and tool audit correlation",
+    "Versioned rewrite result with explicit fallback reason/source/error type/truncation and structured degradation event",
+    "Monotonic nested spans for memory, agents, rewrite, retrieval/embedding/rerank, generation, rules, judge, persistence and SSE",
+    "Private bounded JSONL and Docker stderr collection; authenticated exact trace lookup",
+    "Replace provisional telemetry snapshot; widen MySQL trace JSON to MEDIUMTEXT without changing existing payloads"
+  ],
+  "tests": {
+    "unitTests": 141,
+    "engineeringHarnessGroups": 6,
+    "nativeHttpCases": 11,
+    "nativeSuccessfulJobs": 19,
+    "nativeModelMode": "mock with controlled rewrite/generation/review failures",
+    "realHttpCases": 4,
+    "realSuccessfulJobs": 5,
+    "realAllRepliesAccepted": true,
+    "intentAccuracy": 1.0,
+    "intentRiskRecall": 1.0,
+    "intentCases": 100,
+    "intentRepeats": 1,
+    "riskAccuracy": 1.0,
+    "riskCases": 32,
+    "dialoguePassed": 8,
+    "dialogueCases": 8,
+    "dialogueTurns": 13,
+    "dialogueAcceptanceRate": 1.0,
+    "replyStatic": {
+      "cases": 80,
+      "safeCases": 40,
+      "unsafeCases": 40,
+      "safeFalseRejections": 0,
+      "safeFalseRejectionRate": 0.0,
+      "unsafeAccepted": 0,
+      "unsafeLeakRate": 0.0,
+      "correct": 80,
+      "accuracy": 1.0,
+      "confusion": {
+        "safe": {
+          "accept": 40,
+          "reject": 0
+        },
+        "unsafe": {
+          "accept": 0,
+          "reject": 40
+        }
+      }
+    },
+    "replyRevisions": {
+      "cases": 12,
+      "firstRejections": 12,
+      "unsafeSeedsAccepted": 0,
+      "revisionSuccesses": 11,
+      "revisionSuccessRate": 0.9166666666666666,
+      "fallbackRate": 0.08333333333333333,
+      "note": "Controlled unsafe seeds followed by real generation and runtime review. Approval is not independent human confirmation of safety or quality."
+    }
+  },
+  "storage": {
+    "passed": true,
+    "typeBefore": "text",
+    "typeAfter": "mediumtext",
+    "originalRowsUnchanged": 11,
+    "repeatableMigration": true,
+    "largeTraceBytes": 120733,
+    "finalSnapshots": 1,
+    "fixtureScope": "Storage only; no HTTP or model safety score"
+  },
+  "live": {
+    "passed": true,
+    "successfulJobs": 5,
+    "oldRowsPreserved": {
+      "reports": 34,
+      "tool-jobs": 65,
+      "agent-traces": 49,
+      "cases": 18,
+      "alerts": 17,
+      "excel-records": 34,
+      "tool-audits": 57,
+      "dead-letters": 0
+    },
+    "oldConversations": 43,
+    "legacyJobsMissingOriginPreservedAsNull": 65,
+    "jsonLogEventsForRuns": 170,
+    "matchedContainerFiles": 66,
+    "knowledge": {
+      "vectorChunks": 34,
+      "embeddingModel": "qwen3.7-text-embedding"
+    },
+    "allRepliesAccepted": true,
+    "smtp": "local Mailpit only"
+  },
+  "infrastructure": {
+    "passed": true,
+    "redis": [
+      {
+        "name": "chat",
+        "messages": 2,
+        "ttl": 86248
+      },
+      {
+        "name": "consult",
+        "messages": 2,
+        "ttl": 86257
+      },
+      {
+        "name": "risk",
+        "messages": 4,
+        "ttl": 86269
+      },
+      {
+        "name": "resolved",
+        "messages": 4,
+        "ttl": 86269
+      }
+    ],
+    "newRiskAlertSuccess": true,
+    "matchingLocalMailpitMessages": 1,
+    "traceJsonSizes": [
+      {
+        "id": 54,
+        "bytes": 21668
+      },
+      {
+        "id": 55,
+        "bytes": 47043
+      },
+      {
+        "id": 56,
+        "bytes": 43612
+      },
+      {
+        "id": 57,
+        "bytes": 51133
+      }
+    ],
+    "vectorChunks": 34,
+    "traceStorage": "mediumtext",
+    "unchangedTracePayloadHashes": 53,
+    "secondaryOldFieldsPreserved": {
+      "reports": 37,
+      "tool-jobs": 70,
+      "agent-traces": 53,
+      "cases": 19,
+      "alerts": 18,
+      "excel-records": 37,
+      "tool-audits": 62,
+      "dead-letters": 0
+    },
+    "probePortClosed": true,
+    "dockerLogging": {
+      "Type": "json-file",
+      "Config": {
+        "max-file": "3",
+        "max-size": "10m"
+      }
+    },
+    "applicationLog": {
+      "mode": "0o600"
+    }
+  },
+  "example": {
+    "requestId": "56985fdb9a484622a1dff026079d5fb3",
+    "runId": "8476e31ac50b476b87142bd87368091a",
+    "traceId": 55,
+    "stageTotalsMs": {
+      "input.prepare": 0.007,
+      "session.resolve": 2.392,
+      "memory.load": 3.612,
+      "model.complete": 1623.689,
+      "agent.act": 5816.179,
+      "query.rewrite": 630.105,
+      "retrieval.load_chunks": 4.186,
+      "embedding.request": 4102.73,
+      "retrieval.chroma_query": 23.741,
+      "retrieval.vector": 4154.977,
+      "retrieval.bm25": 7.658,
+      "retrieval.rerank": 6.207,
+      "retrieval.expand": 2.241,
+      "retrieval.total": 4176.63,
+      "planning.total": 5825.273,
+      "persistence.message": 16.822,
+      "persistence.report_outbox": 5.384,
+      "persistence.trace": 7.499,
+      "model.stream": 1634.284,
+      "reply.generate": 1634.905,
+      "reply.rules": 0.697,
+      "model.review": 874.171,
+      "reply.review": 875.037,
+      "reply.total": 2511.982,
+      "persistence.reply_trace": 14.717,
+      "persistence.assistant": 11.834,
+      "sse.emit": 0.787,
+      "turn.total": 8388.193
+    },
+    "modelStreamFirstChunkMs": 689.128,
+    "serverFirstTokenMs": 8389.152,
+    "clientFirstTokenMs": 8391.330708982423,
+    "clientTotalMs": 8399.239624850452,
+    "logicalModelCalls": 4
+  },
+  "checks": {
+    "sevenFrozenDatasetsUnchanged": true,
+    "riskRulesUnchanged": true,
+    "replyRulesUnchanged": true,
+    "understandingPolicyUnchanged": true,
+    "classificationAssessmentAnswerPromptsUnchanged": true,
+    "assessmentServiceUnchanged": true,
+    "finalAllPythonSourcesStable": true,
+    "intentCompleteSameSources": true,
+    "replyCompleteSameSources": true,
+    "noIntentEvaluationToolSideEffects": true,
+    "nativeFaultInjectionPass": true,
+    "largeMySQLTracePass": true,
+    "realMainPass": true,
+    "infrastructureAndOldDataPass": true,
+    "unitTestsPass": true,
+    "sixHarnessGroupsPass": true
+  },
+  "sourceSha256": {
+    "app/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "app/main.py": "07fc5ef708f8258a4f4f905c0e256cde733aa8a9b7c51daf32f98b3a6d5a9f4c",
+    "app/core/bootstrap.py": "b1f4828e74c62b412c58281a98549718681c3299c8611ff2b8a3c558652fee20",
+    "app/core/enums.py": "6491213ea9e12aee6be567b21e7e79fb6bd45f3ff58009681deb49e99390b9ec",
+    "app/core/config.py": "328bd448808efcc3d7be5d97c70f8cda854121c5c7b727d1ab9fa07995acc605",
+    "app/core/database.py": "164a3d91d11129679ae6b355f802e7b96a5efe05dbd152132f1d1b5b906d37b5",
+    "app/core/security.py": "89fc5a805a0faf31fe0ebf267c4851fc3f1a8e09fedf9eefca986aabed025398",
+    "app/core/tool_job_migration.py": "019e2e7904afb11f51d1e384ea84e7b36bf4a78b5527686fae1e2aea4bef791a",
+    "app/core/trace_storage_migration.py": "62fb3080fa16b002c056d634386f06cae791d8099b3ba4a31c8558779b9dac78",
+    "app/agents/coordinator.py": "9e9d44b4a4a21ed1bd30d57d6b1445416b31c8d55c7b98113a1228d2a6ba03e3",
+    "app/agents/harness.py": "369aee78d45a58df153abd460e88e0795bf82a4f541dac3f5b8a52f122d03f46",
+    "app/agents/event_driven_runtime.py": "56149f91a54b9aec2bd5bd53a77a3e4c01391111d4b09ff4be9044c815639e82",
+    "app/agents/registry.py": "2b4fa8037921ed51c9a6f0a758fcfc785e0d8f716b062dc84ea5207e788a9c0a",
+    "app/agents/events.py": "5fa3e8363b5431d367809da9223a8dd60c6b6ad6ac0a35df16f60615b87f42d6",
+    "app/agents/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "app/agents/factory.py": "4de5963db4bd04bd84644c2c94b11094957000d9a8e6ca4256017137c806dab9",
+    "app/agents/result.py": "3c50635ded599baed5b5889b9ae4e8f2f2081a07da3b673f96d4c5e73886eb73",
+    "app/agents/autonomous.py": "09eed04215f99392e766b2542154bdae147ab6462b6cae01ae3cee9420f16be4",
+    "app/models/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "app/models/entities.py": "fcb720f9fba1e5ea2031ddf9414b82b4e31c62469682cf3d3d8ea4dadfd5b923",
+    "app/schemas/dtos.py": "9a24d140be62df9074ececde8444ee1ef5d47da6dc6f6babd4119eb4f1ba2c0e",
+    "app/schemas/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "app/harness/runner.py": "e4926b2617cb4a4b18d39781daf6a878cb06868d2a0bf81668adcc503e9803c6",
+    "app/harness/__init__.py": "dbc63247bee0b976605e78b4882ed8c0d9a2c9bc63a11b20468d02f57220a574",
+    "app/api/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "app/api/routes.py": "b839a61aa9f5b16a61d8bdacd83176dd3b24770431682503d2962a82043548d2",
+    "app/evaluation/context_routing_runner.py": "c5c3955b7a615e8f020f3d75afa961f2a38204f6437958b79ee80d92046bd386",
+    "app/evaluation/runner.py": "8d8c30acdd2db7f8808e617a5bbdcb0bc9d0f8c3c2f8f155635ac0a8037f767c",
+    "app/evaluation/reply_source_runner.py": "fa6a42e024f190115e083f36ef30f9602d5a75ca55693da35dbf0b8851e0dc2f",
+    "app/evaluation/intent_dataset.py": "f35e29eb421318de32decd9e643f41fe68ec64643db49afc93872a7e7d8eab64",
+    "app/evaluation/__init__.py": "3365bc63f98c7968d1fd365404703184ead59163058162a9fd99442e1a754337",
+    "app/evaluation/reply_safety_runner.py": "1770861fac6eb806e96924483e25376d06dd263ab7b402f6f7df59769b6c3b63",
+    "app/evaluation/sequential.py": "ca1c242b187a4c5caa4e370101b7ebab791e666e55fd659f82f4de8481bd509c",
+    "app/evaluation/intent_metrics.py": "e17c7e2c238f338a4fdfc6dd76628b7bcfb749e0874ffc0ddf29a2b878e87623",
+    "app/evaluation/intent_runner.py": "de6bba961c9acc26d11ac93b7fdf0609c532f2d291b2de3c8000a7a49239640c",
+    "app/rag_eval/metrics.py": "0014e209b1d5101c81a1e0b9e843326618e9479457e8b4fb3849179d843a5296",
+    "app/rag_eval/runner.py": "db4ecc61e64d2b6132a38d9a6a7bb1a99a41c7af2d7f63e49fe03f357d2185b2",
+    "app/rag_eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "app/rag_eval/dataset.py": "a5179266f342039bd6bc0dd40de83bd8cc8a303e81c7c30a8b97c78936cc2a67",
+    "app/mcp_tools/server.py": "7e8d42e80ca00ed9e47a81111b1b54c3c68be6d3c4be8ec68d2468194d0883b4",
+    "app/mcp_tools/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "app/services/tool_queue.py": "fb565cf18074b8f6b9957de043634c5a8e7ccbf359a104d80b225cde63f95ef2",
+    "app/services/session_memory.py": "a86494d724da1f9f2e528de9e7ab98b42e6e1cbb1bfdcb8e1cc097fe6f57482d",
+    "app/services/assessment.py": "19e77863412abacf6aea77c3f38327421e2c505436691f91879255eeba2bdebb",
+    "app/services/trace.py": "095e93e39499cba91b63d6dd6fe831cf10e823b6baf289b955b9d66efcff78cc",
+    "app/services/intent_contract.py": "c1da3959a0190a9b917cb1748828244624af120f1c97b94e833845edcaca25ca",
+    "app/services/risk_signals.py": "653587e060c1bacfe9a1c74cc4abe18c9277bb5e2fb913c926f8273814956e8d",
+    "app/services/skills.py": "28258b5ae7594a6acd6872ac5733d17dae5c95c412d66aefbd7528f57c90fdfe",
+    "app/services/memory.py": "74ecbfd8ae6729d0170899fca7615659454d325383ee66b0825aa1ae47100588",
+    "app/services/vector_store.py": "f1fef503663df02a106026892155d64dceeac6de76d0bb9548f969910061c99e",
+    "app/services/response_review.py": "34b3968f8d73b7e530b5660e2e9638ba949f8da736b0b99784237a9463385857",
+    "app/services/tools.py": "31e3a769c7a669f3a9f4b3b978bb58d55801d4d92a25bd8172c4bf184ee07b7c",
+    "app/services/ai.py": "fd544b0eef2522bf680e0d7a6c10fdd518a0a89ff4ba790d1bf13e20dc84e8dd",
+    "app/services/observability.py": "5d66643642514adc48e10bb716d03935c790566c02ea4cd7868f3f23fc2583cd",
+    "app/services/tool_governance.py": "2bce41f48dc7f0e38987d7489a07d364d4a4d501f43a18a330e74bc0e5ee3216",
+    "app/services/query_rewrite.py": "3f852120d121c0381b7a6b9962c0bb56aaa9afb0e820302a616cf921ea5d4387",
+    "app/services/agent_models.py": "88e8871ee01cb69e20a291cfedd996fbb4e4809e91d2934d509ecff3bea1224b",
+    "app/services/model_usage.py": "9c7a0e37e82ebb68ef4798c35491beada73d96fbdc087b1a606f64fa07163d26",
+    "app/services/chat.py": "96003f0ed0daf4feebd1ee49d2bf02f59eae0bd8b2e9bf552ff3dabe882a5d8e",
+    "app/services/reply_safety.py": "cf5f27518ac800d91a6b133c676cb8a2fb5c2eff0825a6eaf42433bd64dfecda",
+    "app/services/tool_execution.py": "3627265a932a060b7701ba7b864f3fdcd05de016dc9c953804184152a4b14342",
+    "app/services/mcp_client.py": "5901e8355625091c1afff8db07cc991134f545fbceb7d3214f847f6b7a3bfd39",
+    "app/services/model_assets.py": "cd763f0d58c5479888d88638043cac186bfdf6516d0f6286b197c16fa08fbcb2",
+    "app/services/knowledge.py": "ffba01babf7f12ab4ed815d13b604ad0158fae857cb8402ecbaeebee5abb2a31",
+    "app/services/report.py": "bdc69784f5f1aa4e8910a52974abb004a808abed719e3956197edab6710636e5",
+    "app/services/privacy.py": "d66b93fb18b741601df6fbff842e9733df310ecdad8b374176ce69458e4d45d0"
+  },
+  "logRetention": {
+    "applicationFile": {
+      "maxBytes": 10485760,
+      "backupFiles": 3,
+      "mode": "0600",
+      "scope": "single-process parent app"
+    },
+    "docker": {
+      "Type": "json-file",
+      "Config": {
+        "max-file": "3",
+        "max-size": "10m"
+      }
+    },
+    "mcp": "Child emits structured stderr; does not race parent file rotation"
+  },
+  "modelProfiles": {
+    "UnderstandingAgent": {
+      "provider": "openai",
+      "model": "deepseek-v4-flash",
+      "temperature": 0.35,
+      "max_tokens": 512
+    },
+    "SafetyAgent": {
+      "provider": "openai",
+      "model": "deepseek-v4-flash",
+      "temperature": 0.35,
+      "max_tokens": 512
+    }
+  },
+  "tokenUsage": null,
+  "currencyCost": null,
+  "limitations": [
+    "Process-local spans and explicit durable-job correlation; no OpenTelemetry exporter or generic distributed traceparent propagation",
+    "Spans are inclusive; parent and child totals must not be added. Async jobs are outside HTTP request duration",
+    "serverFirstTokenMs marks the first reviewed text submitted to ASGI send; client/network latency is separately measured",
+    "Four real HTTP requests and synthetic regression sets are not a production latency distribution or clinical/held-out validation",
+    "Span cap is 512; droppedSpans>0 means incomplete measurements. Telemetry persistence failure retains a planning-phase snapshot and logs failure",
+    "Legacy origins remain null; no invented request history. Existing raw-input SQL trace access/retention policy is unchanged",
+    "File rotation is size-based and intended for one parent process; MCP uses stderr collector. No ELK/Loki deployment is claimed",
+    "12 revision seeds: 11 accepted and 1 safe fallback; no threshold relaxation or claim of universally safe outputs"
+  ]
+}

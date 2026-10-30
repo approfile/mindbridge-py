@@ -29,6 +29,8 @@ class AgentRunResult:
     collaboration_events: list[Any] = field(default_factory=list)
     collaboration_tasks: list[Any] = field(default_factory=list)
     collaboration_artifacts: list[Any] = field(default_factory=list)
+    plan_accepted: bool = False
+    budget_exhausted: bool = False
 
     @property
     def requires_report(self) -> bool:

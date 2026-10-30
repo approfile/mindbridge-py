@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import StreamingResponse
+from contextlib import aclosing
 from sqlalchemy.orm import Session
 
 from app.agents.factory import agent_framework_status
@@ -16,6 +17,12 @@ from app.services.knowledge import KnowledgeService
 from app.services.model_assets import finetuned_model_status
 from app.services.report import ReportService
 from app.services.skills import MindBridgeSkillLibrary
+from app.services.turn_budget import current_turn
+from app.services.turn_execution import TurnRejected
+from app.services.observability import log_event
+from app.services.data_access import admin_read, ReadAccess, exposed, write_audit
+from app.models.entities import DataAccessAudit
+from fastapi import Request
 
 router = APIRouter()
 
@@ -35,16 +42,36 @@ def profile(user: Annotated[UserAccount, Depends(current_user)]):
     }
 
 
+class ChatStreamingResponse(StreamingResponse):
+    async def stream_response(self, send):
+        # Starlette cancels a send on disconnect/backpressure. Close the
+        # suspended producer in its own task/context, rather than relying on
+        # async-generator GC, so its owned work always receives finalization.
+        async with aclosing(self.body_iterator):
+            await super().stream_response(send)
+
+
 @router.post("/api/chat/stream")
-async def chat_stream(
+def chat_stream(
     request: ChatRequest,
     user: Annotated[UserAccount, Depends(current_user)],
     db: Annotated[Session, Depends(get_db)],
 ):
     if "ROLE_ADMIN" in user.roles:
         raise HTTPException(403, "管理员账号只能查看后台记录，不能发起学生对话。")
+    user_id = user.id
+    control = current_turn()
+    if control and control.lease:
+        try:
+            control.lease.bind_user(user_id, request.sessionId)
+        except TurnRejected as exc:
+            log_event('turn.rejected', reason_code=exc.code)
+            raise HTTPException(exc.status, '当前会话正在处理或请求较多，请稍后重试。', headers={'Retry-After': '1'})
     service = ChatService(db, get_settings())
-    return StreamingResponse(service.stream_chat(user, request), media_type="text/event-stream")
+    # Auth owns this request Session. No connection/ORM object is held across
+    # the streamed response or passed into the dedicated planning worker.
+    db.close()
+    return ChatStreamingResponse(service.stream_chat(user_id, request), media_type="text/event-stream")
 
 
 @router.get("/api/agent/status")
@@ -93,59 +120,95 @@ def agent_status(user: Annotated[UserAccount, Depends(current_user)]):
 
 
 @router.get("/api/reports/me")
-def my_reports(user: Annotated[UserAccount, Depends(current_user)], db: Annotated[Session, Depends(get_db)]):
-    return ReportService(db).latest_reports(user.id)
+def my_reports(request: Request, user: Annotated[UserAccount, Depends(current_user)], db: Annotated[Session, Depends(get_db)]):
+    audit_id=write_audit(db,request,user.id,'STARTED',action='SELF_READ')
+    try:
+        rows=ReportService(db).latest_reports(user.id)
+        audit=db.get(DataAccessAudit,audit_id);audit.status='ALLOWED';audit.row_count=len(rows);db.commit()
+        return rows
+    except Exception:
+        db.rollback();audit=db.get(DataAccessAudit,audit_id);audit.status='FAILED';db.commit();raise
 
 
 @router.get("/api/admin/reports")
-def admin_reports(_: Annotated[UserAccount, Depends(require_admin)], db: Annotated[Session, Depends(get_db)]):
-    return ReportService(db).latest_reports()
+def admin_reports(access: Annotated[ReadAccess, Depends(admin_read)], db: Annotated[Session, Depends(get_db)]):
+    return exposed(access, ReportService(db).latest_reports())
 
 
 @router.get("/api/admin/excel-records")
-def admin_excel(_: Annotated[UserAccount, Depends(require_admin)], db: Annotated[Session, Depends(get_db)]):
-    return ReportService(db).excel_records()
+def admin_excel(access: Annotated[ReadAccess, Depends(admin_read)], db: Annotated[Session, Depends(get_db)]):
+    return exposed(access, ReportService(db, sensitive=access.sensitive).excel_records())
+
+
+@router.get('/api/admin/reports/{report_id}')
+def admin_report(report_id: int, access: Annotated[ReadAccess, Depends(admin_read)], db: Annotated[Session, Depends(get_db)]):
+    try:return exposed(access,ReportService(db,sensitive=access.sensitive).report(report_id))
+    except ValueError:raise HTTPException(404,'Report not found') from None
+
+
+@router.get('/api/admin/cases/{case_id}')
+def admin_case(case_id: int, access: Annotated[ReadAccess, Depends(admin_read)], db: Annotated[Session, Depends(get_db)]):
+    rows=ReportService(db,sensitive=access.sensitive).risk_cases(case_id)
+    if not rows:raise HTTPException(404,'Case not found')
+    return exposed(access,rows[0])
+
+
+@router.get('/api/admin/data-access-audits')
+def data_access_audits(access: Annotated[ReadAccess, Depends(admin_read)], db: Annotated[Session, Depends(get_db)]):
+    rows=db.query(DataAccessAudit).order_by(DataAccessAudit.id.desc()).limit(100).all()
+    return exposed(access,[{'id':row.id,'actorId':row.actor_id,'requestId':row.request_id,'action':row.action,
+                            'resource':row.resource,'resourceId':row.resource_id,'purpose':row.purpose,'policy':row.policy,'operatorUid':row.operator_uid,
+                            'status':row.status,'rowCount':row.row_count,'createdAt':row.created_at} for row in rows])
 
 
 @router.get("/api/admin/alerts")
-def admin_alerts(_: Annotated[UserAccount, Depends(require_admin)], db: Annotated[Session, Depends(get_db)]):
-    return ReportService(db).alert_records()
+def admin_alerts(access: Annotated[ReadAccess, Depends(admin_read)], db: Annotated[Session, Depends(get_db)]):
+    return exposed(access, ReportService(db, sensitive=access.sensitive).alert_records())
 
 
 @router.get("/api/admin/cases")
-def admin_cases(_: Annotated[UserAccount, Depends(require_admin)], db: Annotated[Session, Depends(get_db)]):
-    return ReportService(db).risk_cases()
+def admin_cases(access: Annotated[ReadAccess, Depends(admin_read)], db: Annotated[Session, Depends(get_db)]):
+    return exposed(access, ReportService(db, sensitive=access.sensitive).risk_cases())
 
 
 @router.get("/api/admin/cases/{case_id}/notes")
-def admin_case_notes(case_id: int, _: Annotated[UserAccount, Depends(require_admin)], db: Annotated[Session, Depends(get_db)]):
-    return ReportService(db).case_notes(case_id)
+def admin_case_notes(case_id: int, access: Annotated[ReadAccess, Depends(admin_read)], db: Annotated[Session, Depends(get_db)]):
+    return exposed(access, ReportService(db, sensitive=access.sensitive).case_notes(case_id))
 
 
 @router.get("/api/admin/tool-jobs")
-def admin_tool_jobs(_: Annotated[UserAccount, Depends(require_admin)], db: Annotated[Session, Depends(get_db)]):
-    return ReportService(db).tool_jobs()
+def admin_tool_jobs(access: Annotated[ReadAccess, Depends(admin_read)], db: Annotated[Session, Depends(get_db)]):
+    return exposed(access, ReportService(db, sensitive=access.sensitive).tool_jobs())
 
 
 @router.get("/api/admin/dead-letters")
-def admin_dead_letters(_: Annotated[UserAccount, Depends(require_admin)], db: Annotated[Session, Depends(get_db)]):
-    return ReportService(db).dead_letters()
+def admin_dead_letters(access: Annotated[ReadAccess, Depends(admin_read)], db: Annotated[Session, Depends(get_db)]):
+    return exposed(access, ReportService(db, sensitive=access.sensitive).dead_letters())
 
 
 @router.get("/api/admin/agent-traces")
-def admin_agent_traces(_: Annotated[UserAccount, Depends(require_admin)], db: Annotated[Session, Depends(get_db)]):
-    return ReportService(db).agent_run_traces()
+def admin_agent_traces(access: Annotated[ReadAccess, Depends(admin_read)], db: Annotated[Session, Depends(get_db)]):
+    return exposed(access, ReportService(db, sensitive=access.sensitive).agent_run_traces())
+
+
+@router.get("/api/admin/agent-traces/{trace_id}")
+def admin_agent_trace(trace_id: int, access: Annotated[ReadAccess, Depends(admin_read)],
+                      db: Annotated[Session, Depends(get_db)]):
+    rows = ReportService(db, sensitive=access.sensitive).agent_run_traces(trace_id)
+    if not rows:
+        raise HTTPException(404, 'Trace not found')
+    return exposed(access, rows[0])
 
 
 @router.get("/api/admin/tool-audits")
-def admin_tool_audits(_: Annotated[UserAccount, Depends(require_admin)], db: Annotated[Session, Depends(get_db)]):
-    return ReportService(db).tool_audits()
+def admin_tool_audits(access: Annotated[ReadAccess, Depends(admin_read)], db: Annotated[Session, Depends(get_db)]):
+    return exposed(access, ReportService(db, sensitive=access.sensitive).tool_audits())
 
 
 @router.get("/api/admin/conversations/{session_id}")
-def admin_conversation(session_id: str, _: Annotated[UserAccount, Depends(require_admin)], db: Annotated[Session, Depends(get_db)]):
+def admin_conversation(session_id: str, access: Annotated[ReadAccess, Depends(admin_read)], db: Annotated[Session, Depends(get_db)]):
     try:
-        return ReportService(db).conversation(session_id)
+        return exposed(access, ReportService(db, sensitive=access.sensitive).conversation(session_id))
     except ValueError as exc:
         raise HTTPException(404, str(exc)) from exc
 

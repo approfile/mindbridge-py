@@ -1,0 +1,122 @@
+{
+  "probes": [
+    {
+      "scope": "adapter_probe_not_benchmark",
+      "type": "transient",
+      "verified": true,
+      "alertState": "SUCCESS",
+      "attempts": 2,
+      "actualMailpitMessages": 1,
+      "otherJobsSucceeded": true,
+      "actualEffects": [
+        {
+          "kind": "EXCEL_REPORT",
+          "reportId": "1",
+          "source": "excel.ledger",
+          "count": 1
+        },
+        {
+          "kind": "CASE_CREATE",
+          "reportId": "1",
+          "source": "sql.risk_cases",
+          "count": 1
+        },
+        {
+          "kind": "ALERT_SEND",
+          "reportId": "1",
+          "source": "mailpit",
+          "count": 1
+        }
+      ],
+      "modelProvider": "controlled_mock",
+      "modelApiRequests": 0
+    },
+    {
+      "scope": "adapter_probe_not_benchmark",
+      "type": "permanent",
+      "verified": true,
+      "alertState": "DEAD",
+      "attempts": 3,
+      "actualMailpitMessages": 0,
+      "otherJobsSucceeded": true,
+      "actualEffects": [
+        {
+          "kind": "EXCEL_REPORT",
+          "reportId": "1",
+          "source": "excel.ledger",
+          "count": 1
+        },
+        {
+          "kind": "CASE_CREATE",
+          "reportId": "1",
+          "source": "sql.risk_cases",
+          "count": 1
+        },
+        {
+          "kind": "ALERT_SEND",
+          "reportId": "1",
+          "source": "mailpit",
+          "count": 0
+        }
+      ],
+      "modelProvider": "controlled_mock",
+      "modelApiRequests": 0
+    },
+    {
+      "scope": "adapter_probe_not_benchmark",
+      "type": "disconnect",
+      "verified": true,
+      "alertState": "SUCCESS",
+      "attempts": 1,
+      "actualMailpitMessages": 1,
+      "otherJobsSucceeded": true,
+      "actualEffects": [
+        {
+          "kind": "EXCEL_REPORT",
+          "reportId": "1",
+          "source": "excel.ledger",
+          "count": 1
+        },
+        {
+          "kind": "CASE_CREATE",
+          "reportId": "1",
+          "source": "sql.risk_cases",
+          "count": 1
+        },
+        {
+          "kind": "ALERT_SEND",
+          "reportId": "1",
+          "source": "mailpit",
+          "count": 1
+        }
+      ],
+      "modelProvider": "controlled_mock",
+      "modelApiRequests": 0
+    },
+    {
+      "scope": "adapter_probe_not_benchmark",
+      "type": "http-denial",
+      "verified": true,
+      "actualHttpResults": [
+        {
+          "actionId": "student-admin",
+          "denied": true,
+          "sideEffectCount": 0,
+          "auditFound": true,
+          "httpStatus": 403
+        },
+        {
+          "actionId": "admin-sensitive",
+          "denied": true,
+          "sideEffectCount": 0,
+          "auditFound": true,
+          "httpStatus": 403
+        }
+      ],
+      "modelApiRequests": 0
+    }
+  ],
+  "privateEvidenceDirectory": "/Users/szy/Documents/mindbridge-py(1)/mindbridge-py/.local-runtime/agent-results-20261027/adapter-76ff6595c10e",
+  "partOfFrozenBenchmark": false,
+  "preservedHoldout": true
+}

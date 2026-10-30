@@ -1,0 +1,96 @@
+{
+  "releaseDate": "2026-10-30",
+  "policy": "Explicit synthetic evaluation report allowlist; excludes private runtime, secrets and logs. Original bytes preserved.",
+  "artifacts": [
+    {
+      "path": "target/agent-layered/preregistered-v1/SUMMARY.md",
+      "sha256": "6602a3fb62564a0d7ccaf19e63c618196521150a113e6d48862c5a22785f1338",
+      "bytes": 1099
+    },
+    {
+      "path": "target/agent-layered/preregistered-v1/controlled/mechanical-report.json",
+      "sha256": "100875853439a924e4345695a2fc5a498f66da30bf8b41366856fd892f6b2a88",
+      "bytes": 149902
+    },
+    {
+      "path": "target/agent-layered/preregistered-v1/human-review/agreement.json",
+      "sha256": "408e0792db2bfe5a623e3ea4edb44ab9ee42904431395fa4c95fb86082be7d93",
+      "bytes": 4860
+    },
+    {
+      "path": "target/agent-layered/preregistered-v1/human-review/form.json",
+      "sha256": "91a634357b879b2b149b5dae5bd4f3955f8498055c57146b15c8eed8ee3c72bb",
+      "bytes": 1778
+    },
+    {
+      "path": "target/agent-layered/preregistered-v1/human-review/human-reviewed-report.json",
+      "sha256": "8ffb66edee0e8fd3aae00981f500b62e92f78ca53f0d71e53199b8879e512bcd",
+      "bytes": 73587
+    },
+    {
+      "path": "target/agent-layered/preregistered-v1/plan.json",
+      "sha256": "8a6802286709f1f14afd7a783f3a83bc8d02b9d7aa32f660dc8ccdcf0ad58d0a",
+      "bytes": 14118
+    },
+    {
+      "path": "target/agent-layered/preregistered-v1/real-context-intervention/model-reviewed-report.json",
+      "sha256": "0a689293cfa6d63822503993196456875142c2dc8b25e4bcc892950c4d563c01",
+      "bytes": 30028
+    },
+    {
+      "path": "target/agent-layered/preregistered-v1/real-nominal/model-reviewed-report.json",
+      "sha256": "02ee2ed7ddc004fecc4624d0c603df7329e7861aad8ed9ffbcd414dbce39fd04",
+      "bytes": 243936
+    },
+    {
+      "path": "target/agent-layered/preregistered-v1/summary.json",
+      "sha256": "3dd18303eaab43371c4354be63e38ffe49e0d454158108a496c49ef525b7704a",
+      "bytes": 95404
+    },
+    {
+      "path": "target/agent-layered/ragas-v1/faithfulness-diagnostics.json",
+      "sha256": "eb9ab78eb64e4113054be7bc6eaeec55aed2610a9784c539810239c440ffd121",
+      "bytes": 14614
+    },
+    {
+      "path": "target/agent-layered/ragas-v1/ragas-report.json",
+      "sha256": "494d97484b7dcbfbbd680e4f4883b56a0cc09ec1c0dfb165b6aef6a8b13ea5f3",
+      "bytes": 63615
+    },
+    {
+      "path": "target/agent-layered/verification.json",
+      "sha256": "2a5a64ac4cf7d8d57f71a3c21afa4f4600d5e3c60128c532c970ffee40007a8c",
+      "bytes": 965
+    },
+    {
+      "path": "target/agent-results/adapter-probes/report.json",
+      "sha256": "32eafa1c28ce86e1552a99c2db82be69b15a341b4b73b8fd83b6042be8c38c8d",
+      "bytes": 2988
+    },
+    {
+      "path": "target/agent-results/development-corrected-collector/execution-manifest.json",
+      "sha256": "ea5eb171b4309f0b230a3f48179ebc10e5df268b640421f2eb0562fddd5b4b94",
+      "bytes": 16727
+    },
+    {
+      "path": "target/agent-results/development-corrected-collector/observations.json",
+      "sha256": "925f29aeeb4276d4f1e1586c1a915f50163f4beba9bc63553f1a0f7b2c385406",
+      "bytes": 319803
+    },
+    {
+      "path": "target/agent-results/development-corrected-collector/report.json",
+      "sha256": "1e4603285c287f4f06c73ca6cfe37ada83983e74d016a5119080a70e45c538bc",
+      "bytes": 202509
+    },
+    {
+      "path": "target/vector-vs-hybrid/REPORT.md",
+      "sha256": "b62b97e94725a10388a0caf9dc6f7ce2944372ece247ad727ff4d3ff7eb844be",
+      "bytes": 4938
+    },
+    {
+      "path": "target/vector-vs-hybrid/report.json",
+      "sha256": "52b5c5c8425f234973d58b79b1cdf286ceaec9cb662640ee25ef220a0e086cb5",
+      "bytes": 528496
+    }
+  ]
+}

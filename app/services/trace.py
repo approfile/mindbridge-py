@@ -10,12 +10,34 @@ from sqlalchemy.orm import Session
 
 from app.agents.result import AgentRunResult
 from app.models.entities import AgentRunTrace, ChatSession, UserAccount
+from app.services.observability import bind_ids, correlation, current_observation, log_event, timed
 
 
 class AgentTraceService:
     def __init__(self, db: Session):
         self.db = db
 
+    def append_reply_events(self, trace_id: int, events: list[dict]) -> None:
+        trace = self.db.get(AgentRunTrace, trace_id)
+        if trace is None:
+            raise ValueError("Trace not found")
+        steps = json.loads(trace.agent_steps_json)
+        trace.agent_steps_json = _json([*steps, *events])
+        self.db.commit()
+
+    def append_observation(self, trace_id: int, observation, *, turn_control=None) -> None:
+        trace = self.db.get(AgentRunTrace, trace_id)
+        if trace is None:
+            raise ValueError('Trace not found')
+        # The final snapshot already includes every closed planning span.
+        entries = [entry for entry in json.loads(trace.agent_steps_json)
+                   if entry.get('kind') != 'observability' and (turn_control is None or entry.get('kind') != 'turn_control')]
+        if turn_control is not None:
+            entries.append({'kind': 'turn_control', **turn_control})
+        trace.agent_steps_json = _json([*entries, {'kind': 'observability', 'data': observation.snapshot()}])
+        self.db.commit()
+
+    @timed('persistence.trace')
     def save_run(
         self,
         user: UserAccount,
@@ -41,8 +63,17 @@ class AgentTraceService:
             assessment_json=_json(agent_run.assessment or {}),
         )
         self.db.add(trace)
+        self.db.flush()
+        bind_ids(trace_id=trace.id)
+        entries = json.loads(trace.agent_steps_json)
+        entries.append({'kind': 'run_correlation', **correlation()})
+        observation = current_observation()
+        if observation:
+            entries.append({'kind': 'observability', 'data': observation.snapshot('planning')})
+        trace.agent_steps_json = _json(entries)
         self.db.commit()
         self.db.refresh(trace)
+        log_event('agent.run.persisted')
         return trace
 
 
@@ -84,7 +115,6 @@ def _agent_steps_with_collaboration(agent_run: AgentRunResult) -> list[Any]:
             "id": artifact.id,
             "owner": artifact.owner,
             "artifactKind": artifact.kind,
-            "confidence": artifact.confidence,
             "taskId": artifact.task_id,
             "metadata": artifact.metadata,
             "payload": artifact.payload,

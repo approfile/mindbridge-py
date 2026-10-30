@@ -9,6 +9,8 @@ import httpx
 
 from app.core.config import Settings
 from app.models.entities import KnowledgeChunk
+from app.services.observability import timed
+from app.services.turn_budget import bounded_timeout, checkpoint
 
 
 PRIMARY_RETRIEVAL_LABEL = "Chroma vector + BM25 hybrid + local reranker"
@@ -94,6 +96,7 @@ class ChromaKnowledgeStore:
             return
         self.collection.delete(where={"source": source})
 
+    @timed('retrieval.chroma_query')
     def query(self, query_embedding: list[float], top_k: int) -> list[VectorSearchHit]:
         result = self.collection.query(
             query_embeddings=[query_embedding],
@@ -148,7 +151,9 @@ class ChromaKnowledgeStore:
             return 0
         return int(self.collection.count())
 
+    @timed('embedding.request')
     def _embed(self, texts: list[str]) -> list[list[float]]:
+        checkpoint()
         api_key = self.settings.openai_embedding_api_key or self.settings.openai_api_key
         base_url = self.settings.openai_embedding_base_url or "https://api.openai.com/v1"
         payload = {
@@ -160,9 +165,10 @@ class ChromaKnowledgeStore:
             f"{base_url}/embeddings",
             headers=headers,
             json=payload,
-            timeout=self.settings.embedding_timeout_seconds,
+            timeout=bounded_timeout(self.settings.embedding_timeout_seconds),
         )
         response.raise_for_status()
+        checkpoint()
         rows = sorted(response.json().get("data", []), key=lambda item: item.get("index", 0))
         embeddings = [row.get("embedding") for row in rows]
         if len(embeddings) != len(texts) or any(not embedding for embedding in embeddings):

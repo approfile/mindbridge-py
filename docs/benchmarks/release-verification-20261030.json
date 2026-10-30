@@ -1,0 +1,108 @@
+{
+  "releaseDate": "2026-10-30",
+  "mode": "isolated-public-file-copy, existing Python 3.12 business venv; not a clean dependency installation",
+  "unitTests": {
+    "run": 263,
+    "failures": 0,
+    "errors": 0
+  },
+  "engineeringHarness": {
+    "passed": true,
+    "suites": [
+      {
+        "name": "Risk Safety Harness",
+        "passed": true
+      },
+      {
+        "name": "Agent Routing Harness",
+        "passed": true
+      },
+      {
+        "name": "Standard Skills Harness",
+        "passed": true
+      },
+      {
+        "name": "RAG Harness",
+        "passed": true
+      },
+      {
+        "name": "API Harness",
+        "passed": true
+      },
+      {
+        "name": "Tool Queue Harness",
+        "passed": true
+      }
+    ]
+  },
+  "httpSmoke": {
+    "mode": "mock-isolated-http",
+    "checks": [
+      {
+        "check": "health",
+        "status": 200
+      },
+      {
+        "check": "/",
+        "status": 200
+      },
+      {
+        "check": "/student.html",
+        "status": 200
+      },
+      {
+        "check": "/admin.html",
+        "status": 200
+      },
+      {
+        "check": "/styles.css",
+        "status": 200
+      },
+      {
+        "check": "authorization",
+        "pass": true
+      },
+      {
+        "check": "chat-sse",
+        "events": 4,
+        "completed": true
+      },
+      {
+        "check": "consult-sse",
+        "events": 8,
+        "completed": true
+      },
+      {
+        "check": "risk-sse",
+        "events": 9,
+        "completed": true
+      },
+      {
+        "check": "persisted-tools",
+        "jobs": 4,
+        "allSuccess": true,
+        "ledgerExists": true,
+        "deliveryMode": "log"
+      },
+      {
+        "check": "encrypted-storage-and-hidden-admin-body",
+        "pass": true
+      }
+    ],
+    "temporaryServerStopped": true
+  },
+  "composeSyntaxValid": true,
+  "dockerBuild": {
+    "executed": false,
+    "reason": "Docker daemon is not running; HTTP service was tested directly with Uvicorn."
+  },
+  "modelApiRetested": false,
+  "historicalModelResultsDate": "2026-10-28",
+  "sensitiveFilesExcluded": true,
+  "notes": [
+    "The first publishing-wrapper attempt forced the default model provider and interfered with two model-override tests; the wrapper now removes inherited role overrides.",
+    "A 100ms wall-clock test assumption was replaced by a gated finalizer; completed replies still must never become timeouts.",
+    "Fresh-checkout harness now initializes its own key before encrypted sessions and forces mock role models.",
+    "No gold labels or primary historical evaluation scores were changed."
+  ]
+}

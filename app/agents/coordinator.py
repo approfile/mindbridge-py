@@ -15,6 +15,10 @@ from app.agents.events import (
 from app.agents.registry import AgentCapability, AgentRegistry
 from app.core.config import Settings
 from app.core.enums import IntentType, RiskLevel
+from app.services.observability import span, log_event
+from app.agents.plan_validation import validate_plan
+import logging
+from app.services.turn_budget import checkpoint
 
 
 class EventDrivenCoordinator:
@@ -31,12 +35,17 @@ class EventDrivenCoordinator:
         self.max_rounds = int(getattr(settings, "agent_max_rounds", 8))
         self.max_claims_per_round = int(getattr(settings, "agent_max_claims_per_round", 4))
         self.max_claims_per_agent = int(getattr(settings, "agent_max_claims_per_agent", 3))
-        self.final_min_confidence = float(getattr(settings, "agent_final_acceptance_min_confidence", 0.6))
+        if getattr(settings, 'agent_final_acceptance_min_confidence', None) is not None:
+            log_event('config.deprecated_setting', level=logging.WARNING,
+                      reason_code='LEGACY_CONFIDENCE_THRESHOLD_IGNORED')
 
     def run(self, board: CollaborationBlackboard) -> CollaborationBlackboard:
+        self.latest_board = board
         board = self._ensure_root_task(board)
         claim_counts: dict[str, int] = defaultdict(int)
         for round_number in range(1, self.max_rounds + 1):
+            self.latest_board = board
+            checkpoint()
             board = board.append_event(
                 AgentEvent(
                     type=AgentEventType.ROUND_STARTED,
@@ -56,26 +65,24 @@ class EventDrivenCoordinator:
                 if not candidates:
                     break
             for task, candidate in candidates:
+                self.latest_board = board
+                checkpoint()
                 current_task = board.tasks.get(task.id, task)
-                claimed_task = current_task.claim(candidate.agent.profile.name)
-                board = board.update_task(claimed_task).append_event(
+                board = board.update_task(current_task.claim(candidate.agent.profile.name)).append_event(
                     AgentEvent(
                         type=AgentEventType.TASK_CLAIMED,
                         actor=candidate.agent.profile.name,
                         task_id=task.id,
                         message=candidate.decision.reason,
-                        metadata={
-                            "confidence": candidate.decision.confidence,
-                            "claimedBy": list(claimed_task.claimed_by),
-                        },
+                        metadata={"claimPriority": candidate.decision.claim_priority, "semantics": "relative_scheduling_preference"},
                     )
                 )
-                # Hand the claimed task to the agent and close that same instance,
-                # otherwise the CLAIMED status and claimed_by audit trail are
-                # silently dropped from the blackboard.
-                current_task = claimed_task
-                result = candidate.agent.act(current_task, board)
+                with span('agent.act', agent=candidate.agent.profile.name,
+                          action=str(current_task.metadata.get('kind', 'task'))):
+                    result = candidate.agent.act(current_task, board)
                 board = board.apply_turn_result(current_task, candidate.agent.profile.name, result)
+                self.latest_board = board
+                checkpoint()
                 claim_counts[candidate.agent.profile.name] += 1
             board = self._derive_missing_work(board)
             board = self._try_accept_final(board)
@@ -144,19 +151,19 @@ class EventDrivenCoordinator:
             condition=can_request_response and not has_response,
         )
         response = board.latest_artifact("response_proposal")
-        review = board.latest_artifact("safety_review")
+        review = board.latest_artifact("plan_review")
         critique = board.latest_artifact("critique")
         if response and (review is None or review.metadata.get("responseArtifactId") != response.id):
             board = self._ensure_task(
                 board,
                 AgentTask(
                     id=f"task:review-response:{response.id}",
-                    title="Review candidate response safety",
-                    description="Safety review is required before final acceptance.",
+                    title="Validate candidate prompt plan",
+                    description="This checks preparation only; final body review follows report/outbox commit.",
                     priority=TaskPriority.CRITICAL if risk == RiskLevel.HIGH else TaskPriority.HIGH,
                     required_capabilities=frozenset({AgentCapability.SAFETY.value}),
                     created_by=self.coordinator_agent.name,
-                    metadata={"kind": "safety_review", "responseArtifactId": response.id},
+                    metadata={"kind": "plan_review", "responseArtifactId": response.id},
                 ),
             )
         if critique and critique.payload.get("approved") is False:
@@ -217,7 +224,7 @@ class EventDrivenCoordinator:
         task_candidates.sort(
             key=lambda item: (
                 PRIORITY_ORDER[item[0].priority],
-                item[1].decision.confidence,
+                item[1].decision.claim_priority,
                 item[1].agent.profile.name,
             ),
             reverse=True,
@@ -239,21 +246,29 @@ class EventDrivenCoordinator:
         if board.final_artifact_id:
             return board
         response = board.latest_artifact("response_proposal")
-        review = board.latest_artifact("safety_review")
+        review = board.latest_artifact("plan_review")
         if response is None or review is None:
             return board
         if review.metadata.get("responseArtifactId") != response.id:
             return board
-        if not review.payload.get("approved"):
-            return board
-        if response.confidence < self.final_min_confidence:
-            return board
-        reason = "accepted after autonomous response proposal and SafetyAgent approval"
+        validation = validate_plan(board)
+        if not validation.approved:
+            metadata = {**validation.to_dict(), "responseArtifactId": response.id, "reviewArtifactId": review.id}
+            if any(e.type == AgentEventType.PLAN_REJECTED and e.metadata == metadata for e in board.events):
+                return board
+            return board.append_event(AgentEvent(type=AgentEventType.PLAN_REJECTED,
+                actor=self.coordinator_agent.name, artifact_id=response.id,
+                message="prompt plan contract not satisfied", metadata=metadata))
+        reason = "structural prompt plan contract accepted; actual reply body still requires review"
         self.coordinator_agent.remember_acceptance(response.id, reason)
-        return board.accept_final(response.id, self.coordinator_agent.name, reason)
+        return board.accept_plan(response.id, self.coordinator_agent.name, reason, validation.to_dict())
 
 
 def _intent_value(board: CollaborationBlackboard) -> IntentType:
+    if _risk_value(board) == RiskLevel.HIGH:
+        return IntentType.RISK
+    if _risk_value(board) == RiskLevel.MEDIUM:
+        return IntentType.CONSULT
     artifact = board.latest_artifact("intent")
     if artifact:
         try:
@@ -281,5 +296,6 @@ def _risk_value(board: CollaborationBlackboard) -> RiskLevel:
 
 
 def _hard_high_risk(text: str) -> bool:
-    lowered = (text or "").lower()
-    return any(word in lowered for word in ["自杀", "自残", "不想活", "结束生命", "伤害自己", "轻生", "suicide", "kill myself", "self harm"])
+    from app.services.ai import has_high_risk_signal
+
+    return has_high_risk_signal(text)

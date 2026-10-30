@@ -1,0 +1,270 @@
+{
+  "selection": "two lowest original faithfulness scores; post-hoc diagnostics, not new benchmark data",
+  "originalResultsUnchanged": true,
+  "rows": [
+    {
+      "sampleId": "relationships-and-family-1",
+      "originalScore": 0.16666666666666666,
+      "diagnosticScore": 0.625,
+      "structuredTraces": [
+        {
+          "outputType": "StatementGeneratorOutput",
+          "output": {
+            "statements": [
+              "半夜被吵醒确实很消耗人。",
+              "你会烦躁很正常。",
+              "想低攻击地沟通，关键是先讲具体发生了什么。",
+              "想低攻击地沟通，关键是再说对你的影响。",
+              "想低攻击地沟通，关键是最后提一个小而明确的请求。",
+              "低攻击沟通不是给对方贴没素质的标签。",
+              "低攻击沟通不是给对方贴针对我的标签。",
+              "比如可以这样说：昨晚12点半到1点，你那边有比较明显的说话或外放声音。",
+              "我第二天早课，睡眠被打断了。",
+              "能不能12点后戴耳机、打电话去走廊？",
+              "尽量选白天、双方都不赶时间的时候说。",
+              "语气平稳，只谈这一件事。",
+              "下一步可以先花两分钟写下最近三次噪音的具体时间、来源和你的需求。",
+              "下一步可以再约室友当面聊一次。",
+              "如果沟通后仍持续，就联系辅导员或宿管协助。",
+              "如果出现威胁、羞辱、隐私侵犯等情况，就联系辅导员或宿管协助。"
+            ]
+          }
+        },
+        {
+          "outputType": "NLIStatementOutput",
+          "output": {
+            "statements": [
+              {
+                "statement": "半夜被吵醒确实很消耗人。",
+                "reason": "The context discusses roommate conflicts including noise and sleep disruption, and acknowledges the impact, but does not explicitly state that being woken at midnight is exhausting.",
+                "verdict": 0
+              },
+              {
+                "statement": "你会烦躁很正常。",
+                "reason": "The context does not explicitly state that feeling irritable is normal, though it acknowledges emotional impact.",
+                "verdict": 0
+              },
+              {
+                "statement": "想低攻击地沟通，关键是先讲具体发生了什么。",
+                "reason": "The context advises recording specific events and using low-attack expression, implying starting with concrete facts.",
+                "verdict": 1
+              },
+              {
+                "statement": "想低攻击地沟通，关键是再说对你的影响。",
+                "reason": "The example low-attack expression includes stating the impact on oneself (e.g., sleep affected), so this can be inferred.",
+                "verdict": 1
+              },
+              {
+                "statement": "想低攻击地沟通，关键是最后提一个小而明确的请求。",
+                "reason": "The example includes a specific request (e.g., wearing headphones after 12), and the context advises small boundaries and clear requests.",
+                "verdict": 1
+              },
+              {
+                "statement": "低攻击沟通不是给对方贴没素质的标签。",
+                "reason": "The context explicitly contrasts low-attack expression with saying '你太没素质了', which is labeling.",
+                "verdict": 1
+              },
+              {
+                "statement": "低攻击沟通不是给对方贴针对我的标签。",
+                "reason": "The context advises against summarizing with '他就是针对我', which is labeling as targeting.",
+                "verdict": 1
+              },
+              {
+                "statement": "比如可以这样说：昨晚12点半到1点，你那边有比较明显的说话或外放声音。",
+                "reason": "The context gives an example of low-attack expression about noise after 12, though the exact wording is not verbatim.",
+                "verdict": 1
+              },
+              {
+                "statement": "我第二天早课，睡眠被打断了。",
+                "reason": "The context's example low-attack expression includes stating sleep impact, and this is a reasonable inference.",
+                "verdict": 1
+              },
+              {
+                "statement": "能不能12点后戴耳机、打电话去走廊？",
+                "reason": "The context's example request is '能不能晚上12点后戴耳机？', and suggesting calls in the hallway is a minor extension but consistent with low-attack communication.",
+                "verdict": 1
+              },
+              {
+                "statement": "尽量选白天、双方都不赶时间的时候说。",
+                "reason": "The context does not mention choosing daytime or when both parties are not rushed for communication.",
+                "verdict": 0
+              },
+              {
+                "statement": "语气平稳，只谈这一件事。",
+                "reason": "The context does not explicitly advise a calm tone or focusing on one issue, though it implies low-attack communication.",
+                "verdict": 0
+              },
+              {
+                "statement": "下一步可以先花两分钟写下最近三次噪音的具体时间、来源和你的需求。",
+                "reason": "The context advises recording specific events and clarifying needs, but does not specify writing down three recent noise incidents in two minutes.",
+                "verdict": 0
+              },
+              {
+                "statement": "下一步可以再约室友当面聊一次。",
+                "reason": "The context suggests communication but does not explicitly recommend scheduling another face-to-face talk as a next step.",
+                "verdict": 0
+              },
+              {
+                "statement": "如果沟通后仍持续，就联系辅导员或宿管协助。",
+                "reason": "The context advises contacting counselors or dorm management if conflicts escalate or persist, which can be inferred.",
+                "verdict": 1
+              },
+              {
+                "statement": "如果出现威胁、羞辱、隐私侵犯等情况，就联系辅导员或宿管协助。",
+                "reason": "The context explicitly states that if conflicts escalate to threats, bullying, humiliation, privacy invasion, or safety issues, students should contact counselors, dorm management, etc.",
+                "verdict": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sampleId": "exam-season-guidance-1",
+      "originalScore": 0.3333333333333333,
+      "diagnosticScore": 0.3333333333333333,
+      "structuredTraces": [
+        {
+          "outputType": "StatementGeneratorOutput",
+          "output": {
+            "statements": [
+              "考前一周最怕的是“什么都想补”。",
+              "考前一周“什么都想补”的结果是每科都悬着。",
+              "你可以把每门课的内容分成三层。",
+              "第一层是高频重点。",
+              "高频重点指老师反复强调的核心概念与题型。",
+              "高频重点指往年常考的核心概念与题型。",
+              "高频重点指课件和习题里反复出现的核心概念与题型。",
+              "第二层是基础保分。",
+              "基础保分指难度不高但必须拿稳的公式、定义、常规题。",
+              "第三层是低优先级。",
+              "低优先级包括偏题怪题、冷门细节、你一直卡住的难点。",
+              "复习时先保证第一层和第二层覆盖。",
+              "第三层只在时间富余时碰。",
+              "第三层只在时间富余时碰可以避免被一个难题拖垮整体节奏。",
+              "一个可行的下一步是今晚花20分钟。",
+              "今晚花20分钟只挑一门最让你焦虑的课。",
+              "把最让你焦虑的课的内容按这三层各写3到5条。",
+              "明天从第一层开始复习。",
+              "目标越具体，焦虑越容易降下来。",
+              "如果复习中持续崩溃、失眠或出现“没有未来”这类强烈绝望感，建议尽快联系辅导员或学校心理中心。",
+              "别一个人扛。"
+            ]
+          }
+        },
+        {
+          "outputType": "NLIStatementOutput",
+          "output": {
+            "statements": [
+              {
+                "statement": "考前一周最怕的是“什么都想补”。",
+                "reason": "The context says students should make a realistic plan rather than fantasize about fully catching up, implying the fear of trying to cover everything, but it does not explicitly state this exact phrase.",
+                "verdict": 0
+              },
+              {
+                "statement": "考前一周“什么都想补”的结果是每科都悬着。",
+                "reason": "The context does not state that trying to cover everything results in every subject being at risk.",
+                "verdict": 0
+              },
+              {
+                "statement": "你可以把每门课的内容分成三层。",
+                "reason": "The context recommends dividing review content into three layers: high-frequency key points, basic score protection, and low priority.",
+                "verdict": 1
+              },
+              {
+                "statement": "第一层是高频重点。",
+                "reason": "The context explicitly lists 高频重点 as one of the three layers.",
+                "verdict": 1
+              },
+              {
+                "statement": "高频重点指老师反复强调的核心概念与题型。",
+                "reason": "The context mentions 高频重点 but does not define it as concepts and question types repeatedly emphasized by teachers.",
+                "verdict": 0
+              },
+              {
+                "statement": "高频重点指往年常考的核心概念与题型。",
+                "reason": "The context does not define 高频重点 as core concepts and question types commonly tested in past years.",
+                "verdict": 0
+              },
+              {
+                "statement": "高频重点指课件和习题里反复出现的核心概念与题型。",
+                "reason": "The context does not define 高频重点 as core concepts and question types repeatedly appearing in courseware and exercises.",
+                "verdict": 0
+              },
+              {
+                "statement": "第二层是基础保分。",
+                "reason": "The context explicitly lists 基础保分 as one of the three layers.",
+                "verdict": 1
+              },
+              {
+                "statement": "基础保分指难度不高但必须拿稳的公式、定义、常规题。",
+                "reason": "The context mentions 基础保分 but does not define it with these specific details.",
+                "verdict": 0
+              },
+              {
+                "statement": "第三层是低优先级。",
+                "reason": "The context explicitly lists 低优先级 as one of the three layers.",
+                "verdict": 1
+              },
+              {
+                "statement": "低优先级包括偏题怪题、冷门细节、你一直卡住的难点。",
+                "reason": "The context mentions 低优先级 but does not specify what it includes.",
+                "verdict": 0
+              },
+              {
+                "statement": "复习时先保证第一层和第二层覆盖。",
+                "reason": "The context says to first cover high-frequency and basic points, which corresponds to the first and second layers.",
+                "verdict": 1
+              },
+              {
+                "statement": "第三层只在时间富余时碰。",
+                "reason": "The context does not explicitly state that the third layer should only be touched when time is abundant.",
+                "verdict": 0
+              },
+              {
+                "statement": "第三层只在时间富余时碰可以避免被一个难题拖垮整体节奏。",
+                "reason": "The context does not state this causal relationship.",
+                "verdict": 0
+              },
+              {
+                "statement": "一个可行的下一步是今晚花20分钟。",
+                "reason": "The context does not mention spending 20 minutes tonight as a next step.",
+                "verdict": 0
+              },
+              {
+                "statement": "今晚花20分钟只挑一门最让你焦虑的课。",
+                "reason": "The context does not mention this specific action.",
+                "verdict": 0
+              },
+              {
+                "statement": "把最让你焦虑的课的内容按这三层各写3到5条。",
+                "reason": "The context does not mention writing 3 to 5 items for each layer.",
+                "verdict": 0
+              },
+              {
+                "statement": "明天从第一层开始复习。",
+                "reason": "The context does not mention starting review from the first layer tomorrow.",
+                "verdict": 0
+              },
+              {
+                "statement": "目标越具体，焦虑越容易降下来。",
+                "reason": "The context explicitly states that the more specific the goal, the easier anxiety is to reduce.",
+                "verdict": 1
+              },
+              {
+                "statement": "如果复习中持续崩溃、失眠或出现“没有未来”这类强烈绝望感，建议尽快联系辅导员或学校心理中心。",
+                "reason": "The context advises contacting a counselor or mental health center for persistent breakdown or strong expressions of hopelessness like 'I have no future'.",
+                "verdict": 1
+              },
+              {
+                "statement": "别一个人扛。",
+                "reason": "The context does not explicitly say 'don't carry it alone', though it encourages seeking support.",
+                "verdict": 0
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

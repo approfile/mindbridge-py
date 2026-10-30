@@ -1,0 +1,12 @@
+{
+  "origin": "pre-P1 snapshot, rescored using explicit passage qrels",
+  "datasetSha256": "c1a3694d2845234cbe928c6c329c30cce5bed59e182d632ebfa7e594e1470ed7",
+  "mode": "bm25",
+  "topK": 4,
+  "scoring": "anchor-passage-qrels-v2",
+  "recallAtK": 0.9318181818181818,
+  "precisionAtK": 0.30113636363636365,
+  "mrr": 0.9772727272727273,
+  "ndcgAtK": 0.9459607244589858,
+  "hitRate": 1.0
+}

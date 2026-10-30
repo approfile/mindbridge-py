@@ -21,7 +21,7 @@ description: Use when creating a staff-facing handoff summary for counselors or 
 学生：{{student}}
 风险等级：{{risk_level}}
 情绪标签：{{emotion}}
-置信度：{{confidence}}
+判断把握参考：{{confidence}}
 模型摘要：{{summary}}
 建议跟进：
 {{next_steps}}

@@ -7,6 +7,7 @@ from typing import Any
 
 class AgentEventType(str, Enum):
     TURN_STARTED = "TURN_STARTED"
+    TURN_INTERRUPTED = "TURN_INTERRUPTED"
     TASK_CREATED = "TASK_CREATED"
     TASK_CLAIMED = "TASK_CLAIMED"
     TASK_RELEASED = "TASK_RELEASED"
@@ -17,6 +18,8 @@ class AgentEventType(str, Enum):
     REVISION_REQUESTED = "REVISION_REQUESTED"
     SAFETY_OVERRIDE = "SAFETY_OVERRIDE"
     FINAL_ACCEPTED = "FINAL_ACCEPTED"
+    PLAN_ACCEPTED = "PLAN_ACCEPTED"
+    PLAN_REJECTED = "PLAN_REJECTED"
     ROUND_STARTED = "ROUND_STARTED"
     BUDGET_EXHAUSTED = "BUDGET_EXHAUSTED"
 
@@ -72,7 +75,7 @@ class AgentTask:
 class AgentClaim:
     agent: str
     task_id: str
-    confidence: float
+    claim_priority: float
     reason: str
 
 
@@ -93,7 +96,6 @@ class AgentArtifact:
     owner: str
     kind: str
     payload: dict[str, Any]
-    confidence: float = 1.0
     task_id: str = ""
     metadata: dict[str, Any] = field(default_factory=dict)
 
@@ -161,7 +163,7 @@ class CollaborationBlackboard:
                 task_id=artifact.task_id,
                 artifact_id=artifact.id,
                 message=artifact.kind,
-                metadata={"confidence": artifact.confidence},
+                metadata={"artifactKind": artifact.kind},
             )
         )
 
@@ -214,12 +216,13 @@ class CollaborationBlackboard:
             return None
         return next((artifact for artifact in self.artifacts if artifact.id == self.final_artifact_id), None)
 
-    def accept_final(self, artifact_id: str, actor: str, reason: str) -> "CollaborationBlackboard":
+    def accept_plan(self, artifact_id: str, actor: str, reason: str, metadata: dict | None = None) -> "CollaborationBlackboard":
         return replace(self, final_artifact_id=artifact_id).append_event(
             AgentEvent(
-                type=AgentEventType.FINAL_ACCEPTED,
+                type=AgentEventType.PLAN_ACCEPTED,
                 actor=actor,
                 artifact_id=artifact_id,
                 message=reason,
+                metadata=metadata or {},
             )
         )

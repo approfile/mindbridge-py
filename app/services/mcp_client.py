@@ -4,10 +4,12 @@ import os
 import re
 import sys
 from contextlib import asynccontextmanager
+from datetime import timedelta
 from typing import Any, AsyncIterator
 
 from app.core.config import Settings
-from app.core.enums import RiskLevel
+from app.core.enums import RiskLevel, ToolJobKind
+from app.services.tool_governance import ToolAuthorizationError
 
 
 class McpToolError(RuntimeError):
@@ -17,6 +19,35 @@ class McpToolError(RuntimeError):
 class MindBridgeMcpToolClient:
     def __init__(self, settings: Settings):
         self.settings = settings
+
+    async def execute_job(self, kind: str, report_id: int, job_id: int, claim_token: str) -> str:
+        names = {
+            ToolJobKind.EXCEL_REPORT.value: "mindbridge_excel_report",
+            ToolJobKind.CASE_CREATE.value: "mindbridge_case_create",
+            ToolJobKind.ALERT_SEND.value: "mindbridge_alert_send",
+            ToolJobKind.RISK_ALERT.value: "mindbridge_alert_notify",
+        }
+        if kind not in names:
+            raise ToolAuthorizationError(f"未知工具：{kind}")
+        try:
+            async with self._session() as session:
+                return await self._call_tool(session, names[kind], {
+                    "report_id": report_id, "job_id": job_id, "claim_token": claim_token,
+                })
+        except Exception as exc:
+            # anyio's stdio task group may wrap a policy rejection.
+            def rejection(error):
+                if isinstance(error, ToolAuthorizationError):
+                    return error
+                for nested in getattr(error, "exceptions", ()):
+                    found = rejection(nested)
+                    if found:
+                        return found
+                return None
+            blocked = rejection(exc)
+            if blocked:
+                raise blocked
+            raise McpToolError(f"MCP 工具调用异常：{exc}") from exc
 
     async def handle_report(self, report_id: int, risk_level: str | None) -> list[str]:
         try:
@@ -49,6 +80,8 @@ class MindBridgeMcpToolClient:
 
         project_root = self.settings.project_root
         env = os.environ.copy()
+        for name, value in self.settings.model_dump().items():
+            env[name.upper()] = str(value).lower() if isinstance(value, bool) else str(value)
         python_path = env.get("PYTHONPATH")
         env["PYTHONPATH"] = str(project_root) if not python_path else f"{project_root}{os.pathsep}{python_path}"
 
@@ -59,14 +92,19 @@ class MindBridgeMcpToolClient:
             cwd=str(project_root),
         )
         async with stdio_client(server) as (read_stream, write_stream):
-            async with ClientSession(read_stream, write_stream) as session:
+            async with ClientSession(
+                read_stream, write_stream,
+                read_timeout_seconds=timedelta(seconds=self.settings.mcp_tool_timeout_seconds),
+            ) as session:
                 await session.initialize()
                 yield session
 
     async def _call_tool(self, session: Any, name: str, arguments: dict[str, Any]) -> str:
         result = await session.call_tool(name, arguments=arguments)
         message = self._result_message(result)
-        if getattr(result, "isError", False):
+        if getattr(result, "isError", False) and "BLOCKED:" in message:
+            raise ToolAuthorizationError(message.split("BLOCKED:", 1)[1].strip())
+        if getattr(result, "isError", False) or not message.strip().lower().startswith("success:"):
             raise McpToolError(f"{name} 调用失败：{message}")
         return message
 

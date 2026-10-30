@@ -1,0 +1,9 @@
+{
+  "app/rag_eval/data/retrieval-v1.json": "c1a3694d2845234cbe928c6c329c30cce5bed59e182d632ebfa7e594e1470ed7",
+  "app/evaluation/data/risk-v1.json": "8402c2eddcb172ddb8506369a4326172d9447dd76bb4b608297f556dbe911684",
+  "app/evaluation/data/dialogues-v1.json": "8a7427de9d2d38a93520569e893f39b06191f2d6c191a42b8eb2fb8ecd95c3b1",
+  "app/evaluation/data/intent-v1.json": "1d928e681b11c7c5a3c69ee519d12be1fc75b7d3d6811f73498776da01a9ca8d",
+  "app/evaluation/data/reply-safety-v1.json": "07946ddca25e81e1ad134ff0b4cbc072a1d7b8973b7cc7ac834257adab3c9d7c",
+  "app/evaluation/data/reply-safety-source-v1.json": "ba41cf45b830952bf457a37eef2b81ad86dfbd764499798bbc14761e595a06b8",
+  "app/evaluation/data/context-routing-v1.json": "3ee83fb4754a48f8f73dcc49a3454d57633f63297ed242f8a1be8452e7c5abae"
+}

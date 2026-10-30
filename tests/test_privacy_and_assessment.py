@@ -5,6 +5,7 @@ from app.core.enums import RiskLevel
 from app.services.assessment import PsychologicalAssessmentService
 from app.services.memory import RedisShortTermMemoryStore
 from app.services.privacy import PrivacySanitizer
+from app.core.privacy_crypto import decrypt_text, PREFIX
 
 
 class ExplodingAi:
@@ -13,6 +14,17 @@ class ExplodingAi:
 
 
 class PrivacyAndAssessmentTests(unittest.TestCase):
+    def setUp(self):
+        import tempfile
+        from pathlib import Path
+        from unittest.mock import patch
+        from app.core.config import Settings
+        from app.core.privacy_crypto import cipher
+        temp=tempfile.TemporaryDirectory();self.addCleanup(temp.cleanup)
+        settings=Settings(_env_file=None,privacy_key_file=str(Path(temp.name)/'fixture.key'))
+        crypto=patch('app.core.privacy_crypto.get_settings',return_value=settings)
+        crypto.start();self.addCleanup(crypto.stop);cipher(settings)
+
     def test_privacy_sanitizer_masks_common_identifiers(self):
         text = PrivacySanitizer().sanitize("电话 13800138000 邮箱 a@example.com 身份证 110101199003071234")
 
@@ -26,16 +38,18 @@ class PrivacyAndAssessmentTests(unittest.TestCase):
         store.privacy = PrivacySanitizer()
 
         payload = json.loads(store._serialize("user", "电话 13800138000 邮箱 a@example.com"))
-
-        self.assertNotIn("13800138000", payload["content"])
-        self.assertNotIn("a@example.com", payload["content"])
-        self.assertEqual(payload["content"].count("[已脱敏]"), 2)
+        self.assertTrue(payload['content'].startswith(PREFIX))
+        content=decrypt_text(payload['content'])
+        self.assertNotIn("13800138000", content)
+        self.assertNotIn("a@example.com", content)
+        self.assertEqual(content.count("[已脱敏]"), 2)
 
     def test_high_risk_signal_uses_hard_guard_before_model(self):
         result = PsychologicalAssessmentService(ExplodingAi()).assess("我不想活了，想结束生命")
 
         self.assertEqual(result.risk, RiskLevel.HIGH)
-        self.assertGreaterEqual(result.confidence, 0.9)
+        self.assertIsNone(result.confidence)
+        self.assertEqual(result.confidence_info['kind'], 'not_applicable')
 
 
 if __name__ == "__main__":

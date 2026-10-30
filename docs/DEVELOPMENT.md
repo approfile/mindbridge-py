@@ -1,110 +1,50 @@
-# 开发说明
+# 运行、测试与复现
 
-本文覆盖 MindBridge 的开发时间线、目录结构、环境准备、本地运行方式与常见问题；前置阅读：[README](../README.md) 的快速开始一节。可复现命令的完整清单见 [BENCHMARKS](./BENCHMARKS.md)。
+## 本机演示
 
----
+Python 3.12，安装 requirements.txt，按[首页](../README.md)的 SQLite + mock 命令启动。Redis 不可用时近期记忆降级；log 预警只记录模拟投递。不要把这些结果当作真实 embedding、SMTP 或模型验证。
 
-## 1. 开发时间线
+真实 API 的聊天和 embedding 配置分开；.env.example 提供空密钥模板。角色级 AGENT_MODEL_* 可覆盖默认 provider/model。可选 Ollama 只需配置 AI_PROVIDER=ollama、OLLAMA_BASE_URL 和本机实际存在的 OLLAMA_MODEL；仓库没有 GGUF 权重。
 
-- **2026-06 至 2026-09**：本地开发跨度约三个月。6 月初搭建 FastAPI 骨架与配置，6 月中旬至 7 月底完成主体功能（多 Agent Runtime、三级风险判定、RAG、记忆、Skill、工具队列、前端），9 月补充离线验证脚本、回归测试与文档；
-- **2026-09-19**：集中整理并发布首个公开快照。公开仓库的 4 个初始 commit 落在约 41 分钟的时间窗口内，这是整理上传的节奏，不代表开发周期；时间线只陈述可验证事实，不伪造更早的提交日期，后续开发以增量提交记录演进。
+## Docker
 
----
+复制 .env.example 为 .env，填写模型及向量 API 配置后执行 docker compose up -d --build。服务为 MySQL 8.0（13306）、Redis 7.2（16379）、应用（8080）；数据、台账及 privacy.key 位于挂载的 data/，向量另用卷。默认演示数据库凭据需要自行更换。
 
-## 2. 项目结构
+Compose 不自动配置 SMTP。真实预警需显式提供 SMTP_HOST/PORT/USERNAME/PASSWORD、TLS/SSL、收发人及 ALERT_EMAIL_DELIVERY_MODE=smtp。当前 Compose 只透传其中列出的变量；额外配置请在本机 override 中明确加入。ALERT_EMAIL_DELIVERY_MODE=log 不是邮件投递证据。
 
-```text
-app/      # 后端：agents / api / core / harness / knowledge / mcp_tools / models /
-          #      rag_eval / schemas / services / static（详见 ARCHITECTURE 第 6 节）
-skills/   tests/   scripts/   models/   docs/
-```
+镜像不携带 .env、密钥、运行库、缓存或权重；升级现有数据库前备份数据及对应密钥。迁移加密不会清除旧备份。
 
-`skills/` 是 7 个标准 SKILL.md，`tests/` 是 23 个单元与回归用例，`scripts/` 是运行、模型、打包、离线验证与演示脚本，`models/` 只含 Ollama Modelfile 与权重放置说明（不含 GGUF），`docs/` 是架构图与深度设计文档。
-
----
-
-## 3. 环境准备
-
-要求 Python 3.12（与 `requirements.txt`、CI、Dockerfile 一致）。
+## 离线检查
 
 ```bash
-python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-
-cp .env.example .env        # 按需填写；也可以只用环境变量
+pip install -r requirements.txt -r requirements-evaluation.txt
+mkdir -p target data
+AI_PROVIDER=mock DATABASE_URL=sqlite:///./target/tests.sqlite3 \
+KNOWLEDGE_VECTOR_ENABLED=false python -m unittest discover -s tests
+python -m app.harness.runner
+python scripts/validate_agent_tasks.py
 ```
 
-**配置默认值要特别注意**：`app/core/config.py` 的默认值是 `AI_PROVIDER=ollama` 与 MySQL 连接串，因此**一个空 `.env` 并不等于 mock + SQLite**；零服务运行必须显式设置下面第 4 节的变量（`.env.example` 模板已给出这组值）。API Key 只放在本地 `.env`（已被 `.gitignore` 排除），不要写进代码或提交到仓库。
+CI 与本机验证只证明所运行的测试。mock RAG Harness 使用 BM25 降级，不能复现 Qwen 向量成绩。完整任务评测脚本不由普通单测自动触发。
 
-演示账号由启动播种写入：`student / student123`（学生）与 `admin / admin123`（管理员）。
+## 分层真实执行的前置条件
 
----
+scripts/run_agent_results.py、run_agent_layered.py 和 judge_agent_layers.py 使用独立 SQLite、Redis db15 的随机命名空间、隔离台账与本机 Mailpit（HTTP 8025、SMTP 1025），不会复用线上业务库。实际副作用验证需要这些服务；没有 Mailpit 时不能把邮件记录 SUCCESS 算已收件。
 
-## 4. 本地运行
+历史 v1 的 app/evaluation/agent_layered_execution.py、scripts/prepare_rag_quality_samples.py 还读取 .local-runtime/chunk-size-ab-20261025/embedding-cache.json 和 target/chunk-size-ab/report.json；部分父目录也需预先存在。这些历史缓存不公开，所以新 checkout 不能直接一条命令重跑全部真实层。当前发布保留原脚本与源码哈希，不改写历史实验。后续需做版本化的可配置缓存/在线重建适配，再生成新的执行证据。
 
-### 4.1 mock + SQLite（无需任何外部服务）
+历史原始入口与参数见[主报告](agent-layered-evaluation-v1.md)，输出目录应新建，不能覆盖旧成绩。参考答案不传给生成端；人工表须真人填写。
+
+## RAGAS 独立环境
 
 ```bash
-export AI_PROVIDER=mock
-export DATABASE_URL=sqlite:///./data/mindbridge.db
-export KNOWLEDGE_VECTOR_ENABLED=false     # 无 embedding Key 时用纯 BM25 检索
-export TOOL_QUEUE_ENABLED=false           # 简化本地运行；完整闭环见 5.4
-
-mkdir -p data target                      # SQLite 需要目录已存在
-uvicorn app.main:app --host 127.0.0.1 --port 8080
+python3.12 -m venv .venv-ragas
+.venv-ragas/bin/pip install -r requirements.txt -r requirements-ragas-evaluation.txt
+.venv-ragas/bin/pip check
+# 先满足上述采样前置条件，生成新的 samples 后：
+.venv-ragas/bin/python scripts/score_ragas_layers.py \
+  --samples target/agent-layered/ragas-v1 \
+  --output target/agent-layered/ragas-v1/new-report.json
 ```
 
-打开 <http://127.0.0.1:8080> 使用学生端 / 管理端。`TOOL_QUEUE_ENABLED=false` 时工具派发走 MCP stdio 直连；`=true` 时走数据库队列（SQLite 下也可用，能观察重试、限流、死信与审计链路）。
-
-### 4.2 零服务演示与验证
-
-```bash
-python scripts/demo_turn.py                # 三个场景的完整协作事件流
-python -m app.harness.runner               # 6 组工程 harness（mock + 临时 SQLite）
-python -m unittest discover -s tests       # 23 个单元测试
-python scripts/verify_offline.py           # 缺依赖环境下的 33 项断言
-```
-
-### 4.3 Docker Compose
-
-```bash
-cp .env.example .env
-docker compose up -d --build
-```
-
-端口映射：App `8080`、MySQL `13306 → 3306`、Redis `16379 → 6379`。compose 会透传 SMTP 配置，`ALERT_EMAIL_DELIVERY_MODE=log` 时预警只记录不发信。
-
-### 4.4 接真实模型
-
-本地 Ollama 用 `AI_PROVIDER=ollama OLLAMA_MODEL=mindbridge-qwen2.5-7b-ft:latest ./scripts/run-dev.sh`（需自备 GGUF 权重）；接任意 OpenAI 兼容端点则设置 `AI_PROVIDER=openai`、`OPENAI_BASE_URL`、`OPENAI_API_KEY`、`OPENAI_MODEL` 后正常启动。
-
----
-
-## 5. 常见问题
-
-| 问题 | 处理 |
-| --- | --- |
-| 端口被占用 | 默认 App 端口 8080；compose 中 MySQL / Redis 映到 13306 / 16379，可按需修改环境变量或端口映射 |
-| `data/` 或 `target/` 不存在导致启动失败 | SQLite 无法在不存在目录中建库文件；先 `mkdir -p data target`（CI 也单独执行了这一步），或改用已有的 MySQL |
-| 空 `.env` 启动后连不上模型 / 数据库 | 代码默认是 Ollama + MySQL；零服务运行需显式设置 `AI_PROVIDER=mock` 与 SQLite `DATABASE_URL` |
-| 高风险场景没有台账 / 个案 / 预警 | 完整闭环需要可用的工具执行路径：`TOOL_QUEUE_ENABLED=true`（队列，推荐）或安装 `mcp` 后使用直连；未安装 `mcp` 时聊天与报告正常，但工具产物为空（服务端只记 warning）。`requirements.txt` 已含 `mcp>=1.2.0,<2.0.0`；手动安装 `mcp` 时注意它与 starlette / fastapi 的版本约束 |
-| 为什么 `mcp` 要锁 `<2.0.0` | `app/mcp_tools/server.py` 使用 1.x 的 `FastMCP` API，2.x 将其改名为 `MCPServer`，直接升级会导致 MCP 工具服务启动即退出；迁移到 2.x API 属于待办 |
-| Key 放在哪里 | 只放本地 `.env` 或进程环境变量；`.gitignore` 已排除 `.env` / `.env.*` 并保留 `.env.example` |
-| 没有 Redis / 没有 Chroma 能跑吗 | 能。Redis 不可达时短期记忆降级为空历史；Chroma 或 embedding 不可用时检索退回纯 BM25（见 [RAG](./RAG.md)） |
-
----
-
-## 6. 后续计划
-
-短中期方向见 [LIMITATIONS](./LIMITATIONS.md) 第 7 节：v0.1.0 公开快照 → v0.2.0 工程加固 → v0.3.0 运维与并发。
-
----
-
-## 相关文档
-
-- [README](../README.md)：项目定位、能力索引与快速开始
-- [ARCHITECTURE](./ARCHITECTURE.md)：分层与目录结构
-- [QUALITY](./QUALITY.md)：harness、单测与 CI
-- [BENCHMARKS](./BENCHMARKS.md)：可复现命令与实测数据
-- [LIMITATIONS](./LIMITATIONS.md)：边界与版本路线
-- [API](./API.md)：本地账号、认证与调用示例
+RAGAS、独立模型评审与真实生成会调用付费 API。该依赖环境与业务环境分开，避免 LangChain 等可选依赖改变线上环境。历史报告公开的是固定合成实验，不含 API 凭据、私有数据库或密钥。

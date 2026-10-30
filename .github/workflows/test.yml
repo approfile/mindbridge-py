@@ -9,54 +9,27 @@ on:
 jobs:
   python:
     runs-on: ubuntu-latest
+    env:
+      AI_PROVIDER: mock
+      DATABASE_URL: sqlite:///./target/ci-test.sqlite3
+      REDIS_URL: redis://127.0.0.1:1/15
+      REDIS_SOCKET_TIMEOUT_SECONDS: "0.1"
+      KNOWLEDGE_VECTOR_ENABLED: "false"
+      PRIVACY_KEY_FILE: target/ci-privacy.key
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      # A clean checkout has no target/ directory because it is git-ignored, and
-      # SQLite cannot create a database file inside a directory that does not
-      # exist. Create the runtime directories before anything opens DATABASE_URL.
-      - name: Prepare runtime directories
+          pip install -r requirements.txt -r requirements-evaluation.txt
+      - name: Prepare scratch directories
         run: mkdir -p target data
-
       - name: Compile app
-        run: python -m compileall -q app tests scripts
-
-      - name: Run unit tests
-        env:
-          AI_PROVIDER: mock
-          DATABASE_URL: sqlite:///./target/ci-test.sqlite3
-          REDIS_URL: redis://127.0.0.1:6379/15
-          KNOWLEDGE_VECTOR_ENABLED: "false"
-        run: |
-          set -o pipefail
-          python -m unittest discover -s tests -v 2>&1 | tee target/test-output.txt
-
-      # The engineering harness runs entirely on the mock provider, a temporary
-      # SQLite file and in-memory short-term memory, so it needs no service or
-      # API key. It exercises the six core chains and writes JSON reports.
-      - name: Run engineering harness
-        env:
-          AI_PROVIDER: mock
-          REDIS_URL: redis://127.0.0.1:6379/15
-        run: |
-          set -o pipefail
-          python -m app.harness.runner 2>&1 | tee target/harness-output.txt
-
-      - name: Upload test and harness output
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-output
-          path: |
-            target/test-output.txt
-            target/harness-output.txt
-            target/harness/
-          if-no-files-found: warn
+        run: python -m compileall app tests
+      - name: Run tests
+        run: python -m unittest discover -s tests
+      - name: Engineering harness
+        run: python -m app.harness.runner

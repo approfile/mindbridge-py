@@ -11,6 +11,7 @@ from app.core.config import Settings
 from app.models.entities import ChatMessage
 from app.schemas.dtos import AiMessage
 from app.services.privacy import PrivacySanitizer
+from app.core.privacy_crypto import encrypt_text, decrypt_text, PREFIX
 
 
 logger = logging.getLogger(__name__)
@@ -40,28 +41,35 @@ class RedisShortTermMemoryStore:
     def messages_from_rows(self, rows: list[ChatMessage]) -> list[AiMessage]:
         return [self._message_from_row(row) for row in rows]
 
-    def append(self, session_public_id: str, role: str, content: str) -> None:
+    def append(self, session_public_id: str, role: str, content: str, message_id: int | None = None) -> None:
         if self.client is None:
             return
         key = self._key(session_public_id)
         payload = self._serialize(role, content)
         try:
-            self.client.rpush(key, payload)
-            self.client.ltrim(key, -self.settings.redis_memory_max_messages, -1)
-            self.client.expire(key, self.settings.redis_memory_ttl_seconds)
+            pipe = self.client.pipeline()
+            pipe.rpush(key, payload)
+            pipe.ltrim(key, -self.settings.redis_memory_max_messages, -1)
+            pipe.expire(key, self.settings.redis_memory_ttl_seconds)
+            if message_id is not None:
+                pipe.set(key + ":version", message_id, ex=self.settings.redis_memory_ttl_seconds)
+            pipe.execute()
         except Exception as exc:
             logger.warning("Redis memory append unavailable: %s", exc)
 
-    def replace(self, session_public_id: str, messages: list[AiMessage]) -> None:
+    def replace(self, session_public_id: str, messages: list[AiMessage], last_message_id: int | None = None) -> None:
         if self.client is None:
             return
         key = self._key(session_public_id)
         pipe = self.client.pipeline()
         pipe.delete(key)
+        pipe.delete(key + ":version")
         if messages:
             pipe.rpush(key, *[self._serialize(message.role, message.content) for message in messages])
             pipe.ltrim(key, -self.settings.redis_memory_max_messages, -1)
             pipe.expire(key, self.settings.redis_memory_ttl_seconds)
+            if last_message_id is not None:
+                pipe.set(key + ":version", last_message_id, ex=self.settings.redis_memory_ttl_seconds)
         try:
             pipe.execute()
         except Exception as exc:
@@ -69,6 +77,23 @@ class RedisShortTermMemoryStore:
 
     def _read(self, session_public_id: str, limit: int) -> list[AiMessage]:
         raw_items = self.client.lrange(self._key(session_public_id), -limit, -1)
+        return self._decode(raw_items)
+
+    def load_snapshot(self, session_public_id: str) -> tuple[list[AiMessage], int | None]:
+        if self.client is None:
+            return [], None
+        try:
+            key = self._key(session_public_id)
+            pipe = self.client.pipeline()
+            pipe.lrange(key, -self.settings.redis_memory_max_messages, -1)
+            pipe.get(key + ":version")
+            messages, version = pipe.execute()
+            return self._decode(messages), int(version) if version is not None else None
+        except Exception as exc:
+            logger.warning("Redis memory snapshot unavailable: %s", exc)
+            return [], None
+
+    def _decode(self, raw_items) -> list[AiMessage]:
         messages = []
         for raw in raw_items:
             try:
@@ -77,6 +102,11 @@ class RedisShortTermMemoryStore:
                 continue
             role = str(data.get("role", "")).lower()
             content = str(data.get("content", ""))
+            if not content.startswith(PREFIX):
+                # Legacy cache is not an authoritative plaintext fallback.
+                # DB-backed session memory repairs it after authentication.
+                continue
+            content = decrypt_text(content, getattr(self,'settings',None))
             if role and content:
                 messages.append(AiMessage(role=role, content=self.privacy.sanitize(content)))
         return messages
@@ -111,7 +141,7 @@ class RedisShortTermMemoryStore:
         return json.dumps(
             {
                 "role": role.lower(),
-                "content": self.privacy.sanitize(content),
+                "content": encrypt_text(self.privacy.sanitize(content),getattr(self,'settings',None)),
                 "createdAt": datetime.utcnow().isoformat(),
             },
             ensure_ascii=False,
@@ -119,6 +149,46 @@ class RedisShortTermMemoryStore:
 
     def _key(self, session_public_id: str) -> str:
         return f"mindbridge:short-term-memory:{session_public_id}"
+
+    def upgrade_legacy_cache(self):
+        """CAS replace legacy list entries; preserve existing TTL/version.
+
+        Called once during quiescent deployment, not every request. WATCH
+        prevents overwriting another process's concurrent list append.
+        """
+        if self.client is None:return {'available':False,'lists':0}
+        count=0
+        for key in self.client.scan_iter(match='mindbridge:short-term-memory:*',count=100):
+            if self.client.type(key)!='list':continue
+            with self.client.pipeline() as pipe:
+                try:
+                    pipe.watch(key);values=pipe.lrange(key,0,-1);ttl=pipe.pttl(key);updated=[];changed=False
+                    for value in values:
+                        data=json.loads(value);content=str(data.get('content',''))
+                        if not content.startswith(PREFIX):
+                            data['content']=encrypt_text(self.privacy.sanitize(content),self.settings);changed=True
+                        else:decrypt_text(content,self.settings)
+                        updated.append(json.dumps(data,ensure_ascii=False))
+                    if not changed:pipe.unwatch();continue
+                    if ttl==0 or ttl==-2:pipe.unwatch();continue
+                    pipe.multi();pipe.delete(key)
+                    if updated:
+                        pipe.rpush(key,*updated);pipe.pexpire(key,ttl if ttl>0 else self.settings.redis_memory_ttl_seconds*1000)
+                    pipe.execute();count+=1
+                except Exception as exc:
+                    # Fail deployment rather than claim a plaintext cache was
+                    # secured. Retry safely after a concurrent modification.
+                    raise RuntimeError('Private cache migration incomplete') from None
+        return {'available':True,'lists':count}
+
+    def erase_session_cache(self, public_id):
+        if self.client is None:
+            raise RuntimeError('Redis unavailable: content erasure aborted to prevent stale-cache resurrection')
+        base=self._key(public_id)
+        keys=[base,base+':version']
+        for key in self.client.scan_iter(match=self._key('agent:*:'+public_id)+'*',count=100):
+            keys.append(key)
+        self.client.delete(*keys)
 
 
 def compact_history_for_prompt(

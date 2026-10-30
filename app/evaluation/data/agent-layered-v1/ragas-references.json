@@ -1,0 +1,119 @@
+{
+  "version": "ragas-reference-subset-v1",
+  "selection": "one first query per frozen source (11) plus academic-stress-and-burnout-2; fixed before generation",
+  "size": 12,
+  "annotation": "AI-authored source-grounded engineering reference; independent human review pending; not clinical validation",
+  "retrievalDatasetSha256": "c1a3694d2845234cbe928c6c329c30cce5bed59e182d632ebfa7e594e1470ed7",
+  "corpusHashes": {
+    "academic-stress-and-burnout.md": "13a94229c9de339d2cf4e2fdf01c3a971d231fc662fc1d8bcd7f63d006c1c3ef",
+    "adjustment-and-transition.md": "1a70c05ed0c65eba1b06af8dc11e042d067b963ad76f9963788d87d6550ed2a7",
+    "anxiety-panic-grounding.md": "e80f2e81ab975722a0935dd291b9ba7209c35c71fad40cb79ac6a2af33f6cbbb",
+    "campus-mental-health.md": "a2f5c1f04580b0f112173522453394a7791d9f5bce982daa94d8f0bcc8da40d1",
+    "counselor-referral-and-resources.md": "7b71f8037c9756444d90fdedc859606709019981c2c0d4b71f385d2144e729a1",
+    "exam-season-guidance.md": "b448d023b155fc7f8c65103ad1f091aab9bdd4c855bb0bcc03861592839cfda5",
+    "low-mood-depression-support.md": "fc429b6fea8cf46c6f4fb10873922250b6bf0ef95e822879a593ba61243472f2",
+    "privacy-boundaries-and-ethics.md": "4871414f7dc61ec6f3166f6d932add0dd08f4d7719930842f1993d09ff5fa91e",
+    "relationships-and-family.md": "f3aa3e764d60bb17be93c39f43eaf1cf0bebc66d648650ac117575c7ff1a6296",
+    "risk-policy.md": "e717ad9c95d3f47c13393610f12717e940a98c8d99d0ab76883a4704f398e009",
+    "sleep-routine-self-care.md": "3cafe76bc0224dfc42d6c935e7300edfa9f51ef5fb901fef74775b97e001ef1b"
+  },
+  "samples": [
+    {
+      "id": "academic-stress-and-burnout-1",
+      "question": "任务太多全堆在今天，怎样按优先级拆分压力？",
+      "reference": "先把压力任务分成必须今天处理、可以本周处理、暂时接受不完美三类，避免把所有任务都当成现在必须完成；再选一个最小行动开始。",
+      "referenceSources": [
+        "academic-stress-and-burnout.md"
+      ]
+    },
+    {
+      "id": "adjustment-and-transition-1",
+      "question": "新生离家不适应，如何建立日常生活的基本锚点？",
+      "reference": "可以固定吃饭地点、每周联系一个熟人、认识一个任课老师或助教，并找到图书馆和心理中心的位置，通过具体的小步骤建立熟悉感和可预测感。",
+      "referenceSources": [
+        "adjustment-and-transition.md"
+      ]
+    },
+    {
+      "id": "anxiety-panic-grounding-1",
+      "question": "五感着陆练习的54321分别是什么？",
+      "reference": "五感着陆是依次说出5个看见的东西、4个摸得到的触感、3个听见的声音、2个闻到的气味、1个尝到的味道，把注意力拉回当前环境。",
+      "referenceSources": [
+        "anxiety-panic-grounding.md"
+      ]
+    },
+    {
+      "id": "campus-mental-health-1",
+      "question": "What is MindBridge and may it present itself as a therapist?",
+      "reference": "MindBridge is a supportive campus mental-health assistant offering calm, non-judgmental and practical guidance. It should encourage trusted human help when appropriate and must not present itself as a therapist.",
+      "referenceSources": [
+        "campus-mental-health.md"
+      ]
+    },
+    {
+      "id": "counselor-referral-and-resources-1",
+      "question": "校园里有哪些现实支持资源可以帮助学生？",
+      "reference": "可考虑辅导员、校园心理中心、校医院、任课老师或助教、宿管或保卫处，以及可信任的同学和家人等现实支持；应根据具体需要选择，不保证具体本校资源一定可用。",
+      "referenceSources": [
+        "counselor-referral-and-resources.md"
+      ]
+    },
+    {
+      "id": "exam-season-guidance-1",
+      "question": "考前一周，怎样把复习内容分成三个优先层次？",
+      "reference": "考前一周可将复习分为高频重点、基础保分和低优先级三层，先覆盖高频和基础，不要因纠结难题失去整体安排；同时保持休息和吃饭。",
+      "referenceSources": [
+        "exam-season-guidance.md"
+      ]
+    },
+    {
+      "id": "low-mood-depression-support-1",
+      "question": "情绪低落时，行为激活为什么从喝水洗脸等小行动开始？",
+      "reference": "行为激活从喝水、洗脸等小行动开始，是为了降低行动门槛，把任务缩小到能开始的第一步，而不是要求状态很差的学生一次改变整个生活。",
+      "referenceSources": [
+        "low-mood-depression-support.md"
+      ]
+    },
+    {
+      "id": "privacy-boundaries-and-ethics-1",
+      "question": "校园心理AI如何落实最小必要收集，而不追问无关敏感细节？",
+      "reference": "只收集完成支持所需的信息，不诱导提供无关敏感细节；允许学生只说愿意分享的部分，将重点放在当前安全和希望获得的支持上。",
+      "referenceSources": [
+        "privacy-boundaries-and-ethics.md"
+      ]
+    },
+    {
+      "id": "relationships-and-family-1",
+      "question": "室友半夜制造噪音，怎样基于具体事件做低攻击沟通？",
+      "reference": "先记录具体噪音事件和对睡眠的影响，避免给室友贴标签；用具体需求提出低攻击沟通，例如说明睡眠受影响并请求夜间降低噪音，而不是辱骂或报复。",
+      "referenceSources": [
+        "relationships-and-family.md"
+      ]
+    },
+    {
+      "id": "risk-policy-1",
+      "question": "LOW MEDIUM HIGH这些风险等级在系统里用于什么，而非医学诊断？",
+      "reference": "这些等级是工程分流策略，用于决定回复强度、人工支持、是否记录台账和预警，不是医学诊断或临床量表结论。",
+      "referenceSources": [
+        "risk-policy.md"
+      ]
+    },
+    {
+      "id": "sleep-routine-self-care-1",
+      "question": "作息紊乱时，为什么优先固定起床时间而不是强迫今晚早睡？",
+      "reference": "固定起床时间提供稳定作息锚点；即使前一晚睡得不好，也可在可承受范围内保持起床时间，而不是强迫自己今晚立刻入睡。",
+      "referenceSources": [
+        "sleep-routine-self-care.md"
+      ]
+    },
+    {
+      "id": "academic-stress-and-burnout-2",
+      "question": "完美主义让我一直拖延，十分钟启动法怎么用？",
+      "reference": "十分钟启动法只要求先做十分钟，不要求一次完成，结束后再决定是否继续；完美主义者可以先写可修改的丑版初稿，降低开始门槛。",
+      "referenceSources": [
+        "academic-stress-and-burnout.md",
+        "exam-season-guidance.md"
+      ]
+    }
+  ]
+}

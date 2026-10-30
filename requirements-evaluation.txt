@@ -1,0 +1,2 @@
+# Optional authoring/validation dependency; does not alter the application runtime.
+jsonschema==4.26.0

@@ -47,7 +47,9 @@ class AgentModelRegistry:
             settings.openai_model = profile.model
         else:
             settings.ollama_model = profile.model
-        return AiClient(settings)
+        client = AiClient(settings)
+        client.agent_name = agent_name
+        return client
 
     def _setting(self, name: str, fallback: Any) -> Any:
         value = getattr(self.settings, name, None)

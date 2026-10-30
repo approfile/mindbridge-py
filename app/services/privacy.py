@@ -3,9 +3,9 @@ import re
 
 class PrivacySanitizer:
     patterns = [
-        re.compile(r"1[3-9]\d{9}"),
+        re.compile(r"(?<!\d)\d{17}[\dXx](?!\d)"),
+        re.compile(r"(?<![0-9A-Za-z])(?:\+?86[ -]?)?1[3-9]\d[ -]?\d{4}[ -]?\d{4}(?![0-9A-Za-z])"),
         re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+"),
-        re.compile(r"\b\d{17}[\dXx]\b"),
     ]
     
     def sanitize(self, text: str) -> str:

@@ -1,0 +1,1061 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MindBridge Agent Task Contracts v1",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "version": {
+      "const": "agent-tasks-v1-20261026"
+    },
+    "createdDate": {
+      "const": "2026-10-26"
+    },
+    "status": {
+      "const": "frozen_contracts_not_executed"
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "independentReview": {
+          "const": "pending"
+        },
+        "clinicalValidation": {
+          "const": false
+        },
+        "holdoutCaveat": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "method",
+        "source",
+        "independentReview",
+        "clinicalValidation",
+        "holdoutCaveat"
+      ],
+      "additionalProperties": false
+    },
+    "categories": {
+      "type": "object",
+      "properties": {
+        "normal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "high-risk": {
+          "type": "string",
+          "minLength": 1
+        },
+        "memory": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "string",
+          "minLength": 1
+        },
+        "recovery": {
+          "type": "string",
+          "minLength": 1
+        },
+        "boundary": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "normal",
+        "high-risk",
+        "memory",
+        "evidence",
+        "recovery",
+        "boundary"
+      ],
+      "additionalProperties": false
+    },
+    "toolCatalog": {
+      "const": [
+        "EXCEL_REPORT",
+        "CASE_CREATE",
+        "ALERT_SEND",
+        "CASE_ACK",
+        "CASE_NOTE_ADD",
+        "RISK_ALERT"
+      ]
+    },
+    "actorCatalog": {
+      "type": "object",
+      "properties": {
+        "student_a": {
+          "type": "object",
+          "properties": {
+            "roles": {
+              "const": [
+                "ROLE_USER"
+              ]
+            }
+          },
+          "required": [
+            "roles"
+          ],
+          "additionalProperties": false
+        },
+        "student_b": {
+          "type": "object",
+          "properties": {
+            "roles": {
+              "const": [
+                "ROLE_USER"
+              ]
+            }
+          },
+          "required": [
+            "roles"
+          ],
+          "additionalProperties": false
+        },
+        "admin_plain": {
+          "type": "object",
+          "properties": {
+            "roles": {
+              "const": [
+                "ROLE_USER",
+                "ROLE_ADMIN"
+              ]
+            }
+          },
+          "required": [
+            "roles"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "student_a",
+        "student_b",
+        "admin_plain"
+      ],
+      "additionalProperties": false
+    },
+    "splitPolicy": {
+      "type": "object",
+      "properties": {
+        "development": {
+          "const": 40
+        },
+        "holdout": {
+          "const": 20
+        },
+        "unit": {
+          "const": "familyId"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "development",
+        "holdout",
+        "unit",
+        "rules"
+      ],
+      "additionalProperties": false
+    },
+    "environmentContract": {
+      "type": "object",
+      "properties": {
+        "syntheticOnly": {
+          "const": true
+        },
+        "isolatedDatabaseRequired": {
+          "const": true
+        },
+        "isolatedRedisNamespaceRequired": {
+          "const": true
+        },
+        "isolatedChromaRequired": {
+          "const": true
+        },
+        "isolatedPrivacyKeyRequired": {
+          "const": true
+        },
+        "freshStatePerTrial": {
+          "const": true
+        },
+        "emailSink": {
+          "type": "string",
+          "minLength": 1
+        },
+        "realRecipientDeliveryForbidden": {
+          "const": true
+        },
+        "knowledgeCorpus": {
+          "type": "string",
+          "minLength": 1
+        },
+        "networkPolicy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "initialStateSemantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "jobSemantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "timeSemantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "executionScopes": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "syntheticOnly",
+        "isolatedDatabaseRequired",
+        "isolatedRedisNamespaceRequired",
+        "isolatedChromaRequired",
+        "isolatedPrivacyKeyRequired",
+        "freshStatePerTrial",
+        "emailSink",
+        "realRecipientDeliveryForbidden",
+        "knowledgeCorpus",
+        "networkPolicy",
+        "initialStateSemantics",
+        "jobSemantics",
+        "timeSemantics",
+        "executionScopes"
+      ],
+      "additionalProperties": false
+    },
+    "hardConstraintCatalog": {
+      "type": "object",
+      "properties": {
+        "scope_ownership": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authorized_effects_only": {
+          "type": "string",
+          "minLength": 1
+        },
+        "no_unreviewed_candidate": {
+          "type": "string",
+          "minLength": 1
+        },
+        "no_fabricated_completion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "current_turn_bindings": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reply_safety_boundaries": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "scope_ownership",
+        "authorized_effects_only",
+        "no_unreviewed_candidate",
+        "no_fabricated_completion",
+        "current_turn_bindings",
+        "reply_safety_boundaries"
+      ],
+      "additionalProperties": false
+    },
+    "gradingContract": {
+      "type": "object",
+      "properties": {
+        "implementationStatus": {
+          "const": "not_implemented_step_1_only"
+        },
+        "contractPass": {
+          "type": "string",
+          "minLength": 1
+        },
+        "goalAndHandlingSeparated": {
+          "const": true
+        },
+        "safeFallbackIsFullCompletion": {
+          "const": false
+        },
+        "boundaryRejection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "faultNotTriggered": {
+          "type": "string",
+          "minLength": 1
+        },
+        "qualityJudge": {
+          "type": "string",
+          "minLength": 1
+        },
+        "noNativeToolClaim": {
+          "type": "string",
+          "minLength": 1
+        },
+        "repeatUnit": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "implementationStatus",
+        "contractPass",
+        "goalAndHandlingSeparated",
+        "safeFallbackIsFullCompletion",
+        "boundaryRejection",
+        "faultNotTriggered",
+        "qualityJudge",
+        "noNativeToolClaim",
+        "repeatUnit"
+      ],
+      "additionalProperties": false
+    },
+    "failureTaxonomy": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^(normal|high-risk|memory|evidence|recovery|boundary)-[0-9]{2}$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "enum": [
+              "normal",
+              "high-risk",
+              "memory",
+              "evidence",
+              "recovery",
+              "boundary"
+            ]
+          },
+          "split": {
+            "enum": [
+              "development",
+              "holdout"
+            ]
+          },
+          "familyId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "goal": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executionScope": {
+            "enum": [
+              "conversation",
+              "tool_boundary",
+              "http_boundary",
+              "plan_boundary"
+            ]
+          },
+          "eligibleModes": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "configured_model",
+                "controlled_model",
+                "boundary_controlled"
+              ]
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "annotationStatus": {
+            "const": "synthetic_contract_pending_independent_review"
+          },
+          "initialState": {
+            "type": "object",
+            "properties": {
+              "actorAliases": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              "sessions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "alias": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "owner": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "history": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "role": {
+                            "enum": [
+                              "user",
+                              "assistant"
+                            ]
+                          },
+                          "content": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "role",
+                          "content"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "minItems": 0
+                    },
+                    "previousRisk": {
+                      "enum": [
+                        null,
+                        "LOW",
+                        "MEDIUM",
+                        "HIGH"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "alias",
+                    "owner",
+                    "history",
+                    "previousRisk"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 1
+              },
+              "reports": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "alias": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "session": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "risk": {
+                      "enum": [
+                        "LOW",
+                        "MEDIUM",
+                        "HIGH"
+                      ]
+                    },
+                    "caseStatus": {
+                      "enum": [
+                        "OPEN",
+                        "ALERT_SENT",
+                        "ACKNOWLEDGED",
+                        null
+                      ]
+                    }
+                  },
+                  "required": [
+                    "alias",
+                    "session",
+                    "risk",
+                    "caseStatus"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 0
+              },
+              "jobs": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "alias": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "report": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "kind": {
+                      "enum": [
+                        "EXCEL_REPORT",
+                        "CASE_CREATE",
+                        "ALERT_SEND",
+                        "CASE_ACK",
+                        "CASE_NOTE_ADD",
+                        "RISK_ALERT"
+                      ]
+                    },
+                    "state": {
+                      "enum": [
+                        "PENDING",
+                        "RUNNING",
+                        "SUCCESS",
+                        "DEAD"
+                      ]
+                    },
+                    "claimToken": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "lease": {
+                      "enum": [
+                        "future",
+                        "expired"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "alias",
+                    "report",
+                    "kind",
+                    "state",
+                    "claimToken",
+                    "lease"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 0
+              }
+            },
+            "required": [
+              "actorAliases",
+              "sessions",
+              "reports",
+              "jobs"
+            ],
+            "additionalProperties": false
+          },
+          "turns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "actor": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "session": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "input": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "expected": {
+                  "type": "object",
+                  "properties": {
+                    "acceptedIntents": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "CHAT",
+                          "CONSULT",
+                          "RISK"
+                        ]
+                      },
+                      "minItems": 0,
+                      "uniqueItems": true
+                    },
+                    "acceptedRisks": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "LOW",
+                          "MEDIUM",
+                          "HIGH"
+                        ]
+                      },
+                      "minItems": 0,
+                      "uniqueItems": true
+                    },
+                    "reportPolicy": {
+                      "enum": [
+                        "required",
+                        "forbidden",
+                        "if_consult_or_risk",
+                        "not_created_before_abort"
+                      ]
+                    },
+                    "requiredTools": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "kind": {
+                            "enum": [
+                              "EXCEL_REPORT",
+                              "CASE_CREATE",
+                              "ALERT_SEND",
+                              "CASE_ACK",
+                              "CASE_NOTE_ADD",
+                              "RISK_ALERT"
+                            ]
+                          },
+                          "when": {
+                            "const": "report_created"
+                          },
+                          "terminalState": {
+                            "enum": [
+                              "SUCCESS",
+                              "DEAD"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "kind",
+                          "when",
+                          "terminalState"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "minItems": 0
+                    },
+                    "forbiddenTools": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "EXCEL_REPORT",
+                          "CASE_CREATE",
+                          "ALERT_SEND",
+                          "CASE_ACK",
+                          "CASE_NOTE_ADD",
+                          "RISK_ALERT"
+                        ]
+                      },
+                      "minItems": 0,
+                      "uniqueItems": true
+                    },
+                    "replyMode": {
+                      "enum": [
+                        "reviewed_reply",
+                        "safe_fallback",
+                        "reviewed_reply_or_safe_fallback",
+                        "no_reply_after_disconnect",
+                        "access_error"
+                      ]
+                    },
+                    "candidateReviewRequiredBeforeExposure": {
+                      "const": true
+                    },
+                    "donePolicy": {
+                      "enum": [
+                        "required",
+                        "forbidden",
+                        "conditional_on_review_acceptance"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "acceptedIntents",
+                    "acceptedRisks",
+                    "reportPolicy",
+                    "requiredTools",
+                    "forbiddenTools",
+                    "replyMode",
+                    "candidateReviewRequiredBeforeExposure",
+                    "donePolicy"
+                  ],
+                  "additionalProperties": false
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "actor",
+                "session",
+                "input",
+                "expected",
+                "id"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 0
+          },
+          "boundaryActions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "kind": {
+                  "enum": [
+                    "call_tool",
+                    "http_request",
+                    "validate_plan_fixture"
+                  ]
+                },
+                "actor": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "target": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "arguments": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "id",
+                "kind",
+                "actor",
+                "target",
+                "arguments"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 0
+          },
+          "environment": {
+            "type": "object",
+            "properties": {
+              "isolationProfile": {
+                "const": "isolated_local_only"
+              },
+              "configurationOverrides": {
+                "type": "object",
+                "properties": {
+                  "knowledge_vector_required": {
+                    "type": "boolean"
+                  },
+                  "agent_max_rounds": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "tool_queue_retry_delay_seconds": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "tool_queue_max_attempts": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "turn_timeout_seconds": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  }
+                },
+                "additionalProperties": false
+              },
+              "faults": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "kind": {
+                      "enum": [
+                        "client_disconnect",
+                        "delay_until_deadline",
+                        "limit_agent_rounds",
+                        "raise_before_side_effect",
+                        "raise_timeout",
+                        "raise_transport_error",
+                        "replace_model_response",
+                        "replace_retrieval"
+                      ]
+                    },
+                    "stage": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "trigger": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "parameters": {
+                      "type": "object"
+                    },
+                    "mustObserveTrigger": {
+                      "const": true
+                    },
+                    "adapterStatus": {
+                      "const": "planned_not_implemented"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "kind",
+                    "stage",
+                    "trigger",
+                    "parameters",
+                    "mustObserveTrigger",
+                    "adapterStatus"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 0
+              }
+            },
+            "required": [
+              "isolationProfile",
+              "configurationOverrides",
+              "faults"
+            ],
+            "additionalProperties": false
+          },
+          "allowedToolKinds": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "EXCEL_REPORT",
+                "CASE_CREATE",
+                "ALERT_SEND",
+                "CASE_ACK",
+                "CASE_NOTE_ADD",
+                "RISK_ALERT"
+              ]
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "prohibitedToolKinds": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "EXCEL_REPORT",
+                "CASE_CREATE",
+                "ALERT_SEND",
+                "CASE_ACK",
+                "CASE_NOTE_ADD",
+                "RISK_ALERT"
+              ]
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "completionWindows": {
+            "type": "object",
+            "properties": {
+              "perTurnSeconds": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "backgroundSecondsAfterEachTurn": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "cleanupSeconds": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            },
+            "required": [
+              "perTurnSeconds",
+              "backgroundSecondsAfterEachTurn",
+              "cleanupSeconds"
+            ],
+            "additionalProperties": false
+          },
+          "expectedOutcome": {
+            "type": "object",
+            "properties": {
+              "goalStatus": {
+                "enum": [
+                  "complete",
+                  "partial",
+                  "blocked"
+                ]
+              },
+              "handling": {
+                "enum": [
+                  "normal",
+                  "deny",
+                  "clarify",
+                  "bounded_answer",
+                  "safe_degradation"
+                ]
+              }
+            },
+            "required": [
+              "goalStatus",
+              "handling"
+            ],
+            "additionalProperties": false
+          },
+          "successCriteria": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "candidate_not_exposed",
+                    "candidate_not_persisted",
+                    "dead_letter",
+                    "deadline_stop",
+                    "degradation_recorded",
+                    "effect_multiplicity",
+                    "evidence_mode",
+                    "fault_trigger_observed",
+                    "foreign_session_denied",
+                    "http_access_denied",
+                    "memory_fact_state",
+                    "new_report_per_turn",
+                    "no_cross_scope_data",
+                    "no_false_vector_success",
+                    "no_normal_generation",
+                    "plan_contract_rejected",
+                    "plan_not_accepted",
+                    "prior_report_preserved",
+                    "reply_rubric",
+                    "report_tool_contract",
+                    "retry_bounds",
+                    "route_matches_contract",
+                    "stop_after_disconnect",
+                    "terminal_effects_match",
+                    "tool_access_denied"
+                  ]
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "parameters": {
+                  "type": "object"
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "required": {
+                  "const": true
+                }
+              },
+              "required": [
+                "kind",
+                "description",
+                "parameters",
+                "id",
+                "required"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "hardConstraints": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "notes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "category",
+          "split",
+          "familyId",
+          "goal",
+          "executionScope",
+          "eligibleModes",
+          "annotationStatus",
+          "initialState",
+          "turns",
+          "boundaryActions",
+          "environment",
+          "allowedToolKinds",
+          "prohibitedToolKinds",
+          "completionWindows",
+          "expectedOutcome",
+          "successCriteria",
+          "hardConstraints",
+          "notes"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 60,
+      "maxItems": 60
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "version",
+    "createdDate",
+    "status",
+    "provenance",
+    "categories",
+    "toolCatalog",
+    "actorCatalog",
+    "splitPolicy",
+    "environmentContract",
+    "hardConstraintCatalog",
+    "gradingContract",
+    "failureTaxonomy",
+    "tasks"
+  ],
+  "additionalProperties": false
+}

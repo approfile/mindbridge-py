@@ -9,7 +9,13 @@ from typing import Any
 from sqlalchemy.orm import Session
 
 from app.core.enums import RiskLevel, ToolJobKind
-from app.models.entities import PsychologicalReport, ToolAuditRecord, ToolJob
+from app.models.entities import PsychologicalReport, ToolAuditRecord, ToolJob, UserAccount
+from app.services.observability import correlation
+
+
+class ToolAuthorizationError(RuntimeError):
+    def __init__(self, reason: str):
+        super().__init__(f"BLOCKED: {reason}")
 
 
 @dataclass(frozen=True)
@@ -18,10 +24,19 @@ class ToolPolicy:
     description: str
     allowed_risks: tuple[str, ...]
     requires_report: bool = True
+    requires_admin_actor: bool = False
 
 
 class ToolPolicyRegistry:
     POLICIES: dict[str, ToolPolicy] = {
+        "CASE_ACK": ToolPolicy(
+            name="CASE_ACK", description="Acknowledge a case as an existing administrator.",
+            allowed_risks=(RiskLevel.MEDIUM.value, RiskLevel.HIGH.value), requires_admin_actor=True,
+        ),
+        "CASE_NOTE_ADD": ToolPolicy(
+            name="CASE_NOTE_ADD", description="Append a case note as an existing administrator.",
+            allowed_risks=(RiskLevel.MEDIUM.value, RiskLevel.HIGH.value), requires_admin_actor=True,
+        ),
         ToolJobKind.EXCEL_REPORT.value: ToolPolicy(
             name=ToolJobKind.EXCEL_REPORT.value,
             description="Write a psychological report row into the counselor-facing Excel ledger.",
@@ -49,7 +64,7 @@ class ToolPolicyRegistry:
         return cls.POLICIES.get(tool_name)
 
     @classmethod
-    def authorize(cls, tool_name: str, report: PsychologicalReport | None) -> tuple[bool, str, ToolPolicy | None]:
+    def authorize(cls, tool_name: str, report: PsychologicalReport | None, actor: UserAccount | None = None) -> tuple[bool, str, ToolPolicy | None]:
         policy = cls.policy_for(tool_name)
         if policy is None:
             return False, f"未知工具：{tool_name}", None
@@ -58,6 +73,8 @@ class ToolPolicyRegistry:
         risk = report.risk_level if report is not None else ""
         if risk not in policy.allowed_risks:
             return False, f"工具 {tool_name} 不允许处理风险等级 {risk}", policy
+        if policy.requires_admin_actor and (actor is None or "ROLE_ADMIN" not in actor.roles):
+            return False, "个案跟进操作需要已存在的管理员账号", policy
         return True, "允许执行", policy
 
 
@@ -66,22 +83,34 @@ class ToolGovernanceService:
         self.db = db
 
     def start_job(self, job: ToolJob, report: PsychologicalReport | None) -> ToolAuditRecord:
-        allowed, reason, policy = ToolPolicyRegistry.authorize(job.kind, report)
+        return self.start(job.kind, report, job=job)
+
+    def start(
+        self, tool_name: str, report: PsychologicalReport | None, *,
+        job: ToolJob | None = None, actor: UserAccount | None = None,
+        source: str = "queue", payload: dict[str, Any] | None = None,
+    ) -> ToolAuditRecord:
+        allowed, reason, policy = ToolPolicyRegistry.authorize(tool_name, report, actor)
         record = ToolAuditRecord(
-            job_id=job.id,
-            report_id=job.report_id,
-            tool_name=job.kind,
+            job_id=job.id if job else None,
+            report_id=report.id if report else None,
+            tool_name=tool_name,
             policy=policy.name if policy else "unknown",
             allowed=allowed,
             status="AUTHORIZED" if allowed else "BLOCKED",
             reason=reason,
             payload=_json(
                 {
-                    "jobId": job.id,
-                    "kind": job.kind,
-                    "attempts": job.attempts,
+                    "jobId": job.id if job else None,
+                    "kind": tool_name,
+                    "attempts": job.attempts if job else None,
+                    "claimToken": job.claim_token if job else None,
+                    "source": source,
+                    "correlation": correlation(),
+                    "actor": actor.username if actor else None,
                     "riskLevel": report.risk_level if report is not None else None,
                     "policy": asdict(policy) if policy else None,
+                    **(payload or {}),
                 }
             ),
         )
@@ -93,13 +122,15 @@ class ToolGovernanceService:
     def require_allowed(self, job: ToolJob, report: PsychologicalReport | None) -> None:
         allowed, reason, _ = ToolPolicyRegistry.authorize(job.kind, report)
         if not allowed:
-            raise RuntimeError(reason)
+            raise ToolAuthorizationError(reason)
 
     def finish(self, record: ToolAuditRecord, status: str, reason: str = "", payload: dict[str, Any] | None = None) -> ToolAuditRecord:
         record.status = status
+        if status == "BLOCKED":
+            record.allowed = False
         record.reason = reason or record.reason
         if payload is not None:
-            record.payload = _json(payload)
+            record.payload = _json({**json.loads(record.payload or "{}"), **payload})
         record.updated_at = datetime.utcnow()
         self.db.add(record)
         self.db.commit()

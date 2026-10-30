@@ -10,11 +10,17 @@ class Base(DeclarativeBase):
 
 settings = get_settings()
 engine_kwargs = {
+    "hide_parameters": True,
     "pool_pre_ping": True,
     "pool_recycle": 3600,
 }
 if settings.database_url.startswith("sqlite"):
     engine_kwargs["connect_args"] = {"check_same_thread": False}
+elif settings.database_url.startswith('mysql+pymysql'):
+    engine_kwargs['pool_timeout'] = settings.database_pool_timeout_seconds
+    engine_kwargs['connect_args'] = {'connect_timeout': settings.database_socket_timeout_seconds,
+                                    'read_timeout': settings.database_socket_timeout_seconds,
+                                    'write_timeout': settings.database_socket_timeout_seconds}
 
 engine = create_engine(
     settings.database_url,

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "version": "agent-metrics-v1-20261026",
+  "createdDate": "2026-10-26",
+  "status": "definitions_and_offline_calculator_only",
+  "artifactHashes": {
+    "app/evaluation/agent_metrics.py": "55230d84621d1c290a43280bcfd2457a3082163d9240eea2e0ae697631cec3bb",
+    "scripts/score_agent_metrics.py": "9121a79116bf50d8901341f6f0417c840fbfe1a59474e3fccd7c719dafb96d14",
+    "tests/test_agent_metrics.py": "6bbb3931fb6f151ee9597806b741671d8ca6a175551d6ff8c91783d74d0fbfc3",
+    "docs/agent-metrics-v1.md": "f639cfe82c71e26009b81f923eec346673020f825911756ac0efe8fdfa28f9c5",
+    "app/evaluation/data/agent-metrics-v1/metrics.json": "027d2b5df6f7ec5e76b46e448046437daca54b3c9221f17926256e2ac57c4d27",
+    "app/evaluation/data/agent-metrics-v1/observation.schema.json": "729389f93a0087466f71bdbc3a1adec1e3ce9beccac457d267efe092bb161679",
+    "app/evaluation/data/agent-metrics-v1/run.schema.json": "849d7b9c81222b11b4cb6e3f6177f76d1b243bb8477f4432dd823a13ecb7c99f"
+  },
+  "taskDatasetSha256": "ede7765adac8db4c9e80b83f9be30b39517e949ce1e31c3c65a33e5e338a1212",
+  "taskManifestSha256": "79900bd3735023f9116af5bf38c798b01d96ceb206bf57ebf18cc88ed9a7af48",
+  "rateMetricCount": 20,
+  "distributionCount": 10,
+  "collectionAdaptersImplemented": false,
+  "agentTrialsExecuted": 0,
+  "modelApiRequests": 0
+}

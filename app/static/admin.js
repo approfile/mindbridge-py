@@ -25,7 +25,10 @@ const els = {
   knowledgeFile: document.querySelector("#knowledgeFile"),
   knowledgeUploadState: document.querySelector("#knowledgeUploadState"),
   rebuildVector: document.querySelector("#rebuildVector"),
-  backupVector: document.querySelector("#backupVector")
+  backupVector: document.querySelector("#backupVector"),
+  privacyMode: document.querySelector('#privacyMode'),
+  controlledRead: document.querySelector('#controlledRead'),
+  accessPurpose: document.querySelector('#accessPurpose')
 };
 
 function readAuth() {
@@ -54,7 +57,9 @@ async function api(path, options = {}) {
   const response = await fetch(path, { ...options, headers });
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(text || `${response.status} ${response.statusText}`);
+    let message=text;
+    try { const error=JSON.parse(text);message=typeof error.detail==='string'?error.detail:'请求未能完成。'; } catch (_) {}
+    throw new Error(message || `${response.status} ${response.statusText}`);
   }
   return response;
 }
@@ -66,6 +71,16 @@ function setPill(el, text, tone = "ok") {
 
 function isAdmin(profile) {
   return profile.roles?.some((role) => role.authority === "ROLE_ADMIN");
+}
+
+function canReadSensitive() {
+  return state.profile?.roles?.some(role=>role.authority==='ROLE_SENSITIVE_READER');
+}
+
+function controlledReadOptions(path) {
+  return canReadSensitive()
+    ? {path:`${path}?includeSensitive=true`,options:{headers:{'X-Access-Purpose':els.accessPurpose.value}}}
+    : {path,options:{}};
 }
 
 function displayModel(model) {
@@ -103,6 +118,10 @@ async function loadProfile() {
       return null;
     }
     state.profile = profile;
+    els.controlledRead.hidden=!canReadSensitive();
+    els.privacyMode.textContent=canReadSensitive()
+      ? '列表只展示必要元数据；查看单条脱敏正文需选择用途，读取会留痕。'
+      : '当前账号仅可查看统计、状态与去标识元数据，敏感正文已隐藏。';
     els.activeAccount.textContent = profile.displayName || profile.username;
     return profile;
   } catch {
@@ -180,6 +199,16 @@ function renderCases(cases) {
     handoff.textContent = item.handoffSummary || "";
 
     card.append(head, meta, summary, handoff);
+    if(canReadSensitive()) {
+      const read=document.createElement('button');read.type='button';read.className='ghost';read.textContent='按所选用途查看交接';
+      read.addEventListener('click',async()=>{
+        const request=controlledReadOptions(`/api/admin/cases/${item.id}`);
+        try {
+          const response=await api(request.path,request.options);const detail=await response.json();
+          summary.textContent=detail.summary;handoff.textContent=detail.handoffSummary;
+        } catch(error) {handoff.textContent=error.message;}
+      });card.append(read);
+    }
     els.cases.append(card);
   }
 }
@@ -210,7 +239,7 @@ function renderReports(reports) {
     content.textContent = item.content;
     const action = document.createElement("span");
     action.className = "report-action";
-    action.textContent = "查看会话档案";
+    action.textContent = canReadSensitive()?'按所选用途查看会话':'查看会话元数据';
 
     card.append(head, summary, content, action);
     card.addEventListener("click", () => loadConversation(item.sessionId));
@@ -229,7 +258,8 @@ async function loadConversation(sessionId) {
     card.classList.toggle("active", card.dataset.sessionId === sessionId);
   }
   try {
-    const response = await api(`/api/admin/conversations/${encodeURIComponent(sessionId)}`);
+    const request=controlledReadOptions(`/api/admin/conversations/${encodeURIComponent(sessionId)}`);
+    const response = await api(request.path,request.options);
     const conversation = await response.json();
     renderConversation(conversation);
   } catch (error) {

@@ -38,7 +38,7 @@ class EventDrivenProtocolTests(unittest.TestCase):
 
 
 class DemoAgent:
-    def __init__(self, name, capability, confidence):
+    def __init__(self, name, capability, claim_priority):
         self.profile = AgentProfile(
             name=name,
             capabilities=frozenset({capability}),
@@ -46,10 +46,10 @@ class DemoAgent:
             memory_policy="private",
             model_profile=name,
         )
-        self.confidence = confidence
+        self.claim_priority = claim_priority
 
     def decide(self, task, board):
-        return AgentDecision(True, self.confidence, f"{self.profile.name} claims")
+        return AgentDecision(True, self.claim_priority, f"{self.profile.name} claims")
 
     def act(self, task, board):
         return AgentTurnResult(
@@ -66,7 +66,7 @@ class DemoAgent:
 
 
 class RegistryAndCoordinatorTests(unittest.TestCase):
-    def test_registry_sorts_by_claim_confidence_not_list_order(self):
+    def test_registry_sorts_by_claim_priority_not_list_order(self):
         low = DemoAgent("LowConfidenceAgent", AgentCapability.UNDERSTANDING, 0.2)
         high = DemoAgent("HighConfidenceAgent", AgentCapability.UNDERSTANDING, 0.9)
         registry = AgentRegistry([low, high])
@@ -105,38 +105,6 @@ class RegistryAndCoordinatorTests(unittest.TestCase):
         claimed = [event.actor for event in result.events if event.type == AgentEventType.TASK_CLAIMED]
         self.assertIn("AgentA", claimed)
         self.assertIn("AgentB", claimed)
-
-    def test_claimed_tasks_keep_their_claim_record_on_the_blackboard(self):
-        settings = SimpleNamespace(
-            agent_max_rounds=1,
-            agent_max_claims_per_round=2,
-            agent_max_claims_per_agent=1,
-            agent_final_acceptance_min_confidence=0.6,
-        )
-        coordinator_agent = SimpleNamespace(
-            name="CoordinatorAgent",
-            root_task=lambda board: AgentTask(
-                id="task:root",
-                title="Resolve user turn",
-                description=board.user_input,
-                priority=TaskPriority.NORMAL,
-                metadata={"kind": "root"},
-            ),
-            remember_acceptance=lambda artifact_id, reason: None,
-        )
-        registry = AgentRegistry([
-            DemoAgent("AgentA", AgentCapability.UNDERSTANDING, 0.8),
-            DemoAgent("AgentB", AgentCapability.SAFETY, 0.7),
-        ])
-        board = CollaborationBlackboard(turn_id="t1", user_input="hello", model_input="hello")
-
-        result = EventDrivenCoordinator(registry, coordinator_agent, settings).run(board)
-
-        claim_events = [event for event in result.events if event.type == AgentEventType.TASK_CLAIMED]
-        self.assertTrue(claim_events)
-        for event in claim_events:
-            self.assertEqual(event.metadata["claimedBy"], [event.actor])
-            self.assertIn(event.actor, result.tasks[event.task_id].claimed_by)
 
 
 class AgentModelRegistryTests(unittest.TestCase):

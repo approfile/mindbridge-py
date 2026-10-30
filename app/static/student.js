@@ -46,7 +46,12 @@ async function api(path, options = {}) {
   const response = await fetch(path, { ...options, headers });
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(text || `${response.status} ${response.statusText}`);
+    let message = text;
+    try {
+      const error = JSON.parse(text);
+      message = typeof error.detail === "string" ? error.detail : "请求未能受理，请稍后重试。";
+    } catch (_) { /* Non-JSON server response. */ }
+    throw new Error(message || `${response.status} ${response.statusText}`);
   }
   return response;
 }
@@ -156,6 +161,7 @@ async function sendMessage(event) {
     const decoder = new TextDecoder();
     let buffer = "";
     let streamFailed = false;
+    let streamDone = false;
     while (true) {
       const { value, done } = await reader.read();
       if (done) break;
@@ -167,14 +173,20 @@ async function sendMessage(event) {
           assistant.textContent = raw;
           els.messages.scrollTop = els.messages.scrollHeight;
         }
+        if (eventData.type === "done") streamDone = true;
         if (eventData.type === "error") {
           streamFailed = true;
-          if (!raw) assistant.textContent = eventData.message || "MCP 工具调用失败";
+          const message = eventData.message || "本轮回复未完成，请稍后重试。";
+          assistant.textContent = raw ? `${raw}\n\n${message}` : message;
           setPill(els.sessionBadge, "ERROR", "danger");
         }
       });
     }
-    if (!streamFailed) setPill(els.sessionBadge, "DONE", "ok");
+    if (!streamFailed && streamDone) setPill(els.sessionBadge, "DONE", "ok");
+    else if (!streamFailed) {
+      assistant.textContent = raw ? `${raw}\n\n连接已结束，本轮回复未完成。` : "连接已结束，请稍后重试。";
+      setPill(els.sessionBadge, "ERROR", "danger");
+    }
   } catch (error) {
     assistant.textContent = `发送失败：${error.message}`;
     setPill(els.sessionBadge, "ERROR", "danger");

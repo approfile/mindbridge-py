@@ -2,240 +2,162 @@
 
 # MindBridge
 
-**把一句求助，变成一条负责任、可追溯的回复**
+**面向高校心理支持场景的多 Agent 后端**
 
-*Turn one call for help into a responsible, fully traceable reply.*
-
-校园心理支持场景的多 Agent 后端 · Python / FastAPI
+Python / FastAPI · 共享黑板与能力认领 · 安全审核 · 混合 RAG · 可核验评测
 
 [![Test](https://github.com/approfile/mindbridge-py/actions/workflows/test.yml/badge.svg)](https://github.com/approfile/mindbridge-py/actions/workflows/test.yml)
+![Python](https://img.shields.io/badge/Python-3.12-3776ab)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-![Python](https://img.shields.io/badge/Python-3.12-3776ab?logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi&logoColor=white)
-![Runtime](https://img.shields.io/badge/runtime-claim--based%20multi--agent-6d28d9)
-![RAG](https://img.shields.io/badge/RAG-Chroma%20%2B%20BM25-0f766e)
-![MCP](https://img.shields.io/badge/tools-MCP%20%2B%20async%20queue-c2410c)
 
-[效果演示](#效果演示) · [架构说明](docs/ARCHITECTURE.md) · [安全设计](docs/SAFETY.md) · [质量与测试](docs/QUALITY.md) · [评测数据](docs/BENCHMARKS.md) · [已知边界](docs/LIMITATIONS.md) · [MIT License](LICENSE)
+[架构](docs/ARCHITECTURE.md) · [安全](docs/SAFETY.md) · [RAG](docs/RAG.md) · [评测结果](docs/BENCHMARKS.md) · [运行与测试](docs/DEVELOPMENT.md) · [已知边界](docs/LIMITATIONS.md)
 
 </div>
 
-![MindBridge 学生端：快捷表达与 SSE 流式心理陪伴对话（mock 演示）](docs/screenshots/student-chat-consult.png)
+MindBridge 将学生的一轮表达串联为意图理解、风险评估、上下文准备、回复生成与安全审核，并按风险策略持久化报告和后续工具任务。项目重点是让安全门槛、任务依赖、降级和真实执行结果可以检查。
 
-**MindBridge 是一个面向高校心理支持场景的多 Agent 后端**：回答「学生的一句话，如何变成一条既被学生接受、又符合校园危机干预流程、并且全程可追溯的回复」。
+**当前版本：2026-10-30 整理发布；最近一次分层真实模型评测完成于 2026-10-28。** 这是工程研究与演示项目，不替代心理诊断、专业咨询或现实危机干预。
 
-一条请求链路同时处理四件事：**理解**（`CHAT` / `CONSULT` / `RISK` 三路意图路由）、**证据**（11 篇校园心理知识库的路由式混合检索）、**安全**（三级风险判定 + 独立安全审查）、**闭环**（报告 / Excel 台账 / 风险个案 / 辅导员预警 + 全链路 trace）。
+## 当前已经实现
 
-- **自研 claim-based 多 Agent Runtime**：共享黑板 + 能力认领 + 预算控制（8 轮 / 单轮 4 认领 / 单 Agent 3 认领）+ 五条件安全采纳门闸，不依赖 LangChain / LangGraph，控制流完全可读可审计。
-- **安全优先**：三级风险判定（词典硬拦，置信度 0.95 且不调用模型 → 严格 JSON 模型判定 → 启发式兜底）；SafetyAgent 只审查「即将被采纳的那一版」回复，未通过即打回重写；`HIGH` 风险在 4 处强制升级。
-- **可复现**：6 组零依赖工程 Harness + 23 个单元测试；60 条 RAG 评测集实测 HitRate@4 **0.967** / MRR **0.908** / NDCG@4 **0.905**，阈值写进 CI 断言。
+| 模块 | 实际实现 |
+| --- | --- |
+| 多 Agent 协作 | Coordinator 管理黑板、任务依赖、能力认领、轮次/认领预算与验收；Understanding、Safety、Context、Response 发布可关联的 artifact |
+| 两阶段安全检查 | 先验收 prompt 计划的 **8 项结构契约**，再对实际候选正文进行规则与模型审核；最多修订一次，失败采用固定安全兜底 |
+| 路由与记忆 | CHAT / CONSULT / RISK；按需检索；Redis 近期消息、SQL 会话摘要及带用户消息来源的会话事实 |
+| 混合检索 | Chroma cosine 向量召回 + 自实现 BM25，按候选并集归一化融合，再进行本地词面重排和上下文扩展 |
+| 工具闭环 | 报告与 outbox 任务同事务提交；Worker 通过租约与 claim token 执行，含风险授权、重试、死信和审计；支持 MCP stdio 通道 |
+| 请求预算 | 默认单进程并发 4、每用户 2、同会话 1；60 秒整轮预算，超时停止后续生成，持久任务独立收尾 |
+| 可观测性 | request/run/session/trace/report/job 关联，结构化日志、阶段耗时和显式查询改写降级 |
+| 敏感数据 | SQL/Redis 敏感正文加密；管理端默认隐藏正文；独立正文读取权限、用途审计、保留清理预览与离线执行 |
+| 评测 | 冻结数据集、20 项比率及 10 项分布指标、实际 HTTP/SQL/Excel/邮件证据、独立模型评审、RAGAS 和真实人工抽检 |
 
-### 快速开始（mock 模式，3 条命令，无需外部服务）
+## 一轮请求如何运行
 
-```bash
-python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
-mkdir -p data && AI_PROVIDER=mock DATABASE_URL=sqlite:///./data/mindbridge.db KNOWLEDGE_VECTOR_ENABLED=false TOOL_QUEUE_ENABLED=false uvicorn app.main:app --port 8080
-# 浏览器打开 http://127.0.0.1:8080 —— 学生 student / student123，管理员 admin / admin123
+```mermaid
+flowchart TD
+    A[认证与请求预算] --> B[共享黑板与任务认领]
+    B --> C[Understanding: 意图]
+    B --> D[Safety: 风险]
+    C --> E[Context: 记忆 / Skills / 按需 RAG]
+    D --> E
+    E --> F[Response: prompt 计划]
+    F --> G[Safety 计划审查 + Coordinator 8 项验收]
+    G --> H[报告与工具任务持久化]
+    G --> I[实际正文生成]
+    I --> J[正文审核 / 最多一次修订 / 安全兜底]
+    J --> K[SSE 分块返回]
+    H --> L[独立 Worker: Excel / 个案 / 预警]
 ```
 
-> `TOOL_QUEUE_ENABLED=false` 时工具派发走 MCP stdio，需已安装 `mcp`（`requirements.txt` 已包含）；未安装时报告仍会生成，但 Excel 台账 / 风险个案 / 预警会被跳过。完整闭环也可改用 `TOOL_QUEUE_ENABLED=true` 的队列模式。
+风险评估必须在正常回复生成前完成；它不一定是调度的第一个任务。Response 的 response_proposal 是消息/prompt 计划，不能当作已经生成并审核的正文。当前 SSE 发送的是审核后的分块内容，不是未经审核直接透传模型 token。
 
-### 项目性质
+工具由服务端风险策略生成，不能将其描述为模型自主 Function Calling；Coordinator 也不是通用自主规划器。详见[架构说明](docs/ARCHITECTURE.md)。
 
-MindBridge 是我**独立设计与实现**的个人项目（solo project）：需求拆解、架构设计、编码、测试与文档全部由我完成，不存在多人分工，也没有基于现成模板或脚手架生成。下表区分自研部分与开源组件，不冒领后者：
+## 可核验结果
 
-| 自研部分 | 使用的开源 / 现成组件 |
+各评测层分别报告，以下数字不能相加或互相替代。
+
+| 证据 | 范围与结果 |
 | --- | --- |
-| claim-based 多 Agent Runtime（黑板 / 事件 / 认领 / 预算 / 五条件采纳门闸） | FastAPI、uvicorn、SQLAlchemy 2.0、Pydantic |
-| 路由式混合检索：BM25、归一化融合、确定性重排、三层降级 | Chroma（向量存储）、OpenAI 兼容 embedding API |
-| 三级风险判定、版本绑定安全审查、三层记忆与压缩、Skill 加载校验 | Redis、MySQL、FastMCP（MCP 工具服务底座） |
-| 6 组工程 Harness、60 条 RAG 评测集、路由级回归测试 | GitHub Actions（CI） |
+| 检索消融，2026-10-25 | 冻结 52 题，其中 44 题可回答；11 文档、34 chunk。当前混合 + 重排：Recall@4 **93.18%**、Precision@4 **30.11%**、MRR **0.9886**；纯向量：90.91%、28.98%、0.9489 |
+| Agent 分层，2026-10-28 | 60 个不同场景，共 75 试次：19 受控、53 真实自然任务、3 真实上下文干预；不混报一个总成功率 |
+| 真实自然任务：开发集 | 40 试次 / 28 场景，契约 **27 pass / 12 fail / 1 unknown**；通过率区间 67.5%–70.0%，不是完整任务完成率 |
+| 真实自然任务：工程保留集 | 13 试次 / 13 场景，契约 **7 pass / 6 fail**，7/13；标签对作者可见，不称独立盲测 |
+| RAGAS 0.4.3 | 固定 12 题 RAG 子链路，四项覆盖均 12/12：Faithfulness **0.5489**、Answer Relevancy **0.8285**、Context Recall **1.0000**、Context Relevance **1.0000** |
+| 人工抽检 | 用户亲自审核 10 条：回复质量 8/10、安全边界 9/10、未虚构完成声明 8/10；加上机械证据后完整契约 6/10 |
 
----
+同一重排条件下，向量方案与混合方案平均 Recall/Precision 相同，混合方案主要改善排序。RAGAS 的 Context Recall 不是 chunk qrels 的 Recall@4。Faithfulness 不是答案正确率，低分还混有同理表达与评审波动，原始低分没有用复跑较好结果替换。
 
-## 能力地图
+数据主要由 AI 辅助构造并用于工程开发，不是专家临床标注或真实用户效果。独立评审与生成使用同一供应商，存在同源偏差。[完整口径、原始报告与局限](docs/BENCHMARKS.md)。
 
-| 能力 | 实现要点 | 深入阅读 |
-| --- | --- | --- |
-| Agent Runtime | 共享黑板、claim-based 调度、预算（8 轮 / 4 认领 / 3 认领）与五条件采纳门闸 | [ARCHITECTURE](docs/ARCHITECTURE.md) · [DESIGN-NOTES](docs/DESIGN-NOTES.md) |
-| 安全工程 | 三级风险判定、版本绑定安全审查、`SAFETY_OVERRIDE` 四处消费、学生可见内容隔离、输入脱敏 | [SAFETY](docs/SAFETY.md) |
-| RAG | 路由式触发、Chroma + 自研 BM25、归一化融合、确定性重排、三层降级 | [RAG](docs/RAG.md) |
-| 记忆 | Redis 短期记忆（40 条 / TTL 24h）、8 条触发压缩、摘要作用域声明 | [MEMORY-SKILLS](docs/MEMORY-SKILLS.md) |
-| Skills | 7 个标准 `SKILL.md`、目录与 `## Workflow` 校验、READY / WARN / FAILED（仅 `/api/agent/status` 暴露） | [MEMORY-SKILLS](docs/MEMORY-SKILLS.md) |
-| MCP + 队列 | 6 个 MCP 工具、异步队列：3 次尝试 / 15s、30s 线性退避 / 60s 滑窗 30 次限流 / 死信 / 依赖 / 审计 | [ARCHITECTURE](docs/ARCHITECTURE.md) |
-| 可观测性 | 全链路 trace、报告 / 台账 / 个案 / 预警闭环、管理端 4 个面板与只读 API | [API](docs/API.md) |
+## 快速开始：隔离的 mock 演示
 
-## 效果演示
+Python 3.12。从新 checkout 根目录执行；不需要模型 API、MySQL 或 Redis 服务，Redis 不可用时走内存降级。
 
-| 学生端高风险对话 | 管理端总览 |
-| :---: | :---: |
-| ![MindBridge 学生端高风险对话：mock 安全计划回复，不输出风险标签](docs/screenshots/student-chat-risk.png) | ![MindBridge 管理端：风险个案、咨询报告、RAG 知识库与会话档案](docs/screenshots/admin-console.png) |
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+mkdir -p data
+AI_PROVIDER=mock AGENT_MODEL_DEFAULT_PROVIDER=mock \
+DATABASE_URL=sqlite:///./data/demo.sqlite3 \
+REDIS_URL=redis://127.0.0.1:1/15 REDIS_SOCKET_TIMEOUT_SECONDS=0.1 \
+KNOWLEDGE_VECTOR_ENABLED=false TOOL_QUEUE_ENABLED=true \
+ALERT_EMAIL_DELIVERY_MODE=log \
+uvicorn app.main:app --host 127.0.0.1 --port 8080
+```
 
-*图：mock 模式下真实运行的两端界面。学生端为 SSE 逐 token 输出，高风险时给出安全计划且不展示后台标签；管理端为 4 个面板——风险个案、心理风险与咨询报告、RAG 知识库维护、会话档案（Agent 协作 trace 当前只提供只读 API，无前端视图）。*
+打开 <http://127.0.0.1:8080>。初始演示账号：student / student123、admin / admin123。这些是本机演示账号，上线前必须更换；默认管理员没有敏感正文读取权限。log 预警不代表 SMTP 真实投递。
 
-| 登录与角色入口 | 报告与会话档案 |
-| :---: | :---: |
-| ![MindBridge 登录页：学生 / 管理员双角色入口](docs/screenshots/login.png) | ![MindBridge 管理端：HIGH 风险报告与只读会话档案审阅](docs/screenshots/admin-report-detail.png) |
+```bash
+curl http://127.0.0.1:8080/actuator/health
+curl -N -u student:student123 -H 'Content-Type: application/json' \
+  -d '{"message":"我最近考试压力很大，想聊聊"}' \
+  http://127.0.0.1:8080/api/chat/stream
+```
 
-*图：登录页按角色进入学生端 / 管理端；管理端可只读审阅报告对应的会话档案，高风险输入会触发报告、个案与预警闭环。*
+## 接入真实模型与存储
 
-两种运行方式：`AI_PROVIDER=mock` 用确定性桩模型零外部服务复现全链路；切换 `ollama` / `openai` 即接入真实模型，其余链路不变（见[快速开始](#快速开始完整版)）。
+复制 .env.example 为 .env 并填写凭据，切勿提交 .env。**当前真实评测使用 DeepSeek 兼容 API 与独立的 Qwen embedding API**：
 
-## 架构与运行时
+```env
+AGENT_FRAMEWORK=event_driven_multi_agent
+AI_PROVIDER=openai
+OPENAI_BASE_URL=https://api.deepseek.com/v1
+OPENAI_API_KEY=填写生成接口密钥
+OPENAI_MODEL=deepseek-v4-flash
+OPENAI_EMBEDDING_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
+OPENAI_EMBEDDING_API_KEY=填写向量接口密钥
+OPENAI_EMBEDDING_MODEL=qwen3.7-text-embedding
+KNOWLEDGE_VECTOR_ENABLED=true
+KNOWLEDGE_VECTOR_REQUIRED=true
+```
 
-![MindBridge 端到端链路：客户端 → HTTP 层 → Agent Runtime Harness → 多 Agent Runtime → 服务与存储](docs/architecture-overview.svg)
+以上模型名为最近实测请求配置；当时生成接口实际返回 deepseek-flash，不推断其隐藏版本。模型可用性以供应商账号为准。生成与 embedding 的 base URL、key 分开配置；角色级 AGENT_MODEL_* 设置会覆盖默认模型。KNOWLEDGE_VECTOR_REQUIRED=false 允许向量故障后回退 BM25，不代表向量调用成功。
 
-*图：一条学生消息的端到端链路。HTTP 层只做认证与 SSE 分帧，业务编排（脱敏、报告、trace、工具计划）全部收敛在 Harness。*
+`docker compose up -d --build` 提供 MySQL 8.0、Redis 7.2 与应用；宿主端口分别为 13306、16379、8080。完整配置、SMTP 与可选 Ollama 见[运行文档](docs/DEVELOPMENT.md)。Ollama 适配与 Modelfile 只是可选接入能力；本仓库不提供微调权重，也没有完成 Qwen3.5-4B 本地部署验证。
+
+## 测试与复现
+
+```bash
+pip install -r requirements-evaluation.txt
+mkdir -p target data
+AI_PROVIDER=mock DATABASE_URL=sqlite:///./target/tests.sqlite3 \
+KNOWLEDGE_VECTOR_ENABLED=false python -m unittest discover -s tests
+python -m app.harness.runner
+python scripts/validate_agent_tasks.py
+```
+
+6 组工程 Harness 验证风险、路由、Skills、检索、API 和工具队列。mock 检索 Harness 测试 BM25 降级路径，不复现上表真实向量检索分数。在线模型评测需要 API 额度；实际副作用采集还需要独立 Redis 与本机 Mailpit。不要把测试通过当作真实模型质量达标。
+
+RAGAS 使用独立环境的 requirements-ragas-evaluation.txt。分层 v1 的真实执行适配器保留了历史本机 embedding 缓存依赖，尚非新机器一条命令完全复现；源码、冻结契约与公开报告已提供，前置条件见[复现说明](docs/DEVELOPMENT.md)。
+
+## 目录
 
 ```text
-POST /api/chat/stream
-  └─ ChatService.stream_chat
-       ├─ MindBridgeAgentHarness.run        脱敏 → 会话 → 多 Agent 协作 → 报告 → trace
-       ├─ AiClient.stream(prompt_plan)       SSE 逐 token 推送
-       └─ harness.dispatch_tools(tool_plan)  队列或 MCP，不阻塞流式输出
+app/agents/       黑板、事件、能力认领、计划验收与 Harness
+app/api/          认证后的 HTTP / SSE 接口
+app/services/     模型、RAG、记忆、正文审核、工具、观测与隐私
+app/core/         配置、数据库、迁移、加密与认证
+app/evaluation/   Agent 执行、指标及冻结评测数据
+app/rag_eval/     检索评测、段落标注与指标
+app/knowledge/    11 篇内置知识文档
+app/mcp_tools/    MCP 工具入口
+app/static/       学生与管理端页面
+skills/           7 个标准 Skill
+scripts/ tests/   评测、执行、单元与回归测试
+docs/            当前说明、历史修复记录与公开评测摘要
+target/          仅白名单历史合成评测报告入库，其余产物忽略
 ```
 
-**为什么不用 LangChain / LangGraph**：心理安全场景里「谁在什么时候有权否决一条回复」必须完全可读、可审计。自研 runtime 让调度、预算与采纳门闸就是 `app/agents/` 里的普通 Python 控制流，而不是框架黑盒；代价是约 5.9k 行后端代码要自己维护，换来的是可解释性与可测试性。
+## 尚待改进
 
-![MindBridge claim-based 多 Agent Runtime：共享黑板、控制面与四个 worker](docs/agent-runtime.svg)
+- 会话事实抽取仍可能被“项目代号是什么”一类问句覆盖；英语句尾标点也可能进入事实值。
+- 否认危险信号时，部分明确咨询诉求仍会路由到 CHAT。
+- 高风险回复充分性、无依据的完成声明，以及生成/审核超时仍有失败样本。
+- 查询改写有 60 字符截断；RAG 生成证据约束和评审器校准仍需改进。
+- 在线 token/金额统计尚未接入；评测适配器采集 usage 不等于线上已完成。
+- 并发准入为单进程；SMTP 有重复发送窗口；密钥轮换、组织/个案授权和独立专家评测尚未完成。
 
-*图：claim-based 多 Agent 协作运行时。Worker 观察黑板上的开放任务并按置信度认领，协调者每轮结束按五项条件判断是否收敛；箭头为 claim ↔ publish 双向。*
-
-![MindBridge 异步工具队列：依赖门闸、重试与死信](docs/tool-queue.svg)
-
-*图：异步工具队列。高危触发后的台账 / 个案 / 预警三类工具经策略与依赖门闸后执行，失败按 15s / 30s 线性退避重试（共 3 次尝试），超过上限进入死信。*
-
-完整的调度伪代码、数据模型与目录结构见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
-
-## 工程质量与实测数据
-
-| 维度 | 结果 |
-| --- | --- |
-| 工程 Harness | 6 组零依赖 suite（Risk Safety / Agent Routing / Standard Skills / RAG / API / Tool Queue），mock 模型 + 临时 SQLite + 内存记忆，任一组失败返回非 0 |
-| 单元测试 | 23 个用例（标准库 `unittest`，无 pytest 依赖），CI 与 Harness 分两步独立执行 |
-| CI | push / PR 到 `main`：安装依赖 → 编译检查 → 单元测试 → Harness → 上传报告 artifact，全程无需外部服务或 API Key |
-| 代码规模 | `app/` 44 个 Python 模块、约 5.9k 行；13 张 ORM 表、20 条路由、6 个 MCP 工具、7 个 Skill、11 篇知识库文档、34 个 chunk、13 种协作事件、6 种产物（含 `critique`） |
-
-### RAG 评测（60 条评测集，向量关闭的 BM25 + 重排路径）
-
-| 指标 | 实测值 | Harness 阈值 |
-| --- | --- | --- |
-| HitRate@4 | **0.9667**（58 / 60） | ≥ 0.95 |
-| Recall@4 | **0.9667** | ≥ 0.95 |
-| MRR | **0.9083** | ≥ 0.75 |
-| NDCG@4 | **0.9053** | ≥ 0.75 |
-| Precision@4 | **0.6458** | — |
-
-*指标定义、两条未命中分析与完整结果见 [docs/BENCHMARKS.md](docs/BENCHMARKS.md)。*
-
-![MindBridge 路由式 RAG：混合检索链路与三层降级](docs/rag-pipeline.svg)
-
-*图：路由式 RAG。普通聊天不检索，咨询 / 风险才进入「改写 → 向量 + BM25 召回 → 归一化 → 加权融合 → 确定性重排 → 邻接扩展」；降级路径显式暴露在 /api/admin/knowledge/status。*
-
-```bash
-python -m unittest discover -s tests     # 23 tests OK
-python -m app.harness.runner             # 6/6 suite PASS，报告写入 target/harness/
-python scripts/verify_offline.py         # 33 项断言，无 FastAPI / Redis / Chroma 环境也可跑
-```
-
-完整的测试分层与交付前缺陷复盘见 [docs/QUALITY.md](docs/QUALITY.md)。
-
-## 快速开始（完整版）
-
-### 方式一：mock 模式（零外部服务）
-
-按首屏 3 条命令启动后，可先看多 Agent 如何协作而不起服务：
-
-```bash
-python scripts/demo_turn.py              # CHAT / CONSULT / RISK 三个场景，打印完整协作事件流
-```
-
-### 方式二：Docker Compose（MySQL + Redis + App）
-
-```bash
-cp .env.example .env                     # 按需填写真实模型与 SMTP 配置
-docker compose up -d --build             # App → http://127.0.0.1:8080
-```
-
-### 方式三：接入真实模型
-
-```bash
-# 本地 Ollama（models/ 只提供 Modelfile 与放置说明，需自备 GGUF 权重）
-AI_PROVIDER=ollama OLLAMA_MODEL=mindbridge-qwen2.5-7b-ft:latest ./scripts/run-dev.sh
-
-# 任意 OpenAI 兼容端点
-AI_PROVIDER=openai OPENAI_BASE_URL=https://api.openai.com/v1 OPENAI_API_KEY=sk-... \
-OPENAI_MODEL=gpt-4o-mini uvicorn app.main:app --port 8080
-```
-
-配置项、开发脚本与本地调试方式见 [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)；可视化流程与截图见[效果演示](#效果演示)。
-
-## 已知边界
-
-- **调度是单进程顺序执行**：actor-style 只体现在控制流语义，不是并发执行；多 worker 下缺少分布式协调与队列 lease。
-- **鉴权为 HTTP Basic Auth + SHA-256 无盐口令哈希**：无 MFA、无令牌过期、无登录限流；生产应替换为 OIDC / JWT。
-- **风险词典是子串匹配，无否定检测**：「我不想自杀」会被判 `HIGH`，误报方向偏安全，但会产生不必要的干预。
-- **脱敏只覆盖手机号 / 邮箱 / 身份证**：姓名、学号、住址等实体未覆盖。
-- **安全审查是规则要素检查，不是回复安全分类器**：能拦住缺少即时安全要素的回复，不等价于语义级安全判别。
-- **评测集只覆盖 2 / 11 篇知识库文档**；重排是确定性公式而非学习型模型。
-- **工程完备性**：无 Alembic 迁移、结构化日志 / 指标、覆盖率与 lint 门禁；管理端无 trace 前端视图。
-- **产品化**：前端未做无障碍与移动端适配；`models/` 不含 GGUF 权重。
-
-完整的边界清单与优先级见 [docs/LIMITATIONS.md](docs/LIMITATIONS.md)。
-
-## 文档索引
-
-| 文档 | 内容 |
-| --- | --- |
-| [ARCHITECTURE](docs/ARCHITECTURE.md) | 分层结构、端到端链路、Agent Runtime 调度、数据模型、目录结构 |
-| [SAFETY](docs/SAFETY.md) | 三级风险判定、安全审查与 revise 循环、五条件门闸、脱敏、工具策略 |
-| [RAG](docs/RAG.md) | 路由式触发、混合检索链路、确定性重排、三层降级、指标定义 |
-| [MEMORY-SKILLS](docs/MEMORY-SKILLS.md) | 三层记忆、上下文压缩、Skill 体系与校验规则 |
-| [API](docs/API.md) | 20 条路由、认证模型、SSE 事件格式、调用示例 |
-| [QUALITY](docs/QUALITY.md) | 测试策略、六组 Harness、23 个单测、CI、交付前缺陷审计 |
-| [BENCHMARKS](docs/BENCHMARKS.md) | 工程规模、RAG 评测结果、未命中分析、复现命令 |
-| [LIMITATIONS](docs/LIMITATIONS.md) | 已知边界、风险等级与改进路线 |
-| [DESIGN-NOTES](docs/DESIGN-NOTES.md) | D1–D18 设计决策、关键取舍与边界说明（面向代码评审者） |
-| [DEVELOPMENT](docs/DEVELOPMENT.md) | 开发时间线、环境准备、本地运行与常见问题 |
-
-```text
-app/
-├── agents/       # claim-based runtime：黑板 / 事件 / 5 个 Agent（含协调者）/ Harness
-├── api/          # 20 条 HTTP 路由
-├── core/         # 配置、数据库、鉴权、启动播种
-├── knowledge/    # 11 篇校园心理知识库
-├── mcp_tools/    # FastMCP 工具服务（6 个工具）
-├── models/       # 13 张 ORM 表
-├── services/     # AI、检索、记忆、评估、报告、Skill、工具队列、治理、trace
-└── static/       # 原生前端（学生端 + 管理端）
-docs/             # 架构图、截图与深度文档
-skills/           # 7 个标准 SKILL.md
-tests/            # 单元测试 + 路由回归测试
-```
-
-## 项目性质与维护
-
-MindBridge 定位是「可运行、可审计、可复现」的校园心理场景后端，**不是生产医疗系统**。项目由 Ziyi Shen（[@approfile](https://github.com/approfile)）独立维护，以 [MIT License](LICENSE) 发布；版本变更见 [CHANGELOG.md](CHANGELOG.md)。
-
-## English Summary
-
-**MindBridge** is a campus mental-health support backend written in Python/FastAPI. It ships a
-self-built claim-based multi-agent runtime (shared blackboard, capability-based task claiming,
-budgeted scheduling, five-condition safety acceptance gate), a routed hybrid RAG pipeline
-(Chroma + custom BM25 + deterministic reranking with layered fallback), a three-tier risk
-assessment chain (keyword hard gate → structured LLM JSON → heuristic fallback) with version-bound
-safety review, and an MCP-backed async tool queue with retries, rate limiting, dead-letter handling
-and risk-scoped audit. Six dependency-free harness suites and 23 unit tests run in CI, and a
-60-query retrieval benchmark is enforced as a threshold assertion (HitRate@4 0.967 / MRR 0.908 /
-NDCG@4 0.905). This is a solo project and an engineering-focused backend, not a production medical
-system or a substitute for professional help.
-
----
-
-<div align="center">
-
-**MindBridge** — 把「一句话」变成「一条负责任的回复」，并让每一步都可追溯。
-
-非生产医疗系统，不替代专业帮助。如你或身边的人处于紧急危险，请联系校内心理中心、当地心理援助热线，或拨打 110 / 120。
-
-</div>
+详见[已知边界与优先级](docs/LIMITATIONS.md)。本次仓库同步没有将这些问题标记为已修复。

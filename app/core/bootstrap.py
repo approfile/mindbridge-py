@@ -5,12 +5,20 @@ from sqlalchemy.orm import Session
 from app.core.config import get_settings
 from app.core.database import Base, engine
 from app.core.security import hash_password
+from app.core.tool_job_migration import upgrade_tool_jobs
+from app.core.trace_storage_migration import upgrade_trace_storage
+from app.core.confidence_migration import upgrade_confidence_storage
+from app.core.privacy_migration import upgrade_sensitive_storage
 from app.models.entities import UserAccount
 from app.services.knowledge import KnowledgeService
 
 
 def create_schema() -> None:
     Base.metadata.create_all(bind=engine)
+    upgrade_tool_jobs(engine)
+    upgrade_trace_storage(engine)
+    upgrade_confidence_storage(engine)
+    upgrade_sensitive_storage(engine, get_settings())
 
 
 def seed_data(db: Session) -> None:

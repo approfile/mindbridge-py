@@ -2,11 +2,13 @@ from __future__ import annotations
 
 from datetime import datetime
 from typing import Optional
+from sqlalchemy.dialects.mysql import MEDIUMTEXT
 
-from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Integer, String, Text
+from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Index, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
+from app.core.privacy_crypto import SensitiveText
 
 
 def now() -> datetime:
@@ -39,7 +41,7 @@ class ChatSession(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     public_id: Mapped[str] = mapped_column(String(64), unique=True, index=True)
-    title: Mapped[str] = mapped_column(String(160))
+    title: Mapped[str] = mapped_column(SensitiveText())
     user_id: Mapped[int] = mapped_column(ForeignKey("user_accounts.id"))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=now)
@@ -58,7 +60,7 @@ class ChatMessage(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey("user_accounts.id"))
     session_id: Mapped[int] = mapped_column(ForeignKey("chat_sessions.id"))
     role: Mapped[str] = mapped_column(String(32))
-    content: Mapped[str] = mapped_column(Text)
+    content: Mapped[str] = mapped_column(SensitiveText())
     created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
 
     session: Mapped[ChatSession] = relationship(back_populates="messages")
@@ -75,19 +77,32 @@ class KnowledgeChunk(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
 
 
+class SessionMemory(Base):
+    """Derived, session-scoped memory with raw-message provenance."""
+
+    __tablename__ = "session_memories"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    session_id: Mapped[int] = mapped_column(ForeignKey("chat_sessions.id"), unique=True, index=True)
+    last_message_id: Mapped[int] = mapped_column(Integer, default=0)
+    state_json: Mapped[str] = mapped_column(SensitiveText(), default="{}")
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=now)
+
+
 class PsychologicalReport(Base):
     __tablename__ = "psychological_reports"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("user_accounts.id"))
     session_id: Mapped[int] = mapped_column(ForeignKey("chat_sessions.id"))
-    content: Mapped[str] = mapped_column(Text)
+    content: Mapped[str] = mapped_column(SensitiveText())
     intent: Mapped[str] = mapped_column(String(32))
     emotion: Mapped[str] = mapped_column(String(32))
     emotion_score: Mapped[float] = mapped_column(Float)
     risk_level: Mapped[str] = mapped_column(String(32))
-    confidence: Mapped[float] = mapped_column(Float)
-    summary: Mapped[str] = mapped_column(Text)
+    confidence: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    confidence_metadata_json: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    summary: Mapped[str] = mapped_column(SensitiveText())
     created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
 
 
@@ -99,8 +114,8 @@ class RiskCase(Base):
     risk_level: Mapped[str] = mapped_column(String(32), index=True)
     status: Mapped[str] = mapped_column(String(32), index=True)
     owner: Mapped[str] = mapped_column(String(128), default="unassigned")
-    summary: Mapped[str] = mapped_column(Text)
-    handoff_summary: Mapped[str] = mapped_column(Text, default="")
+    summary: Mapped[str] = mapped_column(SensitiveText())
+    handoff_summary: Mapped[str] = mapped_column(SensitiveText(), default="")
     acknowledged_by: Mapped[Optional[str]] = mapped_column(String(128), nullable=True)
     acknowledged_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
@@ -113,7 +128,7 @@ class CaseNote(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     case_id: Mapped[int] = mapped_column(Integer, index=True)
     actor: Mapped[str] = mapped_column(String(128))
-    note: Mapped[str] = mapped_column(Text)
+    note: Mapped[str] = mapped_column(SensitiveText())
     created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
 
 
@@ -123,9 +138,9 @@ class AlertRecord(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     report_id: Mapped[int] = mapped_column(Integer, index=True)
     channel: Mapped[str] = mapped_column(String(64))
-    recipient: Mapped[str] = mapped_column(String(256))
+    recipient: Mapped[str] = mapped_column(SensitiveText())
     status: Mapped[str] = mapped_column(String(32))
-    message: Mapped[str] = mapped_column(Text)
+    message: Mapped[str] = mapped_column(SensitiveText())
     created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
 
 
@@ -134,14 +149,15 @@ class ExcelRecord(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     report_id: Mapped[int] = mapped_column(Integer, index=True)
-    file_path: Mapped[str] = mapped_column(String(512))
+    file_path: Mapped[str] = mapped_column(SensitiveText())
     status: Mapped[str] = mapped_column(String(32))
-    message: Mapped[str] = mapped_column(Text)
+    message: Mapped[str] = mapped_column(SensitiveText())
     created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
 
 
 class ToolJob(Base):
     __tablename__ = "tool_jobs"
+    __table_args__ = (Index("uq_tool_jobs_idempotency_key", "idempotency_key", unique=True),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     report_id: Mapped[int] = mapped_column(Integer, index=True)
@@ -151,7 +167,11 @@ class ToolJob(Base):
     max_attempts: Mapped[int] = mapped_column(Integer, default=3)
     depends_on_job_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True, index=True)
     run_after: Mapped[datetime] = mapped_column(DateTime, default=now, index=True)
-    last_error: Mapped[str] = mapped_column(Text, default="")
+    last_error: Mapped[str] = mapped_column(SensitiveText(), default="")
+    idempotency_key: Mapped[Optional[str]] = mapped_column(String(128), nullable=True)
+    correlation_json: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    claim_token: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
+    lease_expires_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=now)
 
@@ -163,8 +183,8 @@ class DeadLetterRecord(Base):
     job_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True, index=True)
     report_id: Mapped[int] = mapped_column(Integer, index=True)
     kind: Mapped[str] = mapped_column(String(64), index=True)
-    reason: Mapped[str] = mapped_column(Text)
-    payload: Mapped[str] = mapped_column(Text, default="")
+    reason: Mapped[str] = mapped_column(SensitiveText())
+    payload: Mapped[str] = mapped_column(SensitiveText(), default="")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
 
 
@@ -177,13 +197,13 @@ class AgentRunTrace(Base):
     report_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True, index=True)
     intent: Mapped[str] = mapped_column(String(32), index=True)
     risk_level: Mapped[str] = mapped_column(String(32), default="LOW", index=True)
-    original_input: Mapped[str] = mapped_column(Text)
-    sanitized_input: Mapped[str] = mapped_column(Text)
-    memory_brief: Mapped[str] = mapped_column(Text, default="")
-    agent_steps_json: Mapped[str] = mapped_column(Text, default="[]")
-    retrieved_knowledge_json: Mapped[str] = mapped_column(Text, default="[]")
-    response_messages_json: Mapped[str] = mapped_column(Text, default="[]")
-    assessment_json: Mapped[str] = mapped_column(Text, default="{}")
+    original_input: Mapped[str] = mapped_column(SensitiveText())
+    sanitized_input: Mapped[str] = mapped_column(SensitiveText())
+    memory_brief: Mapped[str] = mapped_column(SensitiveText(), default="")
+    agent_steps_json: Mapped[str] = mapped_column(SensitiveText(), default="[]")
+    retrieved_knowledge_json: Mapped[str] = mapped_column(SensitiveText(), default="[]")
+    response_messages_json: Mapped[str] = mapped_column(SensitiveText(), default="[]")
+    assessment_json: Mapped[str] = mapped_column(SensitiveText(), default="{}")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
 
 
@@ -197,8 +217,40 @@ class ToolAuditRecord(Base):
     policy: Mapped[str] = mapped_column(String(128), default="")
     allowed: Mapped[bool] = mapped_column(Boolean, default=True)
     status: Mapped[str] = mapped_column(String(32), index=True)
-    reason: Mapped[str] = mapped_column(Text, default="")
-    payload: Mapped[str] = mapped_column(Text, default="{}")
+    reason: Mapped[str] = mapped_column(SensitiveText(), default="")
+    payload: Mapped[str] = mapped_column(SensitiveText(), default="{}")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=now)
+
+
+class PrivacyMigrationState(Base):
+    __tablename__ = 'privacy_migration_state'
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    key_id: Mapped[str] = mapped_column(String(24))
+
+
+class DataAccessAudit(Base):
+    __tablename__ = 'data_access_audits'
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    actor_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True, index=True)
+    request_id: Mapped[str] = mapped_column(String(128), default='')
+    action: Mapped[str] = mapped_column(String(64))
+    policy: Mapped[str] = mapped_column(String(64), default='sensitive-data-v1')
+    operator_uid: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    resource: Mapped[str] = mapped_column(String(64))
+    resource_id: Mapped[str] = mapped_column(String(128), default='')
+    purpose: Mapped[str] = mapped_column(String(64), default='')
+    status: Mapped[str] = mapped_column(String(32))
+    row_count: Mapped[int] = mapped_column(Integer, default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=now, index=True)
+
+
+class PrivacyErasureMarker(Base):
+    """Server-owned tombstones; user text can never assert erasure state."""
+    __tablename__ = 'privacy_erasure_markers'
+    __table_args__ = (Index('uq_privacy_erasure_resource','resource','resource_id',unique=True),)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    resource: Mapped[str] = mapped_column(String(32))
+    resource_id: Mapped[int] = mapped_column(Integer)
+    erased_at: Mapped[datetime] = mapped_column(DateTime, default=now)
 

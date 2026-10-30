@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 from app.core.config import Settings
 from app.models.entities import KnowledgeChunk
 from app.services.vector_store import FALLBACK_RETRIEVAL_LABEL, PRIMARY_RETRIEVAL_LABEL, ChromaKnowledgeStore
+from app.services.observability import record_degradation, span, timed
 
 
 logger = logging.getLogger(__name__)
@@ -124,19 +125,31 @@ class KnowledgeService:
             text = data.decode("utf-8", errors="ignore")
         return self.ingest(filename, text)
 
-    def retrieve(self, query: str, top_k: int | None = None) -> list[SearchResult]:
+    @timed('retrieval.total')
+    def retrieve(self, query: str, top_k: int | None = None, *, mode: str | None = None, expand: bool = True) -> list[SearchResult]:
         top_k = top_k or self.settings.knowledge_top_k
         candidate_k = self._candidate_k(top_k)
-        chunks = self.db.query(KnowledgeChunk).all()
+        with span('retrieval.load_chunks'):
+            chunks = self.db.query(KnowledgeChunk).order_by(KnowledgeChunk.id).all()
+        if mode not in {None, "bm25", "bm25-rerank", "hybrid"}:
+            raise ValueError("Unknown retrieval mode")
+        if mode == "bm25":
+            ranked = self._retrieve_bm25(query, top_k, chunks)
+            return self._expand_best(ranked, top_k) if expand else ranked
+        if mode == "hybrid" and not self.vector_store.can_embed:
+            raise RuntimeError("Hybrid evaluation requires a real vector backend; fallback is not allowed")
         # Primary retrieval now uses hybrid recall: semantic vector candidates
         # plus BM25 keyword candidates, followed by deterministic local rerank.
-        vector_results = self._retrieve_vector(query, candidate_k)
+        vector_results = [] if mode == "bm25-rerank" else self._retrieve_vector(query, candidate_k)
+        if mode == "hybrid" and not vector_results:
+            raise RuntimeError("Hybrid retrieval produced no vector candidates")
         bm25_results = self._retrieve_bm25(query, candidate_k, chunks)
         ranked = self._fuse_and_rerank(query, vector_results, bm25_results, top_k)
         if ranked:
-            return self._expand_best(ranked, top_k)
+            return self._expand_best(ranked, top_k) if expand else ranked
         return []
 
+    @timed('retrieval.bm25')
     def _retrieve_bm25(self, query: str, top_k: int, chunks: list[KnowledgeChunk] | None = None) -> list[SearchResult]:
         chunks = chunks if chunks is not None else self.db.query(KnowledgeChunk).all()
         scores = bm25_scores(query, chunks)
@@ -148,6 +161,7 @@ class KnowledgeService:
         ranked.sort(key=lambda item: item.score, reverse=True)
         return ranked[:top_k]
 
+    @timed('retrieval.rerank')
     def _fuse_and_rerank(
         self,
         query: str,
@@ -204,8 +218,11 @@ class KnowledgeService:
     def _candidate_k(self, top_k: int) -> int:
         return max(top_k, self.settings.knowledge_candidate_k)
 
+    @timed('retrieval.vector')
     def _retrieve_vector(self, query: str, top_k: int) -> list[SearchResult]:
         if not self.vector_store.can_embed:
+            if self.settings.knowledge_vector_enabled:
+                record_degradation('retrieval.vector', 'VECTOR_UNAVAILABLE')
             return []
         try:
             self._ensure_vector_index()
@@ -292,14 +309,9 @@ class KnowledgeService:
     def _handle_vector_error(self, action: str, exc: Exception) -> None:
         if self.settings.knowledge_vector_required:
             raise exc
-        logger.warning(
-            "%s %s failed; falling back to %s: %s",
-            PRIMARY_RETRIEVAL_LABEL,
-            action,
-            FALLBACK_RETRIEVAL_LABEL,
-            exc,
-        )
+        record_degradation('retrieval.vector', 'VECTOR_CALL_FAILED', error_type=type(exc).__name__)
 
+    @timed('retrieval.expand')
     def _expand_best(self, ranked: list[SearchResult], top_k: int) -> list[SearchResult]:
         if not ranked:
             return []

@@ -1,0 +1,389 @@
+{
+  "createdDate": "2026-10-27",
+  "taskDatasetSha256": "ede7765adac8db4c9e80b83f9be30b39517e949ce1e31c3c65a33e5e338a1212",
+  "split": "development",
+  "plannedTasks": [
+    "normal-01",
+    "normal-02",
+    "normal-04",
+    "normal-05",
+    "normal-06",
+    "normal-07",
+    "normal-08",
+    "high-risk-01",
+    "high-risk-02",
+    "high-risk-04",
+    "high-risk-05",
+    "high-risk-06",
+    "high-risk-08",
+    "high-risk-10",
+    "memory-01",
+    "memory-02",
+    "memory-04",
+    "memory-05",
+    "memory-07",
+    "memory-08",
+    "memory-10",
+    "evidence-01",
+    "evidence-02",
+    "evidence-03",
+    "evidence-06",
+    "evidence-07",
+    "evidence-10",
+    "recovery-01",
+    "recovery-02",
+    "recovery-03",
+    "recovery-04",
+    "recovery-05",
+    "recovery-06",
+    "recovery-10",
+    "boundary-03",
+    "boundary-05",
+    "boundary-06",
+    "boundary-07",
+    "boundary-08",
+    "boundary-09"
+  ],
+  "executionMode": "controlled_model_or_boundary",
+  "modelProvider": "existing mock; no gold-fed model outputs",
+  "embedding": "controlled lexical hash, not Qwen quality",
+  "sqlBackend": "sqlite",
+  "physicalServices": [
+    "real loopback HTTP",
+    "isolated SQLite",
+    "Redis namespace",
+    "Chroma",
+    "Excel file",
+    "local Mailpit SMTP/API"
+  ],
+  "privateEvidenceDirectory": "/Users/szy/Documents/mindbridge-py(1)/mindbridge-py/.local-runtime/agent-results-20261027/run-c7a8cc43452a",
+  "cases": [
+    {
+      "taskId": "normal-01",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/normal-01",
+      "observationSha256": "4a6ade8b5c93b20ee50ed4feeee9ad4e1f70127143f09e2ce1eaebd44b387b10",
+      "rawEvidenceSha256": "0d256015bbd8e7e7d0d136676973487a80d248b62f21d8cad699935642c7ed51"
+    },
+    {
+      "taskId": "normal-02",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/normal-02",
+      "observationSha256": "63b8b7c1636337d8436036470427ae2bed89c4348568a626c3cc23464511d757",
+      "rawEvidenceSha256": "c4583250fe1483d7dce5d804d913e2c42715c15f1a5af2738240e111f2e7a99f"
+    },
+    {
+      "taskId": "normal-04",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/normal-04",
+      "observationSha256": "2c4dfed3964caa11e9948df94b184a7dbd5e47dcd15a525902d53c5bf9a5a552",
+      "rawEvidenceSha256": "eb62d0e99c5587217f338a379708566cc2d463af12c5cbffa0788045b073fb7d"
+    },
+    {
+      "taskId": "normal-05",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/normal-05",
+      "observationSha256": "e34ab1cd77f40e32aa3e97298e6d3f20a08cde5b297a3214f90557531750c56d",
+      "rawEvidenceSha256": "878b7ab19006809e2b23198627871fb4a7319ad5acf9d43562f57fca3948a55e"
+    },
+    {
+      "taskId": "normal-06",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/normal-06",
+      "observationSha256": "7e102422d5ac4b373c90acd5eded68a5815ef1e7035c43d0ee4df3dd995841d1",
+      "rawEvidenceSha256": "bbd5b82cdbef2222760588a28bb7bc30d619a0aa7b84a1a1c6ecf08151e95653"
+    },
+    {
+      "taskId": "normal-07",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/normal-07",
+      "observationSha256": "d380c6fefce486f3f9e7caf8234d00560b5bd323ffeb287da7151cac76c1f380",
+      "rawEvidenceSha256": "f56042e6e066c201f78d7b3fccdb175909ef9d2ca407e7e6dc4c2ac7f54a65c5"
+    },
+    {
+      "taskId": "normal-08",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/normal-08",
+      "observationSha256": "4f4360e6ce36552d06a69e814f3b9662b11213653457da537fb8f78ac39ac445",
+      "rawEvidenceSha256": "9e9e7fd6109f34533d4aa92539d259d1eeb915feb0679ea64e5e5e26c163bb4f"
+    },
+    {
+      "taskId": "high-risk-01",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/high-risk-01",
+      "observationSha256": "454277db245e684f5963762e072305318505f71688bf79141ab9972750711d73",
+      "rawEvidenceSha256": "330e5abe0305f08f5380b22545e56768e53d256468a87fedb401ca485a3c0fd3"
+    },
+    {
+      "taskId": "high-risk-02",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/high-risk-02",
+      "observationSha256": "0213cabf20eacf002dfc1838c33fa3cf1d4f9a211f24097606e021cdcecda0c4",
+      "rawEvidenceSha256": "656903d544160b9f90910595f73a7365cf8a7633d5871b69ba63dfbb19fdce25"
+    },
+    {
+      "taskId": "high-risk-04",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/high-risk-04",
+      "observationSha256": "c4d81bc3db9c0f07f7ebe92c21a6c547f593f93f02803dc8921b6a9358cd183e",
+      "rawEvidenceSha256": "f6bfd77862de8ae9b7c28ba5e575a8360838703131084000a827bd6b2211ef29"
+    },
+    {
+      "taskId": "high-risk-05",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/high-risk-05",
+      "observationSha256": "36af04b0103afaf55ccf42462d2d22bcfa2b62c303cbad438a0cb59c3e1fd535",
+      "rawEvidenceSha256": "fe7abf30f5045cb2208917f3781f5aed09145035365e5f122c203eddfbb55151"
+    },
+    {
+      "taskId": "high-risk-06",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/high-risk-06",
+      "observationSha256": "6ba08607f13bff27cacc83c975acbf31bf7e80d4a163c9d35da4be87883e140a",
+      "rawEvidenceSha256": "ecbfcdb6a061f77c385eab7986592901d9b5a5679d681bb57d4067a727fe29f2"
+    },
+    {
+      "taskId": "high-risk-08",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/high-risk-08",
+      "observationSha256": "bfa627b6ff1b367b6d032d5fe2692ece820d1159e874fb25d5773f26e69a0467",
+      "rawEvidenceSha256": "4a317cdbcaaf708f55a6e81bc187bc972ec84d9044fe345eae66aac864598126"
+    },
+    {
+      "taskId": "high-risk-10",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/high-risk-10",
+      "observationSha256": "7f1e0c659b832bb6cdedd86a3e4ef915cb472903bc5c9bac43561e2a2a2ab607",
+      "rawEvidenceSha256": "196825dad7f159b1454609e257328b8b6a2703bb12503ec0e4aee9e1c102753b"
+    },
+    {
+      "taskId": "memory-01",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/memory-01",
+      "observationSha256": "af8afcc165d1fbbd115450fb4024bac9e366092fd6d92b25d2a3910b8ead7e64",
+      "rawEvidenceSha256": "d48cb3fc01bae55fad54ebf796beb715d15f9ca0dada0b7f304538e136473a69"
+    },
+    {
+      "taskId": "memory-02",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/memory-02",
+      "observationSha256": "ef7f0d7fd0e38b6e2c47180dcd6001565e5bcf0b296a0798675e90319cc49c1b",
+      "rawEvidenceSha256": "ce3b60a0a72a63c9ac689cbae15e7ad545e705ad55e058d68506e49d6f22d4c3"
+    },
+    {
+      "taskId": "memory-04",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/memory-04",
+      "observationSha256": "dd1d4082c2669f7e22c926991fe8a8764e97d43265a8b767b03e1e265abaf9d5",
+      "rawEvidenceSha256": "fc026a0add55e9bbb94328f590548de9f0f10be5b6958bed2b3e8d464c11decb"
+    },
+    {
+      "taskId": "memory-05",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/memory-05",
+      "observationSha256": "c67f97300d09d69081962010404a6f3bb675608b3186fc0df4eac9ed350cb21a",
+      "rawEvidenceSha256": "ba87ff4c4d58798f4104731786e3b87a1a05d9cd7d22aaf101f0886ba8c006d5"
+    },
+    {
+      "taskId": "memory-07",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/memory-07",
+      "observationSha256": "4b0cf7d98ebd407d97778088f0467ad6b5a76f5bfe99bd95e656c5630f01b4ab",
+      "rawEvidenceSha256": "ee9b36262d4aff3a34fee3bbd875ccb6be94ab6ecdcdb428a4a1a6608f776bb8"
+    },
+    {
+      "taskId": "memory-08",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/memory-08",
+      "observationSha256": "71ceebf1e7b24f32907409de77d46f19a86ffbb7eee290448438b006d129d843",
+      "rawEvidenceSha256": "22d607fab24cec5e7983b3df9bbef59f08fcf4cfa50f0a37a2e2516f9405a6dd"
+    },
+    {
+      "taskId": "memory-10",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/memory-10",
+      "observationSha256": "2b64b8c31e46af3537b69c62caacf7d2d8dbac8af6300121eaecf8f098f22766",
+      "rawEvidenceSha256": "139e418cd9e7e08a392d656d7954d1ee0f6b0d331c28f4e4d944ea039dfcf8d5"
+    },
+    {
+      "taskId": "evidence-01",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/evidence-01",
+      "observationSha256": "0a07145002337f91cbc33e197a0d012ffe5ab36133dffb408751d58911c69d5a",
+      "rawEvidenceSha256": "5b359eef2963f45af740242057316c09c7bcd48a3739ff837718b8e7828da612"
+    },
+    {
+      "taskId": "evidence-02",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/evidence-02",
+      "observationSha256": "dbf770b9052b993eae256508f87d8db999658d2ac752aa487d4600788e0da359",
+      "rawEvidenceSha256": "a6a24e0725fde6dada843e8961a4b2f5983902d123c27867ef631052761255b5"
+    },
+    {
+      "taskId": "evidence-03",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/evidence-03",
+      "observationSha256": "cbb38d1865f7323ae0fcafd1db888d0dc50b59fa8cc953bd3c8f50f5c8670270",
+      "rawEvidenceSha256": "7d22d7b7eea7a049eee1306da56cfde97b5cc92375173d0a2b4038aea01f8679"
+    },
+    {
+      "taskId": "evidence-06",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/evidence-06",
+      "observationSha256": "63b1a29911aa0440916c046be1ff99a73c3fca4d811cfa7d37e7796ead336ad4",
+      "rawEvidenceSha256": "207770eb4cbd00ef3cdcbf8f89e8caa4eac77a2d209eb9cf688915c375267790"
+    },
+    {
+      "taskId": "evidence-07",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/evidence-07",
+      "observationSha256": "ce82cbd253114585bccc6ea428596424546d541a437209b322609fcb35d0091f",
+      "rawEvidenceSha256": "c357072f340a3e3274bd5184260180860c840285f21525aadddb02bdb1e3f6be"
+    },
+    {
+      "taskId": "evidence-10",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/evidence-10",
+      "observationSha256": "8d61e0421b30fa08f538febafaa0f517c26e975c0c8cc8877977a9f98f14cb66",
+      "rawEvidenceSha256": "a91514e3eee9cef29c62eb34b3d52a47214ac287409c7c44ea1688558bca4057"
+    },
+    {
+      "taskId": "recovery-01",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/recovery-01",
+      "observationSha256": "051aa0584e157492790848373a4d47a4e5bf4c9f9dfbbb57fcc4841386a9db28",
+      "rawEvidenceSha256": "49485774d51714b47d442bb6d8c457e8a337959ec6e04fd19cca68807c6944bf"
+    },
+    {
+      "taskId": "recovery-02",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/recovery-02",
+      "observationSha256": "f90c63f74aba9f852c5e858fa0ec0eaca2a8baa0ec3f1d59b9b6f60239674223",
+      "rawEvidenceSha256": "b318d6d101035887ca37a33fd133bab81ccdda916671d36ca4ce868c8558a630"
+    },
+    {
+      "taskId": "recovery-03",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/recovery-03",
+      "observationSha256": "feb889969f02707083dc567b650593dcedc0eb81986e0bc04d2be829e710c1d9",
+      "rawEvidenceSha256": "c513ba4c2e6b535c8ac3fb573fab2fbfcaaee1c7054d4d47f82b4e6df8e0a4c8"
+    },
+    {
+      "taskId": "recovery-04",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/recovery-04",
+      "observationSha256": "7b9d0d0a108c51971e3630b2e5cba6adac2915962f7d062e442ec66b8ef7de9d",
+      "rawEvidenceSha256": "fa2c3700c6c9815603f296ace72b3d5772bdd8fe196a6b107cd40dca529d336f"
+    },
+    {
+      "taskId": "recovery-05",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/recovery-05",
+      "observationSha256": "c5ec86499c789758e6e5de6201cddf2c7f11fa95277349a52ee2ee4c3ba9aed1",
+      "rawEvidenceSha256": "6488ab22444f11926f2988d6b44ff467219f32bd09594015d9ecb882ce0fbbb2"
+    },
+    {
+      "taskId": "recovery-06",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/recovery-06",
+      "observationSha256": "ad1a7c9cb8d94a01de42d8773add386d5dd7427a3f8cf7333576e670148f56ed",
+      "rawEvidenceSha256": "f5cc161132ad5166930a9663fc4a294b6ea8c56d648cf6d5e3274275f5d78a67"
+    },
+    {
+      "taskId": "recovery-10",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/recovery-10",
+      "observationSha256": "cd662935accfa21f6752c1fcba7beba3c6c229699308c17195ebbf8037eaf1eb",
+      "rawEvidenceSha256": "598abf5a587abac6388855822e4b3dce59d5fcb9c50eb2777316e8a7562f4cdc"
+    },
+    {
+      "taskId": "boundary-03",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/boundary-03",
+      "observationSha256": "ea82d24d35b66c1fba15cfcffa63c6579d5cf999ff6c1905c8536f6d3b49e85a",
+      "rawEvidenceSha256": "be1715ddae2416748bdf4ae1980fe6f2e5bdb212c1be2eddb3533e402dbd3ce0"
+    },
+    {
+      "taskId": "boundary-05",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/boundary-05",
+      "observationSha256": "55ed1b935eabac2a2496881fe8d55fa066ed380bde57366a67ab75e8751690fc",
+      "rawEvidenceSha256": "10d6a20202acd866cd120791d622d50dfd9b9dd460a8c5d4d6316475bf313fa3"
+    },
+    {
+      "taskId": "boundary-06",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/boundary-06",
+      "observationSha256": "45b9c6bb56a7b062147b3881614dffdd36b20b7ae6c15b6ea7f8dc392e4a2d56",
+      "rawEvidenceSha256": "8eef3d6f40f6a3892d0dd3c9ffba4c424f1d8b762abc5e073f761feec1a74745"
+    },
+    {
+      "taskId": "boundary-07",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/boundary-07",
+      "observationSha256": "a3ac63f63fa06d2b37598a2d3fc8fc25a7459b613f177d8c07e32244529b6dec",
+      "rawEvidenceSha256": "7dc92cf069dcbdfe25660db59d3fe996abeddb3cb8150be6383b790d27600699"
+    },
+    {
+      "taskId": "boundary-08",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/boundary-08",
+      "observationSha256": "8f403a1e34551f873a1090c54ad90c3151dc3756de80043f3456d136f353c2fd",
+      "rawEvidenceSha256": "5ae3833e2c11720c4c8b03f18df7f62b06c740a36f279589ce17cde60429cea7"
+    },
+    {
+      "taskId": "boundary-09",
+      "exitCode": 0,
+      "captured": true,
+      "privateState": ".local-runtime/agent-results-20261027/run-c7a8cc43452a/boundary-09",
+      "observationSha256": "f0253fadaaf0c1fad66c8552ac61703cfb755b92fe3c5e9729556b26976edffd",
+      "rawEvidenceSha256": "8c053b575987b6a66f7c5165fe65e61142b9088ba1cf5dbd603725af7ccfe6c8"
+    }
+  ],
+  "semanticReviewStatus": "pending_step_4",
+  "collectorSourceHashesRecordedAfterRun": {
+    "app/evaluation/agent_execution.py": "baaee7cf15cd82b514cd05f1e5f66d69ae8e5a25d1d595a98a042d81f6558341",
+    "app/evaluation/agent_result_evidence.py": "02a10afee162b0ba52410a83f48757cffc09a6305115fa937e9ec9df57549958",
+    "scripts/run_agent_results.py": "2cb36909de880f27d2820b0cab9c0db38249fda631d8f770a9205678d7148ec1",
+    "scripts/verify_agent_result_adapters.py": "26215274dfbdb7eb8808a3e9acd7513ba483a6749fdcbc839b02c02f9f386b89"
+  }
+}

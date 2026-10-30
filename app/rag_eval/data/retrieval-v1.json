@@ -1,0 +1,681 @@
+{
+  "schemaVersion": 2,
+  "version": "retrieval-v1-20261024",
+  "split": "frozen-engineering-test",
+  "annotation": "engineering-authored synthetic qrels; not independently expert labeled",
+  "chunking": {
+    "size": 512,
+    "overlap": 64
+  },
+  "sources": {
+    "academic-stress-and-burnout.md": "13a94229c9de339d2cf4e2fdf01c3a971d231fc662fc1d8bcd7f63d006c1c3ef",
+    "adjustment-and-transition.md": "1a70c05ed0c65eba1b06af8dc11e042d067b963ad76f9963788d87d6550ed2a7",
+    "anxiety-panic-grounding.md": "e80f2e81ab975722a0935dd291b9ba7209c35c71fad40cb79ac6a2af33f6cbbb",
+    "campus-mental-health.md": "a2f5c1f04580b0f112173522453394a7791d9f5bce982daa94d8f0bcc8da40d1",
+    "counselor-referral-and-resources.md": "7b71f8037c9756444d90fdedc859606709019981c2c0d4b71f385d2144e729a1",
+    "exam-season-guidance.md": "b448d023b155fc7f8c65103ad1f091aab9bdd4c855bb0bcc03861592839cfda5",
+    "low-mood-depression-support.md": "fc429b6fea8cf46c6f4fb10873922250b6bf0ef95e822879a593ba61243472f2",
+    "privacy-boundaries-and-ethics.md": "4871414f7dc61ec6f3166f6d932add0dd08f4d7719930842f1993d09ff5fa91e",
+    "relationships-and-family.md": "f3aa3e764d60bb17be93c39f43eaf1cf0bebc66d648650ac117575c7ff1a6296",
+    "risk-policy.md": "e717ad9c95d3f47c13393610f12717e940a98c8d99d0ab76883a4704f398e009",
+    "sleep-routine-self-care.md": "3cafe76bc0224dfc42d6c935e7300edfa9f51ef5fb901fef74775b97e001ef1b"
+  },
+  "relevanceScale": {
+    "0": "not relevant",
+    "1": "supporting passage",
+    "2": "direct answer evidence"
+  },
+  "queries": [
+    {
+      "id": "academic-stress-and-burnout-1",
+      "question": "任务太多全堆在今天，怎样按优先级拆分压力？",
+      "qrels": [
+        {
+          "source": "academic-stress-and-burnout.md",
+          "sourceIndex": 0,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "academic-stress-and-burnout-2",
+      "question": "完美主义让我一直拖延，十分钟启动法怎么用？",
+      "qrels": [
+        {
+          "source": "academic-stress-and-burnout.md",
+          "sourceIndex": 0,
+          "gain": 2
+        },
+        {
+          "source": "exam-season-guidance.md",
+          "sourceIndex": 0,
+          "gain": 1
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "academic-stress-and-burnout-3",
+      "question": "组会没有进展，和导师沟通前应该整理哪些信息？",
+      "qrels": [
+        {
+          "source": "academic-stress-and-burnout.md",
+          "sourceIndex": 1,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "academic-stress-and-burnout-4",
+      "question": "学业压力已经影响基本生活时，应该向哪些人求助？",
+      "qrels": [
+        {
+          "source": "academic-stress-and-burnout.md",
+          "sourceIndex": 1,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "adjustment-and-transition-1",
+      "question": "新生离家不适应，如何建立日常生活的基本锚点？",
+      "qrels": [
+        {
+          "source": "adjustment-and-transition.md",
+          "sourceIndex": 0,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "adjustment-and-transition-2",
+      "question": "不想强迫自己变外向，新生可以怎么低压力社交？",
+      "qrels": [
+        {
+          "source": "adjustment-and-transition.md",
+          "sourceIndex": 0,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "adjustment-and-transition-3",
+      "question": "转专业之前需要收集哪些信息，而不是马上做决定？",
+      "qrels": [
+        {
+          "source": "adjustment-and-transition.md",
+          "sourceIndex": 0,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "adjustment-and-transition-4",
+      "question": "毕业时把offer结果等同自我价值，怎样做短期行动计划？",
+      "qrels": [
+        {
+          "source": "adjustment-and-transition.md",
+          "sourceIndex": 1,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "anxiety-panic-grounding-1",
+      "question": "五感着陆练习的54321分别是什么？",
+      "qrels": [
+        {
+          "source": "anxiety-panic-grounding.md",
+          "sourceIndex": 0,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "anxiety-panic-grounding-2",
+      "question": "焦虑时如何区分事实、猜测和下一步行动？",
+      "qrels": [
+        {
+          "source": "anxiety-panic-grounding.md",
+          "sourceIndex": 1,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "anxiety-panic-grounding-3",
+      "question": "学生正在服药时，心理助手能否指导调整药物？",
+      "qrels": [
+        {
+          "source": "anxiety-panic-grounding.md",
+          "sourceIndex": 2,
+          "gain": 2
+        },
+        {
+          "source": "privacy-boundaries-and-ethics.md",
+          "sourceIndex": 1,
+          "gain": 1
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "anxiety-panic-grounding-4",
+      "question": "焦虑持续多周、频繁惊恐并影响进食，何时建议专业支持？",
+      "qrels": [
+        {
+          "source": "anxiety-panic-grounding.md",
+          "sourceIndex": 1,
+          "gain": 2
+        },
+        {
+          "source": "counselor-referral-and-resources.md",
+          "sourceIndex": 0,
+          "gain": 1
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "campus-mental-health-1",
+      "question": "What is MindBridge and may it present itself as a therapist?",
+      "qrels": [
+        {
+          "source": "campus-mental-health.md",
+          "sourceIndex": 0,
+          "gain": 2
+        },
+        {
+          "source": "campus-mental-health.md",
+          "sourceIndex": 2,
+          "gain": 1
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "campus-mental-health-2",
+      "question": "学生有羞耻和失败感时，回复为什么要非评判并把问题拆小？",
+      "qrels": [
+        {
+          "source": "campus-mental-health.md",
+          "sourceIndex": 3,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "campus-mental-health-3",
+      "question": "低落和孤独时，可以给哪些小行动和社交连接建议？",
+      "qrels": [
+        {
+          "source": "campus-mental-health.md",
+          "sourceIndex": 3,
+          "gain": 1
+        },
+        {
+          "source": "low-mood-depression-support.md",
+          "sourceIndex": 0,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "campus-mental-health-4",
+      "question": "咨询前可以记录情况，但助手能不能给出医学诊断？",
+      "qrels": [
+        {
+          "source": "campus-mental-health.md",
+          "sourceIndex": 5,
+          "gain": 2
+        },
+        {
+          "source": "privacy-boundaries-and-ethics.md",
+          "sourceIndex": 0,
+          "gain": 1
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "counselor-referral-and-resources-1",
+      "question": "校园里有哪些现实支持资源可以帮助学生？",
+      "qrels": [
+        {
+          "source": "counselor-referral-and-resources.md",
+          "sourceIndex": 0,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "counselor-referral-and-resources-2",
+      "question": "去咨询室说不清楚，对话要点怎样整理成三段？",
+      "qrels": [
+        {
+          "source": "counselor-referral-and-resources.md",
+          "sourceIndex": 1,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "counselor-referral-and-resources-3",
+      "question": "有即时危险时，为什么不能只建议预约下周咨询？",
+      "qrels": [
+        {
+          "source": "counselor-referral-and-resources.md",
+          "sourceIndex": 1,
+          "gain": 2
+        },
+        {
+          "source": "risk-policy.md",
+          "sourceIndex": 3,
+          "gain": 1
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "counselor-referral-and-resources-4",
+      "question": "部署方应该在哪里补充本校心理中心和夜间值班电话？",
+      "qrels": [
+        {
+          "source": "counselor-referral-and-resources.md",
+          "sourceIndex": 1,
+          "gain": 2
+        },
+        {
+          "source": "counselor-referral-and-resources.md",
+          "sourceIndex": 0,
+          "gain": 1
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "exam-season-guidance-1",
+      "question": "考前一周，怎样把复习内容分成三个优先层次？",
+      "qrels": [
+        {
+          "source": "exam-season-guidance.md",
+          "sourceIndex": 0,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "exam-season-guidance-2",
+      "question": "复习走神时，25分钟学习块应该怎样设置一个具体目标？",
+      "qrels": [
+        {
+          "source": "exam-season-guidance.md",
+          "sourceIndex": 0,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "exam-season-guidance-3",
+      "question": "考试时心慌脑子空白，应该先做什么、如何处理卡住的题？",
+      "qrels": [
+        {
+          "source": "exam-season-guidance.md",
+          "sourceIndex": 1,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "exam-season-guidance-4",
+      "question": "考后反复查答案自责，如何限制复盘并区分可控和不可控？",
+      "qrels": [
+        {
+          "source": "exam-season-guidance.md",
+          "sourceIndex": 1,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "low-mood-depression-support-1",
+      "question": "情绪低落时，行为激活为什么从喝水洗脸等小行动开始？",
+      "qrels": [
+        {
+          "source": "low-mood-depression-support.md",
+          "sourceIndex": 0,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "low-mood-depression-support-2",
+      "question": "日记记录的三栏分别写什么？",
+      "qrels": [
+        {
+          "source": "low-mood-depression-support.md",
+          "sourceIndex": 0,
+          "gain": 2
+        },
+        {
+          "source": "low-mood-depression-support.md",
+          "sourceIndex": 1,
+          "gain": 1
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "low-mood-depression-support-3",
+      "question": "低落时不想麻烦别人，可以怎样建立低门槛社交连接？",
+      "qrels": [
+        {
+          "source": "low-mood-depression-support.md",
+          "sourceIndex": 1,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "low-mood-depression-support-4",
+      "question": "低落中出现明确计划、告别语言或无法保证安全时如何升级？",
+      "qrels": [
+        {
+          "source": "low-mood-depression-support.md",
+          "sourceIndex": 1,
+          "gain": 2
+        },
+        {
+          "source": "low-mood-depression-support.md",
+          "sourceIndex": 2,
+          "gain": 1
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "privacy-boundaries-and-ethics-1",
+      "question": "校园心理AI如何落实最小必要收集，而不追问无关敏感细节？",
+      "qrels": [
+        {
+          "source": "privacy-boundaries-and-ethics.md",
+          "sourceIndex": 0,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "privacy-boundaries-and-ethics-2",
+      "question": "学生要求高风险时也绝对保密，助手应该怎样回应？",
+      "qrels": [
+        {
+          "source": "privacy-boundaries-and-ethics.md",
+          "sourceIndex": 0,
+          "gain": 1
+        },
+        {
+          "source": "privacy-boundaries-and-ethics.md",
+          "sourceIndex": 1,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "privacy-boundaries-and-ethics-3",
+      "question": "管理员查看风险台账后应如何避免惩罚、标签化和公开谈资？",
+      "qrels": [
+        {
+          "source": "privacy-boundaries-and-ethics.md",
+          "sourceIndex": 0,
+          "gain": 1
+        },
+        {
+          "source": "privacy-boundaries-and-ethics.md",
+          "sourceIndex": 1,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "privacy-boundaries-and-ethics-4",
+      "question": "面对医学、法律或纪律处分等高风险事务，助手的角色边界是什么？",
+      "qrels": [
+        {
+          "source": "privacy-boundaries-and-ethics.md",
+          "sourceIndex": 1,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "relationships-and-family-1",
+      "question": "室友半夜制造噪音，怎样基于具体事件做低攻击沟通？",
+      "qrels": [
+        {
+          "source": "relationships-and-family.md",
+          "sourceIndex": 0,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "relationships-and-family-2",
+      "question": "室友冲突已经升级为霸凌和人身威胁，应联系谁？",
+      "qrels": [
+        {
+          "source": "relationships-and-family.md",
+          "sourceIndex": 0,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "relationships-and-family-3",
+      "question": "分手后冲动想不断发消息，可以怎样延迟行动？",
+      "qrels": [
+        {
+          "source": "relationships-and-family.md",
+          "sourceIndex": 1,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "relationships-and-family-4",
+      "question": "父母控制和期待让人窒息，怎样从可谈判的小边界开始？",
+      "qrels": [
+        {
+          "source": "relationships-and-family.md",
+          "sourceIndex": 1,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "risk-policy-1",
+      "question": "LOW MEDIUM HIGH这些风险等级在系统里用于什么，而非医学诊断？",
+      "qrels": [
+        {
+          "source": "risk-policy.md",
+          "sourceIndex": 1,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "risk-policy-2",
+      "question": "持续焦虑失眠但没有立即自伤意图，MEDIUM的支持行动是什么？",
+      "qrels": [
+        {
+          "source": "risk-policy.md",
+          "sourceIndex": 2,
+          "gain": 2
+        },
+        {
+          "source": "risk-policy.md",
+          "sourceIndex": 3,
+          "gain": 1
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "risk-policy-3",
+      "question": "已有明确伤害自己或他人的计划时，HIGH回复和预警流程是什么？",
+      "qrels": [
+        {
+          "source": "risk-policy.md",
+          "sourceIndex": 3,
+          "gain": 2
+        },
+        {
+          "source": "risk-policy.md",
+          "sourceIndex": 4,
+          "gain": 1
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "risk-policy-4",
+      "question": "高风险回复为什么不能责备、激将或作道德评判？",
+      "qrels": [
+        {
+          "source": "risk-policy.md",
+          "sourceIndex": 4,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "sleep-routine-self-care-1",
+      "question": "作息紊乱时，为什么优先固定起床时间而不是强迫今晚早睡？",
+      "qrels": [
+        {
+          "source": "sleep-routine-self-care.md",
+          "sourceIndex": 0,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "sleep-routine-self-care-2",
+      "question": "下午喝咖啡晚上心慌，如何观察并调整咖啡因摄入时间？",
+      "qrels": [
+        {
+          "source": "sleep-routine-self-care.md",
+          "sourceIndex": 0,
+          "gain": 2
+        },
+        {
+          "source": "sleep-routine-self-care.md",
+          "sourceIndex": 1,
+          "gain": 1
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "sleep-routine-self-care-3",
+      "question": "躺下二三十分钟还清醒时，应该离开床做什么？",
+      "qrels": [
+        {
+          "source": "sleep-routine-self-care.md",
+          "sourceIndex": 1,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "sleep-routine-self-care-4",
+      "question": "失眠持续多周并影响白天功能时，何时需要转介？",
+      "qrels": [
+        {
+          "source": "sleep-routine-self-care.md",
+          "sourceIndex": 1,
+          "gain": 2
+        }
+      ],
+      "answerable": true
+    },
+    {
+      "id": "unanswerable-1",
+      "question": "海桥大学心理中心在2030年10月25日的值班电话号码是多少？",
+      "qrels": [],
+      "answerable": false
+    },
+    {
+      "id": "unanswerable-2",
+      "question": "海桥大学2029年的转专业最低绩点是3.2还是3.5？",
+      "qrels": [],
+      "answerable": false
+    },
+    {
+      "id": "unanswerable-3",
+      "question": "海桥大学西区校医院心理科这周日具体在哪个诊室？",
+      "qrels": [],
+      "answerable": false
+    },
+    {
+      "id": "unanswerable-4",
+      "question": "海桥大学心理咨询每次收费多少元，退费规定是什么？",
+      "qrels": [],
+      "answerable": false
+    },
+    {
+      "id": "unanswerable-5",
+      "question": "海桥大学2029年秋招宣讲会的具体日程是什么？",
+      "qrels": [],
+      "answerable": false
+    },
+    {
+      "id": "unanswerable-6",
+      "question": "请给出海桥大学辅导员李老师的私人手机号码。",
+      "qrels": [],
+      "answerable": false
+    },
+    {
+      "id": "unanswerable-7",
+      "question": "今天海桥市未来24小时的降雨概率是多少？",
+      "qrels": [],
+      "answerable": false
+    },
+    {
+      "id": "unanswerable-8",
+      "question": "海桥大学图书馆2030年寒假几点闭馆？",
+      "qrels": [],
+      "answerable": false
+    }
+  ]
+}

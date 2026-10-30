@@ -1,4 +1,5 @@
 from __future__ import annotations
+from app.services.confidence import confidence_summary
 
 import re
 from dataclasses import dataclass, field
@@ -6,6 +7,7 @@ from pathlib import Path
 
 from app.core.enums import IntentType, RiskLevel
 from app.models.entities import PsychologicalReport, UserAccount
+from app.services.privacy import PrivacySanitizer
 
 
 class SkillLoadError(RuntimeError):
@@ -172,10 +174,10 @@ class MindBridgeSkillLibrary:
                 "student": student,
                 "risk_level": report.risk_level,
                 "emotion": report.emotion,
-                "confidence": f"{report.confidence:.2f}",
-                "summary": report.summary,
+                "confidence": confidence_summary(report),
+                "summary": PrivacySanitizer().sanitize(report.summary),
                 "next_steps": "\n".join(f"- {step}" for step in next_steps),
-                "content_excerpt": _truncate(report.content, 700),
+                "content_excerpt": _truncate(PrivacySanitizer().sanitize(report.content), 700),
             },
         )
 
@@ -221,11 +223,7 @@ def _render_template(template: str, values: dict[str, str]) -> str:
 
 
 def _student_label(user: UserAccount | None, user_id: int) -> str:
-    if user is None:
-        return f"userId={user_id}"
-    if user.display_name:
-        return f"{user.display_name} ({user.username})"
-    return user.username
+    return f'学生#{user_id}'
 
 
 def _truncate(text: str, limit: int) -> str:

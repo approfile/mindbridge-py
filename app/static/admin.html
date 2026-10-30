@@ -28,6 +28,17 @@
   </header>
 
   <main class="admin-layout">
+    <section class="panel" aria-label="敏感数据访问">
+      <p id="privacyMode">正在确认数据访问权限。</p>
+      <label id="controlledRead" hidden>本次正文读取用途
+        <select id="accessPurpose">
+          <option value="case_followup">个案跟进</option>
+          <option value="incident_review">异常排查</option>
+          <option value="data_subject_request">本人数据请求</option>
+        </select>
+        <small>仅在点击查看单条档案时读取脱敏正文，访问用途与结果会留痕。</small>
+      </label>
+    </section>
     <section class="admin-grid" aria-label="后台指标">
       <div class="metric">
         <span>报告数</span>

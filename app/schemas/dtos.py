@@ -7,11 +7,12 @@ from pydantic import BaseModel, Field
 
 
 class ChatRequest(BaseModel):
-    message: str = Field(min_length=1)
+    message: str = Field(min_length=1, max_length=8000)
     sessionId: Optional[str] = None
 
 
 class ChatStreamEvent(BaseModel):
+    requestId: Optional[str] = None
     sessionId: Optional[str] = None
     content: Optional[str] = None
     message: Optional[str] = None
@@ -38,7 +39,8 @@ class ReportResponse(BaseModel):
     emotion: str
     emotionScore: float
     riskLevel: str
-    confidence: float
+    confidence: Optional[float]
+    confidenceInfo: dict[str, Any] = Field(default_factory=dict)
     summary: str
     createdAt: datetime
 
@@ -89,6 +91,8 @@ class CaseNoteResponse(BaseModel):
 
 
 class ToolJobResponse(BaseModel):
+    requestId: Optional[str] = None
+    runId: Optional[str] = None
     id: int
     reportId: int
     kind: str
@@ -113,6 +117,9 @@ class DeadLetterResponse(BaseModel):
 
 
 class AgentRunTraceResponse(BaseModel):
+    requestId: Optional[str] = None
+    runId: Optional[str] = None
+    observability: dict[str, Any] = Field(default_factory=dict)
     id: int
     sessionId: str
     reportId: Optional[int] = None

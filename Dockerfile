@@ -13,8 +13,6 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app ./app
-# Standard skills are loaded from the filesystem at runtime, so they must ship
-# with the image; otherwise MindBridgeSkillLibrary returns an empty skill set.
 COPY skills ./skills
 COPY models/mindbridge-qwen2.5-7b-ft/Modelfile ./models/mindbridge-qwen2.5-7b-ft/Modelfile
 

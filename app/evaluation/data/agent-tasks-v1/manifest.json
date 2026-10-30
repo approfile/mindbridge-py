@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "datasetVersion": "agent-tasks-v1-20261026",
+  "createdDate": "2026-10-26",
+  "status": "frozen_contracts_not_executed",
+  "artifactHashes": {
+    "app/evaluation/data/agent-tasks-v1/tasks.json": "ede7765adac8db4c9e80b83f9be30b39517e949ce1e31c3c65a33e5e338a1212",
+    "app/evaluation/data/agent-tasks-v1/schema.json": "b0dc906e7a7ab9d01725b521a6a87518bda127fd6c657b00e1ce573a72189542",
+    "app/evaluation/data/agent-tasks-v1/CASES.md": "69c587c82abc9ce159c11f153b21df0fd836d17b2cd16e691872bb78250ba240",
+    "docs/agent-task-dataset-v1.md": "f14012764adc15bc9444ed79ce98699f2ff337c10b7f01ee491ed7f375516adf",
+    "scripts/validate_agent_tasks.py": "1e31911e7c6309367592f9bc571c61d8ae1d438240785445c157951f9cbc6dbc",
+    "tests/test_agent_task_dataset.py": "106153806a3fe76b42137400954f043cd4b4b36f934b052f11793beb5e8778d7",
+    "requirements-evaluation.txt": "a4cb9cfa9f8672f5433f0b5de47a8426bf6ba53a987eaa1ec2481c61d7422f10"
+  },
+  "corpusHashes": {
+    "app/knowledge/academic-stress-and-burnout.md": "13a94229c9de339d2cf4e2fdf01c3a971d231fc662fc1d8bcd7f63d006c1c3ef",
+    "app/knowledge/adjustment-and-transition.md": "1a70c05ed0c65eba1b06af8dc11e042d067b963ad76f9963788d87d6550ed2a7",
+    "app/knowledge/anxiety-panic-grounding.md": "e80f2e81ab975722a0935dd291b9ba7209c35c71fad40cb79ac6a2af33f6cbbb",
+    "app/knowledge/campus-mental-health.md": "a2f5c1f04580b0f112173522453394a7791d9f5bce982daa94d8f0bcc8da40d1",
+    "app/knowledge/counselor-referral-and-resources.md": "7b71f8037c9756444d90fdedc859606709019981c2c0d4b71f385d2144e729a1",
+    "app/knowledge/exam-season-guidance.md": "b448d023b155fc7f8c65103ad1f091aab9bdd4c855bb0bcc03861592839cfda5",
+    "app/knowledge/low-mood-depression-support.md": "fc429b6fea8cf46c6f4fb10873922250b6bf0ef95e822879a593ba61243472f2",
+    "app/knowledge/privacy-boundaries-and-ethics.md": "4871414f7dc61ec6f3166f6d932add0dd08f4d7719930842f1993d09ff5fa91e",
+    "app/knowledge/relationships-and-family.md": "f3aa3e764d60bb17be93c39f43eaf1cf0bebc66d648650ac117575c7ff1a6296",
+    "app/knowledge/risk-policy.md": "e717ad9c95d3f47c13393610f12717e940a98c8d99d0ab76883a4704f398e009",
+    "app/knowledge/sleep-routine-self-care.md": "3cafe76bc0224dfc42d6c935e7300edfa9f51ef5fb901fef74775b97e001ef1b"
+  },
+  "legacyDatasetHashes": {
+    "app/rag_eval/data/retrieval-v1.json": "c1a3694d2845234cbe928c6c329c30cce5bed59e182d632ebfa7e594e1470ed7",
+    "app/evaluation/data/risk-v1.json": "8402c2eddcb172ddb8506369a4326172d9447dd76bb4b608297f556dbe911684",
+    "app/evaluation/data/dialogues-v1.json": "8a7427de9d2d38a93520569e893f39b06191f2d6c191a42b8eb2fb8ecd95c3b1",
+    "app/evaluation/data/intent-v1.json": "1d928e681b11c7c5a3c69ee519d12be1fc75b7d3d6811f73498776da01a9ca8d",
+    "app/evaluation/data/reply-safety-v1.json": "07946ddca25e81e1ad134ff0b4cbc072a1d7b8973b7cc7ac834257adab3c9d7c",
+    "app/evaluation/data/reply-safety-source-v1.json": "ba41cf45b830952bf457a37eef2b81ad86dfbd764499798bbc14761e595a06b8",
+    "app/evaluation/data/context-routing-v1.json": "3ee83fb4754a48f8f73dcc49a3454d57633f63297ed242f8a1be8452e7c5abae"
+  },
+  "sourceProvenanceHashes": {
+    "app/agents/coordinator.py": "6de271449011820673f743453d1c8434582e7881de5b943dfe0144a3a95c96f0",
+    "app/agents/plan_validation.py": "0727e29d06829a79b489ffa978f3777b5816f8c18fcb4bcc0ad7d614222f51b5",
+    "app/agents/harness.py": "308d029a84cbf154c5349c22271f276cbeb87a29024541cac31648f958c01e62",
+    "app/services/session_memory.py": "78b2c0c651b8f5be6ec2c51d76a9f383bc3b3ab178f09406eab9038e5ea2a23b",
+    "app/services/risk_signals.py": "653587e060c1bacfe9a1c74cc4abe18c9277bb5e2fb913c926f8273814956e8d",
+    "app/services/response_review.py": "34b3968f8d73b7e530b5660e2e9638ba949f8da736b0b99784237a9463385857",
+    "app/services/tool_governance.py": "2bce41f48dc7f0e38987d7489a07d364d4a4d501f43a18a330e74bc0e5ee3216",
+    "app/services/tool_queue.py": "fb565cf18074b8f6b9957de043634c5a8e7ccbf359a104d80b225cde63f95ef2",
+    "app/services/tool_execution.py": "3627265a932a060b7701ba7b864f3fdcd05de016dc9c953804184152a4b14342",
+    "app/services/tools.py": "b6aa726392b18bddac4b1955a64e5aa95e4e8d26c3a46fb52f5d887134acbbf0",
+    "app/services/chat.py": "feb33492ffdce2c601f3b3c3f7a285433c06ea7dce702f78c255eda9a856dc88",
+    "app/api/routes.py": "58241ab9f6e405b8b79626f45fad48586782c89fc3f3144e11f571693a5f3d54"
+  },
+  "sourceHashPolicy": "Provenance only; future business code changes do not silently relabel frozen tasks.",
+  "counts": {
+    "tasks": 60,
+    "turns": 64,
+    "splits": {
+      "development": 40,
+      "holdout": 20
+    },
+    "categories": {
+      "normal": 10,
+      "high-risk": 10,
+      "memory": 10,
+      "evidence": 10,
+      "recovery": 10,
+      "boundary": 10
+    },
+    "executionScopes": {
+      "conversation": 54,
+      "tool_boundary": 3,
+      "http_boundary": 2,
+      "plan_boundary": 1
+    }
+  },
+  "resultsPresent": false,
+  "independentReview": "pending"
+}

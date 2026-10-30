@@ -15,6 +15,7 @@ mkdir -p "$STAGE_DIR/$PROJECT_NAME"
 rsync -a "$ROOT_DIR/" "$STAGE_DIR/$PROJECT_NAME/" \
   --exclude '.git/' \
   --exclude '.venv/' \
+  --exclude '.local-runtime/' \
   --exclude '.uploads/' \
   --exclude '.idea/' \
   --exclude '.vscode/' \

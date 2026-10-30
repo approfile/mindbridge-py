@@ -1,8 +1,8 @@
 from app.core.bootstrap import create_schema
 from app.core.config import get_settings
 from app.core.database import SessionLocal
-from app.models.entities import PsychologicalReport
-from app.services.tools import ToolOrchestrationService
+from app.services.tool_execution import ToolExecutionService
+from app.services.observability import configure_logging
 
 try:
     from mcp.server.fastmcp import FastMCP
@@ -13,95 +13,56 @@ except Exception as exc:  # pragma: no cover
 mcp = FastMCP("mindbridge-python-tools")
 
 
-@mcp.tool()
-def mindbridge_excel_report(report_id: int) -> str:
-    """Write one psychological risk report into the MindBridge Excel ledger."""
+def _execute(name: str, **arguments) -> str:
     create_schema()
     db = SessionLocal()
     try:
-        report = db.get(PsychologicalReport, report_id)
-        if report is None:
-            return f"report {report_id} not found"
-        record = ToolOrchestrationService(db, get_settings()).write_excel(report)
-        return f"success: {record.file_path}"
+        return ToolExecutionService(db, get_settings()).execute(name, source="mcp-stdio", **arguments)
     finally:
         db.close()
 
 
 @mcp.tool()
-def mindbridge_case_create(report_id: int) -> str:
-    """Create or return the active MindBridge risk case for one psychological report."""
-    create_schema()
-    db = SessionLocal()
-    try:
-        report = db.get(PsychologicalReport, report_id)
-        if report is None:
-            return f"report {report_id} not found"
-        case = ToolOrchestrationService(db, get_settings()).create_case(report)
-        return f"success: caseId={case.id}, reportId={case.report_id}, status={case.status}"
-    finally:
-        db.close()
+def mindbridge_excel_report(report_id: int, job_id: int | None = None, claim_token: str | None = None) -> str:
+    """Write a report ledger row after policy authorization; repeated writes are idempotent."""
+    return _execute("EXCEL_REPORT", report_id=report_id, job_id=job_id, claim_token=claim_token)
 
 
 @mcp.tool()
-def mindbridge_alert_send(case_id: int) -> str:
-    """Send or record the counselor alert for one MindBridge risk case."""
-    create_schema()
-    db = SessionLocal()
-    try:
-        from app.models.entities import RiskCase
+def mindbridge_case_create(report_id: int, job_id: int | None = None, claim_token: str | None = None) -> str:
+    """Create or reuse a case only for a medium/high-risk report."""
+    return _execute("CASE_CREATE", report_id=report_id, job_id=job_id, claim_token=claim_token)
 
-        case = db.get(RiskCase, case_id)
-        if case is None:
-            return f"case {case_id} not found"
-        record = ToolOrchestrationService(db, get_settings()).send_case_alert(case)
-        return f"{record.status}: caseId={case_id}, {record.channel} -> {record.recipient}: {record.message}"
-    finally:
-        db.close()
+
+@mcp.tool()
+def mindbridge_alert_send(
+    case_id: int | None = None, report_id: int | None = None,
+    job_id: int | None = None, claim_token: str | None = None,
+) -> str:
+    """Send a high-risk case alert. Delivery failures are MCP errors, never success text."""
+    return _execute("ALERT_SEND", report_id=report_id, case_id=case_id, job_id=job_id, claim_token=claim_token)
 
 
 @mcp.tool()
 def mindbridge_alert_ack(case_id: int, actor: str, note: str = "") -> str:
-    """Mark a MindBridge risk case as acknowledged by a counselor or administrator."""
-    create_schema()
-    db = SessionLocal()
-    try:
-        case = ToolOrchestrationService(db, get_settings()).acknowledge_case(case_id, actor, note)
-        return f"success: caseId={case.id}, status={case.status}, acknowledgedBy={case.acknowledged_by}"
-    except RuntimeError as exc:
-        return str(exc)
-    finally:
-        db.close()
+    """Acknowledge a case as a known administrator over trusted local stdio."""
+    return _execute("CASE_ACK", case_id=case_id, actor=actor, note=note)
 
 
 @mcp.tool()
 def mindbridge_case_note_add(case_id: int, actor: str, note: str) -> str:
-    """Append a follow-up note to a MindBridge risk case."""
-    create_schema()
-    db = SessionLocal()
-    try:
-        record = ToolOrchestrationService(db, get_settings()).add_case_note(case_id, actor, note)
-        return f"success: noteId={record.id}, caseId={record.case_id}"
-    except RuntimeError as exc:
-        return str(exc)
-    finally:
-        db.close()
+    """Append a case note as a known administrator over trusted local stdio."""
+    return _execute("CASE_NOTE_ADD", case_id=case_id, actor=actor, note=note)
 
 
 @mcp.tool()
-def mindbridge_alert_notify(report_id: int) -> str:
-    """Send a high-risk alert email and record the notification result for one psychological report."""
-    create_schema()
-    db = SessionLocal()
-    try:
-        report = db.get(PsychologicalReport, report_id)
-        if report is None:
-            return f"report {report_id} not found"
-        record = ToolOrchestrationService(db, get_settings()).notify(report)
-        return f"{record.status}: {record.channel} -> {record.recipient}: {record.message}"
-    finally:
-        db.close()
+def mindbridge_alert_notify(report_id: int, job_id: int | None = None, claim_token: str | None = None) -> str:
+    """Legacy report notification, subject to the same high-risk policy and audit boundary."""
+    return _execute("RISK_ALERT", report_id=report_id, job_id=job_id, claim_token=claim_token)
 
 
 if __name__ == "__main__":
+    # MCP child logs go to stderr for the process collector. Never let short-
+    # lived children race the parent's single-process rotating file handler.
+    configure_logging(get_settings().model_copy(update={'observability_log_file': ''}))
     mcp.run()

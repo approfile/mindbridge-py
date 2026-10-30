@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Protocol
+import math
 
 from app.agents.events import AgentTask, AgentTurnResult, CollaborationBlackboard
 
@@ -28,8 +29,13 @@ class AgentProfile:
 @dataclass(frozen=True)
 class AgentDecision:
     claim: bool
-    confidence: float = 0.0
+    claim_priority: float = 0.0
     reason: str = ""
+
+    def __post_init__(self):
+        # Deterministic relative scheduling preference, never correctness.
+        if type(self.claim_priority) not in {float, int} or not math.isfinite(self.claim_priority) or not 0 <= self.claim_priority <= 1:
+            raise ValueError('claim_priority must be a finite scheduling preference in [0,1]')
 
 
 class AutonomousAgent(Protocol):
@@ -67,7 +73,7 @@ class AgentRegistry:
             decision = agent.decide(task, board)
             if decision.claim:
                 candidates.append(AgentCandidate(agent, decision))
-        return sorted(candidates, key=lambda item: item.decision.confidence, reverse=True)
+        return sorted(candidates, key=lambda item: item.decision.claim_priority, reverse=True)
 
     def _has_required_capability(self, agent: AutonomousAgent, task: AgentTask) -> bool:
         if not task.required_capabilities:

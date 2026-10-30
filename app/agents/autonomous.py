@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import uuid
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
 
 from sqlalchemy.orm import Session
@@ -23,6 +23,12 @@ from app.schemas.dtos import AiMessage
 from app.services.agent_models import AgentModelRegistry
 from app.services.ai import AiClient, PromptTemplates, has_consult_signal, has_high_risk_signal
 from app.services.assessment import PsychologicalAssessmentService
+from app.services.risk_signals import analyze_risk, has_personal_support_signal
+from app.services.intent_contract import INTENT_CONTRACT, parse_intent
+from app.services.reply_safety import reply_policy, reply_policy_message
+from app.services.query_rewrite import QueryRewriteResult, rewrite_query
+from app.agents.plan_validation import CLARIFICATION_MESSAGE
+from app.services.turn_budget import current_turn, checkpoint
 
 if TYPE_CHECKING:
     from app.models.entities import ChatSession, UserAccount
@@ -30,10 +36,12 @@ if TYPE_CHECKING:
     from app.services.memory import RedisShortTermMemoryStore
 
 
-GENERAL_TASK_WORDS = [
+GENERAL_TASK_TOPICS = [
     "java", "python", "javascript", "代码", "编程", "程序", "算法", "数据库", "spring", "maven",
-    "前端", "后端", "项目", "接口", "bug", "报错", "作业", "论文", "翻译", "总结", "解释",
-    "怎么写", "如何", "是什么", "为什么", "给我", "帮我", "推荐", "查询", "天气", "路线",
+    "前端", "后端", "项目", "接口", "bug", "报错", "作业", "论文", "翻译", "天气", "路线",
+]
+GENERAL_TASK_WORDS = [
+    *GENERAL_TASK_TOPICS, "总结", "解释", "怎么写", "如何", "是什么", "为什么", "给我", "帮我", "推荐", "查询",
 ]
 
 
@@ -48,6 +56,8 @@ class AgentRuntimeServices:
     memory: RedisShortTermMemoryStore
     private_memory: "AgentPrivateMemory"
     knowledge: KnowledgeService
+    history: list[AiMessage] = field(default_factory=list)
+    previous_risk: str | None = None
 
 
 class AgentPrivateMemory:
@@ -82,9 +92,11 @@ class BaseAutonomousAgent:
         return self.services.model_registry.client_for(self.name)
 
     def private_memory(self) -> list[AiMessage]:
+        checkpoint()
         return self.services.private_memory.load(self.name, self.services.session.public_id)
 
     def remember(self, content: str) -> None:
+        checkpoint()
         self.services.private_memory.append(self.name, self.services.session.public_id, content)
 
     def _artifact(
@@ -92,7 +104,6 @@ class BaseAutonomousAgent:
         kind: str,
         payload: dict[str, Any],
         task: AgentTask,
-        confidence: float = 1.0,
         metadata: dict[str, Any] | None = None,
     ) -> AgentArtifact:
         return AgentArtifact(
@@ -100,7 +111,6 @@ class BaseAutonomousAgent:
             owner=self.name,
             kind=kind,
             payload=payload,
-            confidence=confidence,
             task_id=task.id,
             metadata=metadata or {},
         )
@@ -111,8 +121,9 @@ class UnderstandingAgent(BaseAutonomousAgent):
         name="UnderstandingAgent",
         capabilities=frozenset({AgentCapability.UNDERSTANDING}),
         system_prompt=(
-            "你是 UnderstandingAgent。你只负责理解用户当前请求，输出意图、主题、置信度和理由，"
-            "不生成最终回复，不做风险处置。"
+            '你是 UnderstandingAgent。只返回JSON对象 {"intent":"CHAT"}，'
+            "intent只能为CHAT、CONSULT、RISK，不输出主题、置信度、理由或其他字段。"
+            "不生成最终回复，不执行风险处置。"
         ),
         memory_policy="private_intent_history",
         model_profile="understanding",
@@ -127,17 +138,21 @@ class UnderstandingAgent(BaseAutonomousAgent):
         return AgentDecision(False, reason="task does not need understanding")
 
     def act(self, task: AgentTask, board: CollaborationBlackboard) -> AgentTurnResult:
-        intent = self._classify(board.model_input or board.user_input, board)
-        confidence = 0.92 if intent == IntentType.RISK else 0.78
+        classification = self._classify(board.model_input or board.user_input, board)
+        intent = classification.intent
         payload = {
             "intent": intent.value,
             "topic": self._topic(board.model_input or board.user_input),
-            "reason": "high risk hard signal" if intent == IntentType.RISK else "autonomous intent proposal",
+            "reason": classification.reason,
+            "source": classification.source,
+            "degraded": classification.source == "fallback",
+            "errorType": classification.error_type,
+            "contract": INTENT_CONTRACT,
             "privateMemoryKey": self.services.private_memory._key(self.name, self.services.session.public_id),
         }
         self.remember(f"intent={intent.value}; topic={payload['topic']}")
         return AgentTurnResult(
-            artifacts=(self._artifact("intent", payload, task, confidence),),
+            artifacts=(self._artifact("intent", payload, task),),
             messages=(
                 AgentMessage(
                     id=f"msg:{uuid.uuid4().hex[:10]}",
@@ -155,28 +170,36 @@ class UnderstandingAgent(BaseAutonomousAgent):
             return True
         return bool(board.user_input and task.metadata.get("kind") in {"root", "understanding"})
 
-    def _classify(self, text: str, board: CollaborationBlackboard) -> IntentType:
+    def _classify(self, text: str, board: CollaborationBlackboard) -> "IntentClassification":
         lowered = text.lower()
-        if has_high_risk_signal(lowered):
-            return IntentType.RISK
-        if not has_consult_signal(lowered) and any(word in lowered for word in GENERAL_TASK_WORDS):
-            return IntentType.CHAT
+        signal = analyze_risk(text, self.services.history, self.services.previous_risk)
+        if signal.level == RiskLevel.HIGH:
+            return IntentClassification(IntentType.RISK, "rule", signal.reason)
+        if signal.level == RiskLevel.MEDIUM:
+            return IntentClassification(IntentType.CONSULT, "rule", signal.reason)
+        if signal.reference_only:
+            return IntentClassification(IntentType.CHAT, "rule", signal.reason)
+        if signal.negated_only:
+            intent = IntentType.CONSULT if has_consult_signal(lowered) or self.services.previous_risk == "HIGH" else IntentType.CHAT
+            return IntentClassification(intent, "rule", signal.reason)
+        if has_personal_support_signal(text):
+            return IntentClassification(IntentType.CONSULT, "rule", "current_personal_support_request")
+        # Request verbs occur in both ordinary tasks and emotional disclosures.
+        # Only domain topics can shortcut a model classification.
+        if not has_consult_signal(lowered) and any(word in lowered for word in GENERAL_TASK_TOPICS):
+            return IntentClassification(IntentType.CHAT, "rule", "ordinary_task_shortcut")
         try:
             memory_context = "\n".join(item.content for item in self.private_memory()[-6:])
             messages = [
-                *PromptTemplates.intent_prompt([], text),
+                *PromptTemplates.intent_prompt(self.services.history, text),
                 AiMessage(role="system", content=f"{self.profile.system_prompt}\n私有记忆：\n{memory_context or '无'}"),
             ]
-            label = self.client().complete(messages).upper()
-            if "RISK" in label:
-                return IntentType.RISK
-            if "CONSULT" in label:
-                return IntentType.CONSULT
-            if "CHAT" in label:
-                return IntentType.CHAT
-        except Exception:
-            pass
-        return IntentType.CONSULT if has_consult_signal(lowered) else IntentType.CHAT
+            raw = self.client().complete(messages, json_mode=self.services.settings.intent_json_mode)
+            intent = parse_intent(raw)
+            return IntentClassification(intent, "model", "validated_intent_json")
+        except Exception as exc:
+            intent = IntentType.CONSULT if has_consult_signal(lowered) else IntentType.CHAT
+            return IntentClassification(intent, "fallback", "intent_unavailable_or_invalid", type(exc).__name__)
 
     def _topic(self, text: str) -> str:
         lowered = text.lower()
@@ -187,6 +210,14 @@ class UnderstandingAgent(BaseAutonomousAgent):
         if any(word in lowered for word in GENERAL_TASK_WORDS):
             return "general_task"
         return "conversation"
+
+
+@dataclass(frozen=True)
+class IntentClassification:
+    intent: IntentType
+    source: str
+    reason: str
+    error_type: str | None = None
 
 
 class SafetyAgent(BaseAutonomousAgent):
@@ -204,30 +235,32 @@ class SafetyAgent(BaseAutonomousAgent):
 
     def decide(self, task: AgentTask, board: CollaborationBlackboard) -> AgentDecision:
         latest_response = board.latest_artifact("response_proposal")
-        latest_review = board.latest_artifact("safety_review")
-        if latest_response and (latest_review is None or latest_review.metadata.get("responseArtifactId") != latest_response.id):
-            return AgentDecision(True, 0.95, "candidate response needs safety critique")
-        if not board.latest_artifact("risk") and board.user_input:
-            confidence = 0.98 if has_high_risk_signal(board.user_input) else 0.84
-            return AgentDecision(True, confidence, "user input needs independent risk assessment")
-        if AgentCapability.SAFETY.value in task.required_capabilities:
-            return AgentDecision(True, 0.8, "task explicitly asks for safety")
+        latest_review = board.latest_artifact("plan_review")
+        if task.metadata.get("kind") == "plan_review" and latest_response and (latest_review is None or latest_review.metadata.get("responseArtifactId") != latest_response.id):
+            return AgentDecision(True, 0.95, "candidate prompt plan needs validation")
+        if task.metadata.get("kind") == "risk" and not board.latest_artifact("risk") and board.user_input:
+            claim_priority = 0.98 if has_high_risk_signal(board.user_input) else 0.84
+            return AgentDecision(True, claim_priority, "user input needs independent risk assessment")
         return AgentDecision(False, reason="no safety work needed")
 
     def act(self, task: AgentTask, board: CollaborationBlackboard) -> AgentTurnResult:
         response = board.latest_artifact("response_proposal")
-        review = board.latest_artifact("safety_review")
-        if response and (review is None or review.metadata.get("responseArtifactId") != response.id):
+        review = board.latest_artifact("plan_review")
+        if task.metadata.get("kind") == "plan_review" and response and (review is None or review.metadata.get("responseArtifactId") != response.id):
             return self._review_response(task, board, response)
         return self._assess_risk(task, board)
 
     def _assess_risk(self, task: AgentTask, board: CollaborationBlackboard) -> AgentTurnResult:
-        assessment = PsychologicalAssessmentService(self.client()).assess(board.model_input or board.user_input, _context_history(board))
+        assessment = PsychologicalAssessmentService(self.client()).assess(
+            board.model_input or board.user_input, self.services.history, self.services.previous_risk,
+        )
+        control = current_turn()
+        if control: control.note_risk(assessment.risk.value)
         payload = {
             "risk": assessment.risk.value,
             "emotion": assessment.emotion.value,
             "emotionScore": assessment.emotion_score,
-            "confidence": assessment.confidence,
+            "confidenceInfo": assessment.confidence_info,
             "summary": assessment.summary,
             "assessment": assessment,
             "privateMemoryKey": self.services.private_memory._key(self.name, self.services.session.public_id),
@@ -245,7 +278,7 @@ class SafetyAgent(BaseAutonomousAgent):
             )
         self.remember(f"risk={assessment.risk.value}; summary={assessment.summary}")
         return AgentTurnResult(
-            artifacts=(self._artifact("risk", payload, task, assessment.confidence),),
+            artifacts=(self._artifact("risk", payload, task),),
             events=events,
             messages=(
                 AgentMessage(
@@ -262,20 +295,23 @@ class SafetyAgent(BaseAutonomousAgent):
     def _review_response(self, task: AgentTask, board: CollaborationBlackboard, response: AgentArtifact) -> AgentTurnResult:
         risk = _risk_level(board)
         messages = response.payload.get("messages", [])
-        combined = "\n".join(getattr(message, "content", str(message)) for message in messages)
-        approved = True
-        reason = "response proposal satisfies current safety constraints"
-        if risk == RiskLevel.HIGH and not any(word in combined for word in ["高风险处理规则", "当前安全", "可信任的人", "紧急"]):
-            approved = False
-            reason = "high-risk response proposal lacks immediate safety guidance"
+        expected = reply_policy_message(risk.value)
+        checks = {
+            "serverPolicyMatches": response.payload.get("safetyPolicy") == reply_policy(risk.value),
+            "serverPolicyMessageMatches": bool(messages and messages[0] == expected),
+        }
+        approved = all(checks.values())
+        reason = "server-authored preparation constraints validated; actual reply body still requires review" if approved else "reply plan lacks matching server-authored policy"
         payload = {
             "approved": approved,
             "reason": reason,
             "responseArtifactId": response.id,
             "risk": risk.value,
+            "scope": "prompt_plan_only",
+            "checks": checks,
             "privateMemoryKey": self.services.private_memory._key(self.name, self.services.session.public_id),
         }
-        kind = "safety_review" if approved else "critique"
+        kind = "plan_review" if approved else "critique"
         events = ()
         follow_up_tasks = ()
         if not approved:
@@ -301,7 +337,7 @@ class SafetyAgent(BaseAutonomousAgent):
             )
         self.remember(f"review approved={approved}; reason={reason}")
         return AgentTurnResult(
-            artifacts=(self._artifact(kind, payload, task, 0.95, {"responseArtifactId": response.id}),),
+            artifacts=(self._artifact(kind, payload, task, {"responseArtifactId": response.id}),),
             tasks=follow_up_tasks,
             events=events,
         )
@@ -332,34 +368,36 @@ class ContextAgent(BaseAutonomousAgent):
         return AgentDecision(False, reason="context not necessary for current artifacts")
 
     def act(self, task: AgentTask, board: CollaborationBlackboard) -> AgentTurnResult:
-        from app.services.memory import compact_history_for_prompt
         from app.services.skills import MindBridgeSkillLibrary
 
-        history = self._load_history()
-        compacted_history, deterministic_brief = compact_history_for_prompt(history, self.services.settings, board.model_input)
-        memory_brief = self._summarize_memory(history, board.model_input, deterministic_brief)
-        model_history = self._bounded_model_history([*compacted_history, AiMessage(role="user", content=board.model_input)])
+        memory = board.latest_artifact("memory")
+        memory_brief = memory.payload["memoryBrief"]
+        model_history = memory.payload["modelHistory"]
         intent = _intent(board)
         risk = _risk_level(board)
 
         retrieved: list["SearchResult"] = []
         query = ""
         skill_context = ""
+        rewrite = None
         if intent != IntentType.CHAT or risk != RiskLevel.LOW:
-            query = self._rewrite_query(memory_brief, board.model_input)
+            rewrite = self._rewrite_query(memory_brief, board.model_input)
+            query = rewrite.query
             retrieved = self.services.knowledge.retrieve(query, self.services.settings.knowledge_top_k)
             skill_context = MindBridgeSkillLibrary.response_skill_context(intent, risk, board.user_input)
         payload = {
             "memoryBrief": memory_brief,
             "modelHistory": model_history,
             "knowledgeQuery": query,
+            "queryRewrite": rewrite.metadata() if rewrite else {
+                "source": "skipped", "degraded": False, "reasonCode": "REWRITE_NOT_NEEDED"},
             "retrievedKnowledge": retrieved,
             "skillContext": skill_context,
             "privateMemoryKey": self.services.private_memory._key(self.name, self.services.session.public_id),
         }
         self.remember(f"context intent={intent.value}; risk={risk.value}; retrieved={len(retrieved)}")
         return AgentTurnResult(
-            artifacts=(self._artifact("context", payload, task, 0.88),),
+            artifacts=(self._artifact("context", payload, task),),
             messages=(
                 AgentMessage(
                     id=f"msg:{uuid.uuid4().hex[:10]}",
@@ -372,55 +410,12 @@ class ContextAgent(BaseAutonomousAgent):
             ),
         )
 
-    def _load_history(self) -> list[AiMessage]:
-        from app.models.entities import ChatMessage
-
-        history = self.services.memory.load_recent(self.services.session.public_id)
-        if history:
-            return history
-        rows = (
-            self.services.db.query(ChatMessage)
-            .filter(ChatMessage.session_id == self.services.session.id)
-            .order_by(ChatMessage.created_at.desc())
-            .limit(self.services.settings.redis_memory_max_messages)
-            .all()
-        )
-        rows.reverse()
-        history = self.services.memory.messages_from_rows(rows)
-        if history:
-            self.services.memory.replace(self.services.session.public_id, history)
-        return history
-
-    def _rewrite_query(self, memory_brief: str, model_input: str) -> str:
-        try:
-            query = self.client().complete([
+    def _rewrite_query(self, memory_brief: str, model_input: str) -> QueryRewriteResult:
+        return rewrite_query(self.client(), [
                 AiMessage(role="system", content=f"{self.profile.system_prompt}\n把学生输入改写成适合检索校园心理知识库的中文查询词，只输出查询词。"),
                 AiMessage(role="user", content=f"记忆摘要：\n{memory_brief}\n\n当前输入：\n{model_input}"),
-            ]).strip()
-            return (query or model_input)[:60]
-        except Exception:
-            return model_input[:60]
+            ], model_input)
 
-    def _summarize_memory(self, history: list[AiMessage], current_input: str, fallback: str) -> str:
-        max_chars = max(120, self.services.settings.memory_summary_max_chars)
-        if not history:
-            return "无相关历史记忆。"
-        try:
-            summary = self.client().complete([
-                AiMessage(role="system", content=f"{self.profile.system_prompt}\n只输出 1-3 条中文记忆要点，不输出风险等级或诊断。"),
-                AiMessage(role="user", content=f"当前输入：\n{current_input}\n\n最近历史：\n{history[-12:]}"),
-            ]).strip()
-            return summary[:max_chars] or fallback
-        except Exception:
-            return fallback or "无相关历史记忆。"
-
-    def _bounded_model_history(self, history: list[AiMessage]) -> list[AiMessage]:
-        limit = max(2, self.services.settings.chat_history_limit * 2)
-        if len(history) <= limit:
-            return history
-        if history[0].role == "system":
-            return [history[0], *history[-(limit - 1):]]
-        return history[-limit:]
 
 
 class ResponseAgent(BaseAutonomousAgent):
@@ -428,8 +423,8 @@ class ResponseAgent(BaseAutonomousAgent):
         name="ResponseAgent",
         capabilities=frozenset({AgentCapability.RESPONSE}),
         system_prompt=(
-            "你是 ResponseAgent。你根据黑板上的意图、风险、上下文和安全约束提出候选回复 prompt，"
-            "但最终是否采纳由 CoordinatorAgent 决定。"
+            "你是 ResponseAgent。根据意图、风险、上下文和安全约束组织面向学生的候选回复，"
+            "直接回应学生需求；候选需要独立审核后才能发送。"
         ),
         memory_policy="private_response_strategy",
         model_profile="response",
@@ -455,7 +450,8 @@ class ResponseAgent(BaseAutonomousAgent):
         intent = _intent(board)
         risk = _risk_level(board)
         context = board.latest_artifact("context")
-        context_payload = context.payload if context else {}
+        memory = board.latest_artifact("memory")
+        context_payload = context.payload if context else memory.payload if memory else {}
         model_history = context_payload.get("modelHistory") or [AiMessage(role="user", content=board.model_input)]
         memory_brief = context_payload.get("memoryBrief") or "无相关历史记忆。"
         knowledge = context_payload.get("retrievedKnowledge") or []
@@ -463,7 +459,7 @@ class ResponseAgent(BaseAutonomousAgent):
         knowledge_context = "\n\n".join(f"- [{item.source}] {item.content}" for item in knowledge)
         if intent == IntentType.CHAT and risk == RiskLevel.LOW:
             messages = [
-                PromptTemplates.answer_system_prompt(IntentType.CHAT, RiskLevel.LOW, "", self.services.user.display_name),
+                PromptTemplates.answer_system_prompt(IntentType.CHAT, RiskLevel.LOW, "", '学生'),
                 AiMessage(
                     role="system",
                     content=(
@@ -482,7 +478,7 @@ class ResponseAgent(BaseAutonomousAgent):
                     intent if intent != IntentType.CHAT else IntentType.CONSULT,
                     risk,
                     knowledge_context,
-                    self.services.user.display_name,
+                    '学生',
                     skill_context,
                 ),
                 AiMessage(
@@ -503,11 +499,22 @@ class ResponseAgent(BaseAutonomousAgent):
             "intent": intent.value,
             "risk": risk.value,
             "responseAgent": self.name,
+            "inputArtifactIds": {
+                "intent": board.latest_artifact("intent").id,
+                "risk": board.latest_artifact("risk").id,
+                "context": (context or memory).id if (context or memory) else None,
+            },
+            "evidenceMode": "general_chat" if mode == "normal_chat" else "retrieved_support" if knowledge else "generic_support",
             "privateMemoryKey": self.services.private_memory._key(self.name, self.services.session.public_id),
         }
+        assessment = board.latest_artifact("risk")
+        if assessment and assessment.payload["assessment"].needs_clarification:
+            messages.insert(1, CLARIFICATION_MESSAGE)
+        messages.insert(0, reply_policy_message(risk.value))
+        payload["safetyPolicy"] = reply_policy(risk.value)
         self.remember(f"response mode={mode}; intent={intent.value}; risk={risk.value}")
         return AgentTurnResult(
-            artifacts=(self._artifact("response_proposal", payload, task, 0.86),),
+            artifacts=(self._artifact("response_proposal", payload, task),),
             messages=(
                 AgentMessage(
                     id=f"msg:{uuid.uuid4().hex[:10]}",
@@ -546,6 +553,7 @@ class CoordinatorAgent(BaseAutonomousAgent):
             description=board.user_input,
             priority=TaskPriority.CRITICAL if has_high_risk_signal(board.user_input) else TaskPriority.NORMAL,
             created_by=self.name,
+            required_capabilities=frozenset({AgentCapability.COORDINATION.value}),
             metadata={"kind": "root"},
         )
 
@@ -554,6 +562,11 @@ class CoordinatorAgent(BaseAutonomousAgent):
 
 
 def _intent(board: CollaborationBlackboard) -> IntentType:
+    risk = _risk_level(board)
+    if risk == RiskLevel.HIGH:
+        return IntentType.RISK
+    if risk == RiskLevel.MEDIUM:
+        return IntentType.CONSULT
     artifact = board.latest_artifact("intent")
     if artifact:
         try:
