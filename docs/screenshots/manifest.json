@@ -1,0 +1,60 @@
+{
+  "capturedDate": "2026-10-30",
+  "sourceCommitBeforeDocumentationChanges": "84c00ba47e7a1115aed9f8254029a475910df487",
+  "mode": "isolated_mock_ui",
+  "captureTool": "Playwright CLI 0.1.21 / Chrome",
+  "viewport": {
+    "width": 1440,
+    "height": 960
+  },
+  "fixtures": "Two synthetic messages; no production conversations. Reviewer exists only in isolated screenshot fixture.",
+  "backend": "Current project source; fresh isolated SQLite and private key; no UI text or response mocking at browser level.",
+  "vectorEnabled": false,
+  "alertDeliveryMode": "log",
+  "persistedToolJobCounts": {
+    "SUCCESS": 4
+  },
+  "controlledReadAuditRows": 11,
+  "screenshots": [
+    {
+      "file": "student-chat-consult.png",
+      "description": "学生端咨询对话",
+      "width": 1440,
+      "height": 960,
+      "bytes": 150868,
+      "sha256": "dd3c3c0ffb2203f8275dc745d4e0acbb5c36c64c58849d28ab4e9898940f939f"
+    },
+    {
+      "file": "student-chat-risk.png",
+      "description": "学生端风险场景",
+      "width": 1440,
+      "height": 960,
+      "bytes": 146036,
+      "sha256": "241748f2cfa4d0a736cdec6098b86749632ff03f173d6c5d625b5e17f9009ec9"
+    },
+    {
+      "file": "login.png",
+      "description": "登录与角色入口",
+      "width": 1440,
+      "height": 960,
+      "bytes": 72324,
+      "sha256": "445260f8187cdd73d684477688913c733204e78a01de5fbe6cf69e70dda6efa3"
+    },
+    {
+      "file": "admin-console.png",
+      "description": "默认管理端：正文隐藏",
+      "width": 1440,
+      "height": 1101,
+      "bytes": 179653,
+      "sha256": "fc19ccec0d497ada357083a030220c2977737fd143faece1230018f7e76a738d"
+    },
+    {
+      "file": "admin-report-detail.png",
+      "description": "独立授权账号：按用途查看单条合成档案",
+      "width": 1440,
+      "height": 1374,
+      "bytes": 316501,
+      "sha256": "7644a7da9b93c3c9df3fb75915b4e4e4a6b4bc572d4eca837488d2d2663a216a"
+    }
+  ]
+}
