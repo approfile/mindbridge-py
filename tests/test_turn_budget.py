@@ -137,6 +137,9 @@ class ConcurrentHttpTests(ToolRuntimeFixture):
                     busy=await client.post('/api/chat/stream',json={'message':'解释Python列表。'})
                     self.assertEqual(busy.status_code,429);self.assertEqual(busy.headers['retry-after'],'1')
                     await self.idle(runtime)
+                    # This request verifies released capacity, not whether the
+                    # full mock pipeline fits the earlier 60ms outage budget.
+                    settings.turn_timeout_seconds=2
                     fast=await client.post('/api/chat/stream',json={'message':'解释Python列表。'})
                     self.assertIn('event: done',fast.text)
             await self.idle(runtime)

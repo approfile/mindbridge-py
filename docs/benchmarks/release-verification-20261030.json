@@ -103,6 +103,7 @@
     "The first publishing-wrapper attempt forced the default model provider and interfered with two model-override tests; the wrapper now removes inherited role overrides.",
     "A 100ms wall-clock test assumption was replaced by a gated finalizer; completed replies still must never become timeouts.",
     "Fresh-checkout harness now initializes its own key before encrypted sessions and forces mock role models.",
-    "No gold labels or primary historical evaluation scores were changed."
+    "No gold labels or primary historical evaluation scores were changed.",
+    "Initial GitHub CI run 41046356206 exposed a second test-only 60ms assumption on the post-cleanup recovery request. Timeout, 429 and capacity-release assertions are retained; the recovery request now gets a normal budget. See repository Actions for the subsequent run."
   ]
 }
