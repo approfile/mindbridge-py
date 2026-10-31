@@ -15,9 +15,11 @@ _REFERENCE_TOPIC = re.compile(r"自杀|自残|自伤|不想活|伤害|轻生|心
 _QUOTES = re.compile(r'“[^”]*”|「[^」]*」|"[^"\n]*"|(?<!\w)\x27[^\x27\n]+\x27(?!\w)')
 _ATTRIBUTION = re.compile(r"翻译|台词|(?:小说|角色|人物).{0,30}(?:说|对白|句)|\b(?:translate|literature|literary)\b|\b(?:character|narrator)\b.{0,50}\b(?:says?|said|line)\b", re.I)
 _PERSONAL_DISCLOSURE = re.compile(r"真实(?:想法|感受)|我自己.{0,8}(?:想法|感受)|(?:这正是|这就是|说的就是)我|\bmy (?:own |real )?(?:feelings|intention|thoughts)|\babout (?:me|myself)\b|\bhow I feel\b|not (?:a |the )?fictional", re.I)
-_SUPPORT_DISTRESS = re.compile(r"焦虑|压力|失眠|难过|难受|低落|挫败|心慌|烦躁|紧张|睡(?:不着|不好|得很差)|难(?:以)?入睡|不够好|anxious|overwhelmed|losing sleep|trouble sleeping", re.I)
+_SUPPORT_DISTRESS = re.compile(r"焦虑|压力|失眠|难过|难受|低落|挫败|心慌|烦躁|紧张|睡(?:不着|不好|得很差|得晚)|作息|难(?:以)?入睡|不够好|anxious|overwhelmed|irritable|sleep schedule|losing sleep|trouble sleeping", re.I)
 _SUPPORT_REQUEST = re.compile(r"想聊(?:聊|一聊)|想找人聊|陪我.{0,8}(?:聊|理)|给我.{0,8}(?:支持|安慰)|情绪支持|\b(?:need|want).{0,20}(?:support|talk)|\bhelp me (?:cope|calm)", re.I)
-_PERSONAL_STATE = re.compile(r"我(?:最近|现在|一直|总是|越来越|有点|很|觉得|感到)|自己.{0,15}不够好|\bi (?:feel|am|have been)\b", re.I)
+_PERSONAL_STATE = re.compile(r"我(?:最近|现在|一直|总是|越来越|有点|很|觉得|感到)|让我|令我|使我|"
+                             r"我(?:没有|不会|并不).{0,20}(?:但|不过|可是).{0,4}(?:很|有点|觉得|感到)|"
+                             r"自己.{0,15}不够好|\bi (?:feel|am|have been)\b", re.I)
 
 
 def reference_view(text: str) -> str:

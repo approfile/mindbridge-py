@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import re
 from dataclasses import dataclass
 from datetime import datetime
 
@@ -12,12 +11,7 @@ from app.models.entities import ChatMessage, ChatSession, PsychologicalReport, S
 from app.schemas.dtos import AiMessage
 from app.services.memory import RedisShortTermMemoryStore, compact_history_for_prompt
 from app.services.privacy import PrivacySanitizer
-
-
-_KEYS = r"项目代号|项目名称|论文主题|目标岗位|回复语言|每天可用时间|称呼|project codename|target role"
-_FACT = re.compile(rf"(?P<key>{_KEYS})\s*(?:改为|改成|更正为|是|为|=|:|：|is)\s*[‘“\"']?(?P<value>[^，,。；;\n‘’“”\"'！？!?]{{1,60}})", re.I)
-_CORRECTION = re.compile(rf"(?P<key>{_KEYS})不是[^，,。]+[，,]\s*(?:而)?是\s*(?P<value>[^，,。；;\n！？!?]{{1,60}})", re.I)
-_FORGET = re.compile(rf"(?:忘记|删除|不要记住)\s*(?P<key>{_KEYS})", re.I)
+from app.services.memory_facts import VERSION as FACT_VERSION, fact_operations
 
 
 @dataclass
@@ -52,7 +46,8 @@ class SessionMemoryService:
         try:
             state = json.loads(memory.state_json)
             latest = self.db.query(ChatMessage.id).filter_by(session_id=session.id, user_id=user.id).order_by(ChatMessage.id.desc()).with_for_update().first()
-            if (not isinstance(state, dict) or not isinstance(state.get("facts", {}), dict)
+            if (not isinstance(state, dict) or state.get('extractorVersion') != FACT_VERSION
+                    or not isinstance(state.get("facts", {}), dict)
                     or not isinstance(state.get("recentUserPoints", []), list)
                     or memory.last_message_id > (latest[0] if latest else 0)):
                 raise ValueError("invalid state")
@@ -69,7 +64,9 @@ class SessionMemoryService:
                    for fact in facts.values()):
                 raise ValueError("missing or changed fact source")
         except (ValueError, TypeError):
-            state = {}
+            # Replay own persisted USER messages after extractor upgrades;
+            # provenance alone cannot detect a previously misparsed question.
+            state = {'extractorVersion': FACT_VERSION}
             memory.last_message_id = 0
         facts = state.setdefault("facts", {})
         points = state.setdefault("recentUserPoints", [])
@@ -83,12 +80,11 @@ class SessionMemoryService:
             for row in rows:
                 if row.role.upper() == "USER":
                     content = self.privacy.sanitize(row.content)
-                    for match in [*_FACT.finditer(content), *_CORRECTION.finditer(content)]:
-                        key = match["key"].lower()
-                        key = {"project codename": "项目代号", "target role": "目标岗位"}.get(key, key)
-                        facts[key] = {"value": match["value"].strip(), "sourceMessageId": row.id}
-                    for match in _FORGET.finditer(content):
-                        facts.pop(match["key"].lower(), None)
+                    for key, value in fact_operations(content):
+                        if value is None:
+                            facts.pop(key, None)
+                        else:
+                            facts[key] = {"value": value, "sourceMessageId": row.id}
                     points.append({"text": content[:100], "sourceMessageId": row.id})
                     del points[:-4]
                     if len(facts) > 20:

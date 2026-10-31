@@ -1,0 +1,2265 @@
+{
+  "library": "ragas",
+  "version": "0.4.3",
+  "plannedSamples": 12,
+  "metrics": [
+    "faithfulness",
+    "answer_relevancy",
+    "context_recall",
+    "context_relevance"
+  ],
+  "judgeRequestedModel": "deepseek-v4-flash",
+  "embeddingModel": "qwen3.7-text-embedding",
+  "sameProviderBias": true,
+  "referenceIndependentReview": "pending",
+  "results": [
+    {
+      "sampleId": "academic-stress-and-burnout-1",
+      "metric": "faithfulness",
+      "value": 0.5833333333333334,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 5100.416500121355
+    },
+    {
+      "sampleId": "academic-stress-and-burnout-1",
+      "metric": "answer_relevancy",
+      "value": 0.7662783799101511,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 6024.950708961114
+    },
+    {
+      "sampleId": "academic-stress-and-burnout-1",
+      "metric": "context_recall",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 987.1187501121312
+    },
+    {
+      "sampleId": "academic-stress-and-burnout-1",
+      "metric": "context_relevance",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "validJudgeRatings": [
+        2,
+        2
+      ],
+      "elapsedMs": 1397.135250037536
+    },
+    {
+      "sampleId": "adjustment-and-transition-1",
+      "metric": "answer_relevancy",
+      "value": 0.7981143644561693,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 4155.029749963433
+    },
+    {
+      "sampleId": "adjustment-and-transition-1",
+      "metric": "faithfulness",
+      "value": 0.7777777777777778,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 6674.340666970238
+    },
+    {
+      "sampleId": "adjustment-and-transition-1",
+      "metric": "context_recall",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 1224.694750038907
+    },
+    {
+      "sampleId": "adjustment-and-transition-1",
+      "metric": "context_relevance",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "validJudgeRatings": [
+        2,
+        2
+      ],
+      "elapsedMs": 1563.8361249584705
+    },
+    {
+      "sampleId": "anxiety-panic-grounding-1",
+      "metric": "faithfulness",
+      "value": 0.6666666666666666,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 5030.262667220086
+    },
+    {
+      "sampleId": "anxiety-panic-grounding-1",
+      "metric": "context_recall",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 1107.2998750023544
+    },
+    {
+      "sampleId": "anxiety-panic-grounding-1",
+      "metric": "context_relevance",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "validJudgeRatings": [
+        2,
+        2
+      ],
+      "elapsedMs": 1287.5333749689162
+    },
+    {
+      "sampleId": "anxiety-panic-grounding-1",
+      "metric": "answer_relevancy",
+      "value": 0.9234352959960969,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 6145.675250096247
+    },
+    {
+      "sampleId": "campus-mental-health-1",
+      "metric": "answer_relevancy",
+      "value": 0.8578278647308112,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 3757.625832920894
+    },
+    {
+      "sampleId": "campus-mental-health-1",
+      "metric": "faithfulness",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 5072.595792124048
+    },
+    {
+      "sampleId": "campus-mental-health-1",
+      "metric": "context_recall",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 1282.0763748604804
+    },
+    {
+      "sampleId": "campus-mental-health-1",
+      "metric": "context_relevance",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "validJudgeRatings": [
+        2,
+        2
+      ],
+      "elapsedMs": 1670.0550420209765
+    },
+    {
+      "sampleId": "counselor-referral-and-resources-1",
+      "metric": "faithfulness",
+      "value": 0.5925925925925926,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 7818.296334007755
+    },
+    {
+      "sampleId": "counselor-referral-and-resources-1",
+      "metric": "answer_relevancy",
+      "value": 0.8492252296496003,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 7129.612041870132
+    },
+    {
+      "sampleId": "counselor-referral-and-resources-1",
+      "metric": "context_recall",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 1606.047417037189
+    },
+    {
+      "sampleId": "counselor-referral-and-resources-1",
+      "metric": "context_relevance",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "validJudgeRatings": [
+        2,
+        2
+      ],
+      "elapsedMs": 1329.9185410141945
+    },
+    {
+      "sampleId": "exam-season-guidance-1",
+      "metric": "faithfulness",
+      "value": 0.5714285714285714,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 4040.384457912296
+    },
+    {
+      "sampleId": "exam-season-guidance-1",
+      "metric": "context_recall",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 1209.4571660272777
+    },
+    {
+      "sampleId": "exam-season-guidance-1",
+      "metric": "answer_relevancy",
+      "value": 0.7644200256001401,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 5126.17399985902
+    },
+    {
+      "sampleId": "exam-season-guidance-1",
+      "metric": "context_relevance",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "validJudgeRatings": [
+        2,
+        2
+      ],
+      "elapsedMs": 1725.9005419909954
+    },
+    {
+      "sampleId": "low-mood-depression-support-1",
+      "metric": "answer_relevancy",
+      "value": 0.8279694881167661,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 3825.6883330177516
+    },
+    {
+      "sampleId": "low-mood-depression-support-1",
+      "metric": "faithfulness",
+      "value": 0.6,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 5499.516875017434
+    },
+    {
+      "sampleId": "low-mood-depression-support-1",
+      "metric": "context_recall",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 1157.6664578169584
+    },
+    {
+      "sampleId": "low-mood-depression-support-1",
+      "metric": "context_relevance",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "validJudgeRatings": [
+        2,
+        2
+      ],
+      "elapsedMs": 1716.265541035682
+    },
+    {
+      "sampleId": "privacy-boundaries-and-ethics-1",
+      "metric": "answer_relevancy",
+      "value": 0.6789708820821123,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 5889.986000023782
+    },
+    {
+      "sampleId": "privacy-boundaries-and-ethics-1",
+      "metric": "faithfulness",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 7120.365583105013
+    },
+    {
+      "sampleId": "privacy-boundaries-and-ethics-1",
+      "metric": "context_recall",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 1495.8198331296444
+    },
+    {
+      "sampleId": "privacy-boundaries-and-ethics-1",
+      "metric": "context_relevance",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "validJudgeRatings": [
+        2,
+        2
+      ],
+      "elapsedMs": 1778.1420419923961
+    },
+    {
+      "sampleId": "relationships-and-family-1",
+      "metric": "faithfulness",
+      "value": 0.4,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 6414.95820810087
+    },
+    {
+      "sampleId": "relationships-and-family-1",
+      "metric": "answer_relevancy",
+      "value": 0.7714112504877484,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 6399.448833195493
+    },
+    {
+      "sampleId": "relationships-and-family-1",
+      "metric": "context_recall",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 1651.0894161183387
+    },
+    {
+      "sampleId": "relationships-and-family-1",
+      "metric": "context_relevance",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "validJudgeRatings": [
+        2,
+        2
+      ],
+      "elapsedMs": 1495.7233748864383
+    },
+    {
+      "sampleId": "risk-policy-1",
+      "metric": "answer_relevancy",
+      "value": 0.8100239216278765,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 4080.4101249668747
+    },
+    {
+      "sampleId": "risk-policy-1",
+      "metric": "faithfulness",
+      "value": 0.9230769230769231,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 4958.574290852994
+    },
+    {
+      "sampleId": "risk-policy-1",
+      "metric": "context_recall",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 1198.941292008385
+    },
+    {
+      "sampleId": "risk-policy-1",
+      "metric": "context_relevance",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "validJudgeRatings": [
+        2,
+        2
+      ],
+      "elapsedMs": 1298.3527921605855
+    },
+    {
+      "sampleId": "sleep-routine-self-care-1",
+      "metric": "faithfulness",
+      "value": 0.6,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 5465.308124898002
+    },
+    {
+      "sampleId": "sleep-routine-self-care-1",
+      "metric": "answer_relevancy",
+      "value": 0.8973339378552394,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 5676.828375086188
+    },
+    {
+      "sampleId": "sleep-routine-self-care-1",
+      "metric": "context_recall",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 1188.4369999170303
+    },
+    {
+      "sampleId": "sleep-routine-self-care-1",
+      "metric": "context_relevance",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "validJudgeRatings": [
+        2,
+        2
+      ],
+      "elapsedMs": 1451.6101670451462
+    },
+    {
+      "sampleId": "academic-stress-and-burnout-2",
+      "metric": "answer_relevancy",
+      "value": 0.9649947216497683,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 3516.546166036278
+    },
+    {
+      "sampleId": "academic-stress-and-burnout-2",
+      "metric": "context_recall",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 1510.5410830583423
+    },
+    {
+      "sampleId": "academic-stress-and-burnout-2",
+      "metric": "faithfulness",
+      "value": 0.5833333333333334,
+      "status": "scored",
+      "reason": null,
+      "elapsedMs": 6756.87245791778
+    },
+    {
+      "sampleId": "academic-stress-and-burnout-2",
+      "metric": "context_relevance",
+      "value": 1.0,
+      "status": "scored",
+      "reason": null,
+      "validJudgeRatings": [
+        2,
+        2
+      ],
+      "elapsedMs": 1592.0462501235306
+    }
+  ],
+  "summaries": {
+    "faithfulness": {
+      "planned": 12,
+      "scored": 12,
+      "partial": 0,
+      "failedOrSkipped": 0,
+      "coverage": 1.0,
+      "meanOnScored": 0.6915174331840999,
+      "fullSetMean": 0.6915174331840999
+    },
+    "answer_relevancy": {
+      "planned": 12,
+      "scored": 12,
+      "partial": 0,
+      "failedOrSkipped": 0,
+      "coverage": 1.0,
+      "meanOnScored": 0.8258337801802066,
+      "fullSetMean": 0.8258337801802066
+    },
+    "context_recall": {
+      "planned": 12,
+      "scored": 12,
+      "partial": 0,
+      "failedOrSkipped": 0,
+      "coverage": 1.0,
+      "meanOnScored": 1.0,
+      "fullSetMean": 1.0
+    },
+    "context_relevance": {
+      "planned": 12,
+      "scored": 12,
+      "partial": 0,
+      "failedOrSkipped": 0,
+      "coverage": 1.0,
+      "meanOnScored": 1.0,
+      "fullSetMean": 1.0
+    }
+  },
+  "providerCalls": [
+    {
+      "evaluation": "academic-stress-and-burnout-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "fd8e0251-3ef0-47be-a850-18e55af1da99",
+      "usage": {
+        "prompt_tokens": 776,
+        "completion_tokens": 35,
+        "total_tokens": 811,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 392
+      }
+    },
+    {
+      "evaluation": "academic-stress-and-burnout-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "87e24196-2336-4f29-8164-8ee600043fb5",
+      "usage": {
+        "prompt_tokens": 663,
+        "completion_tokens": 184,
+        "total_tokens": 847,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 279
+      }
+    },
+    {
+      "evaluation": "academic-stress-and-burnout-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "d9708877-0c53-4e67-a2a0-a52bbf141058",
+      "usage": {
+        "prompt_tokens": 776,
+        "completion_tokens": 36,
+        "total_tokens": 812,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 136
+      }
+    },
+    {
+      "evaluation": "academic-stress-and-burnout-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "212fbb32-487d-4a75-8b65-bededffccb71",
+      "usage": {
+        "prompt_tokens": 776,
+        "completion_tokens": 36,
+        "total_tokens": 812,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 136
+      }
+    },
+    {
+      "evaluation": "academic-stress-and-burnout-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "0c23c81f-8699-9751-af13-4d02ee6a660e",
+      "usage": {
+        "prompt_tokens": 28,
+        "total_tokens": 28
+      }
+    },
+    {
+      "evaluation": "academic-stress-and-burnout-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "d9e3809d-2707-44a1-a4da-f8e502d479a6",
+      "usage": {
+        "prompt_tokens": 2614,
+        "completion_tokens": 699,
+        "total_tokens": 3313,
+        "prompt_tokens_details": {
+          "cached_tokens": 2304
+        },
+        "prompt_cache_hit_tokens": 2304,
+        "prompt_cache_miss_tokens": 310
+      }
+    },
+    {
+      "evaluation": "academic-stress-and-burnout-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "d0c370c2-5abf-9d77-b1f9-6b1fdc4b01a2",
+      "usage": {
+        "prompt_tokens": 104,
+        "total_tokens": 104
+      }
+    },
+    {
+      "evaluation": "academic-stress-and-burnout-1:context_recall",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "1ec6b573-e0f4-4dbb-a987-8c5da00d656d",
+      "usage": {
+        "prompt_tokens": 3033,
+        "completion_tokens": 125,
+        "total_tokens": 3158,
+        "prompt_tokens_details": {
+          "cached_tokens": 2816
+        },
+        "prompt_cache_hit_tokens": 2816,
+        "prompt_cache_miss_tokens": 217
+      }
+    },
+    {
+      "evaluation": "academic-stress-and-burnout-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "ce7099b7-a406-4b0f-a1d6-dc35037381f0",
+      "usage": {
+        "prompt_tokens": 2025,
+        "completion_tokens": 6,
+        "total_tokens": 2031,
+        "prompt_tokens_details": {
+          "cached_tokens": 1792
+        },
+        "prompt_cache_hit_tokens": 1792,
+        "prompt_cache_miss_tokens": 233
+      }
+    },
+    {
+      "evaluation": "academic-stress-and-burnout-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "5123b4f9-ec17-4965-81cb-8bb5ab1d57f6",
+      "usage": {
+        "prompt_tokens": 2019,
+        "completion_tokens": 6,
+        "total_tokens": 2025,
+        "prompt_tokens_details": {
+          "cached_tokens": 1792
+        },
+        "prompt_cache_hit_tokens": 1792,
+        "prompt_cache_miss_tokens": 227
+      }
+    },
+    {
+      "evaluation": "adjustment-and-transition-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "26f00785-92dc-4fe6-8933-9be1854d642b",
+      "usage": {
+        "prompt_tokens": 719,
+        "completion_tokens": 300,
+        "total_tokens": 1019,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 335
+      }
+    },
+    {
+      "evaluation": "adjustment-and-transition-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "caae2963-a79e-44ee-ba27-cbf1738f3781",
+      "usage": {
+        "prompt_tokens": 833,
+        "completion_tokens": 42,
+        "total_tokens": 875,
+        "prompt_tokens_details": {
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 321
+      }
+    },
+    {
+      "evaluation": "adjustment-and-transition-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "a734df3a-065e-4456-9ec1-c96daa84f29e",
+      "usage": {
+        "prompt_tokens": 833,
+        "completion_tokens": 32,
+        "total_tokens": 865,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 193
+      }
+    },
+    {
+      "evaluation": "adjustment-and-transition-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "26f89e89-43b7-4731-ad70-c001fcc08669",
+      "usage": {
+        "prompt_tokens": 833,
+        "completion_tokens": 32,
+        "total_tokens": 865,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 193
+      }
+    },
+    {
+      "evaluation": "adjustment-and-transition-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "24d873ba-1597-965f-a817-3cadd8bd7d52",
+      "usage": {
+        "prompt_tokens": 27,
+        "total_tokens": 27
+      }
+    },
+    {
+      "evaluation": "adjustment-and-transition-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "6c271126-c27d-9f35-bdb8-04ab8a173a5e",
+      "usage": {
+        "prompt_tokens": 103,
+        "total_tokens": 103
+      }
+    },
+    {
+      "evaluation": "adjustment-and-transition-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "365fa7ea-042c-4879-a3b4-1444f4724d71",
+      "usage": {
+        "prompt_tokens": 2605,
+        "completion_tokens": 1094,
+        "total_tokens": 3699,
+        "prompt_tokens_details": {
+          "cached_tokens": 2176
+        },
+        "prompt_cache_hit_tokens": 2176,
+        "prompt_cache_miss_tokens": 429
+      }
+    },
+    {
+      "evaluation": "adjustment-and-transition-1:context_recall",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "7354ccb9-5593-4b89-ac53-c39ce2068a2c",
+      "usage": {
+        "prompt_tokens": 2910,
+        "completion_tokens": 130,
+        "total_tokens": 3040,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 222
+      }
+    },
+    {
+      "evaluation": "adjustment-and-transition-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "4b8e656e-d794-4747-a308-ff49884b3368",
+      "usage": {
+        "prompt_tokens": 1899,
+        "completion_tokens": 6,
+        "total_tokens": 1905,
+        "prompt_tokens_details": {
+          "cached_tokens": 1664
+        },
+        "prompt_cache_hit_tokens": 1664,
+        "prompt_cache_miss_tokens": 235
+      }
+    },
+    {
+      "evaluation": "adjustment-and-transition-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "3537171a-e9c1-40f0-b6a4-93293550c828",
+      "usage": {
+        "prompt_tokens": 1893,
+        "completion_tokens": 6,
+        "total_tokens": 1899,
+        "prompt_tokens_details": {
+          "cached_tokens": 1664
+        },
+        "prompt_cache_hit_tokens": 1664,
+        "prompt_cache_miss_tokens": 229
+      }
+    },
+    {
+      "evaluation": "anxiety-panic-grounding-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "f11501ea-da38-40b7-beb0-9bdf78d2ab0b",
+      "usage": {
+        "prompt_tokens": 679,
+        "completion_tokens": 242,
+        "total_tokens": 921,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 295
+      }
+    },
+    {
+      "evaluation": "anxiety-panic-grounding-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "bf852864-52f0-4ff8-aaa6-7d9c0ea0f939",
+      "usage": {
+        "prompt_tokens": 794,
+        "completion_tokens": 31,
+        "total_tokens": 825,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 410
+      }
+    },
+    {
+      "evaluation": "anxiety-panic-grounding-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "b8c37ae6-7c48-4afb-8dfd-5e8ea74b31c5",
+      "usage": {
+        "prompt_tokens": 794,
+        "completion_tokens": 31,
+        "total_tokens": 825,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 154
+      }
+    },
+    {
+      "evaluation": "anxiety-panic-grounding-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "11718015-ee6c-4ab9-8fe9-8814451bf2dc",
+      "usage": {
+        "prompt_tokens": 794,
+        "completion_tokens": 31,
+        "total_tokens": 825,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 154
+      }
+    },
+    {
+      "evaluation": "anxiety-panic-grounding-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "fd74d809-275c-4c9a-ac35-9fbbebaa0f5a",
+      "usage": {
+        "prompt_tokens": 2696,
+        "completion_tokens": 852,
+        "total_tokens": 3548,
+        "prompt_tokens_details": {
+          "cached_tokens": 2304
+        },
+        "prompt_cache_hit_tokens": 2304,
+        "prompt_cache_miss_tokens": 392
+      }
+    },
+    {
+      "evaluation": "anxiety-panic-grounding-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "8baefbc6-32a4-9ee5-9be8-959232f10d2a",
+      "usage": {
+        "prompt_tokens": 29,
+        "total_tokens": 29
+      }
+    },
+    {
+      "evaluation": "anxiety-panic-grounding-1:context_recall",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "8259f958-3a9a-4018-944d-7e062845a953",
+      "usage": {
+        "prompt_tokens": 3063,
+        "completion_tokens": 147,
+        "total_tokens": 3210,
+        "prompt_tokens_details": {
+          "cached_tokens": 2816
+        },
+        "prompt_cache_hit_tokens": 2816,
+        "prompt_cache_miss_tokens": 247
+      }
+    },
+    {
+      "evaluation": "anxiety-panic-grounding-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "f0b55b75-7cd0-4aa2-8b3e-855ac4df844d",
+      "usage": {
+        "prompt_tokens": 2047,
+        "completion_tokens": 6,
+        "total_tokens": 2053,
+        "prompt_tokens_details": {
+          "cached_tokens": 1792
+        },
+        "prompt_cache_hit_tokens": 1792,
+        "prompt_cache_miss_tokens": 255
+      }
+    },
+    {
+      "evaluation": "anxiety-panic-grounding-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "09ffa160-1481-415a-aaee-ae1db4d3af6a",
+      "usage": {
+        "prompt_tokens": 2041,
+        "completion_tokens": 6,
+        "total_tokens": 2047,
+        "prompt_tokens_details": {
+          "cached_tokens": 1792
+        },
+        "prompt_cache_hit_tokens": 1792,
+        "prompt_cache_miss_tokens": 249
+      }
+    },
+    {
+      "evaluation": "anxiety-panic-grounding-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "337d7bd2-5408-9236-b645-3688e94427b4",
+      "usage": {
+        "prompt_tokens": 99,
+        "total_tokens": 99
+      }
+    },
+    {
+      "evaluation": "campus-mental-health-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "1306411c-ec5b-4f63-8a36-9b73a220de12",
+      "usage": {
+        "prompt_tokens": 774,
+        "completion_tokens": 28,
+        "total_tokens": 802,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 390
+      }
+    },
+    {
+      "evaluation": "campus-mental-health-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "02beeb5e-d154-4df6-b07b-c4979b419dbb",
+      "usage": {
+        "prompt_tokens": 662,
+        "completion_tokens": 208,
+        "total_tokens": 870,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 278
+      }
+    },
+    {
+      "evaluation": "campus-mental-health-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "bb233493-13cc-4c87-a5eb-0ade22d542a9",
+      "usage": {
+        "prompt_tokens": 774,
+        "completion_tokens": 28,
+        "total_tokens": 802,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 134
+      }
+    },
+    {
+      "evaluation": "campus-mental-health-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "0dda77a6-f85d-4879-a30e-c06b18306548",
+      "usage": {
+        "prompt_tokens": 774,
+        "completion_tokens": 28,
+        "total_tokens": 802,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 134
+      }
+    },
+    {
+      "evaluation": "campus-mental-health-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "fd9c221a-2ac1-9c4f-8d59-fd010db6c72b",
+      "usage": {
+        "prompt_tokens": 29,
+        "total_tokens": 29
+      }
+    },
+    {
+      "evaluation": "campus-mental-health-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "862e2f89-9602-9b4e-a54d-e63b8c2fd00c",
+      "usage": {
+        "prompt_tokens": 81,
+        "total_tokens": 81
+      }
+    },
+    {
+      "evaluation": "campus-mental-health-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "046eeddf-ebe0-4e47-841c-445fb5548db2",
+      "usage": {
+        "prompt_tokens": 2359,
+        "completion_tokens": 741,
+        "total_tokens": 3100,
+        "prompt_tokens_details": {
+          "cached_tokens": 1920
+        },
+        "prompt_cache_hit_tokens": 1920,
+        "prompt_cache_miss_tokens": 439
+      }
+    },
+    {
+      "evaluation": "campus-mental-health-1:context_recall",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "0dc27e6f-e00f-4320-a0cd-87c4f2bc7175",
+      "usage": {
+        "prompt_tokens": 2757,
+        "completion_tokens": 160,
+        "total_tokens": 2917,
+        "prompt_tokens_details": {
+          "cached_tokens": 2560
+        },
+        "prompt_cache_hit_tokens": 2560,
+        "prompt_cache_miss_tokens": 197
+      }
+    },
+    {
+      "evaluation": "campus-mental-health-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "f4ca7626-0126-4ecc-bdd1-1e22c52f678c",
+      "usage": {
+        "prompt_tokens": 1747,
+        "completion_tokens": 6,
+        "total_tokens": 1753,
+        "prompt_tokens_details": {
+          "cached_tokens": 1536
+        },
+        "prompt_cache_hit_tokens": 1536,
+        "prompt_cache_miss_tokens": 211
+      }
+    },
+    {
+      "evaluation": "campus-mental-health-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "5579dc3c-fd7e-4266-850b-5891305954e0",
+      "usage": {
+        "prompt_tokens": 1741,
+        "completion_tokens": 6,
+        "total_tokens": 1747,
+        "prompt_tokens_details": {
+          "cached_tokens": 1536
+        },
+        "prompt_cache_hit_tokens": 1536,
+        "prompt_cache_miss_tokens": 205
+      }
+    },
+    {
+      "evaluation": "counselor-referral-and-resources-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "2e9f44c5-af90-49ac-93d6-b3e4249397d3",
+      "usage": {
+        "prompt_tokens": 725,
+        "completion_tokens": 386,
+        "total_tokens": 1111,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 341
+      }
+    },
+    {
+      "evaluation": "counselor-referral-and-resources-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "817ab717-2cd1-435a-9633-bf3fe2be5701",
+      "usage": {
+        "prompt_tokens": 841,
+        "completion_tokens": 28,
+        "total_tokens": 869,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 457
+      }
+    },
+    {
+      "evaluation": "counselor-referral-and-resources-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "2ca446a2-c953-40c8-bc1d-8d21821bc44d",
+      "usage": {
+        "prompt_tokens": 841,
+        "completion_tokens": 24,
+        "total_tokens": 865,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 201
+      }
+    },
+    {
+      "evaluation": "counselor-referral-and-resources-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "2673af39-c3af-459f-a726-c0050345e9e5",
+      "usage": {
+        "prompt_tokens": 841,
+        "completion_tokens": 22,
+        "total_tokens": 863,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 201
+      }
+    },
+    {
+      "evaluation": "counselor-referral-and-resources-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "d3373a06-12ca-918e-8c77-7a170df94f52",
+      "usage": {
+        "prompt_tokens": 24,
+        "total_tokens": 24
+      }
+    },
+    {
+      "evaluation": "counselor-referral-and-resources-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "43433250-cac8-42e0-a816-8d9c50a6daf9",
+      "usage": {
+        "prompt_tokens": 2680,
+        "completion_tokens": 1504,
+        "total_tokens": 4184,
+        "prompt_tokens_details": {
+          "cached_tokens": 1536
+        },
+        "prompt_cache_hit_tokens": 1536,
+        "prompt_cache_miss_tokens": 1144
+      }
+    },
+    {
+      "evaluation": "counselor-referral-and-resources-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "bbde9e1a-215c-9e23-99ae-bc53d4169e52",
+      "usage": {
+        "prompt_tokens": 76,
+        "total_tokens": 76
+      }
+    },
+    {
+      "evaluation": "counselor-referral-and-resources-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "34860033-5001-494b-9e73-7c683ffa1792",
+      "usage": {
+        "prompt_tokens": 1886,
+        "completion_tokens": 6,
+        "total_tokens": 1892,
+        "prompt_tokens_details": {
+          "cached_tokens": 1152
+        },
+        "prompt_cache_hit_tokens": 1152,
+        "prompt_cache_miss_tokens": 734
+      }
+    },
+    {
+      "evaluation": "counselor-referral-and-resources-1:context_recall",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "312ea9fd-a34d-432d-8ee9-1d7543da60ee",
+      "usage": {
+        "prompt_tokens": 2906,
+        "completion_tokens": 175,
+        "total_tokens": 3081,
+        "prompt_tokens_details": {
+          "cached_tokens": 2176
+        },
+        "prompt_cache_hit_tokens": 2176,
+        "prompt_cache_miss_tokens": 730
+      }
+    },
+    {
+      "evaluation": "counselor-referral-and-resources-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "e51ee62e-052f-450e-bd7a-d95760f251f9",
+      "usage": {
+        "prompt_tokens": 1880,
+        "completion_tokens": 6,
+        "total_tokens": 1886,
+        "prompt_tokens_details": {
+          "cached_tokens": 1152
+        },
+        "prompt_cache_hit_tokens": 1152,
+        "prompt_cache_miss_tokens": 728
+      }
+    },
+    {
+      "evaluation": "exam-season-guidance-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "f3dcc24a-c1a9-40ff-856f-92a4f7096ff3",
+      "usage": {
+        "prompt_tokens": 767,
+        "completion_tokens": 26,
+        "total_tokens": 793,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 383
+      }
+    },
+    {
+      "evaluation": "exam-season-guidance-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "22239588-efc2-4e8d-a540-207bb5be9663",
+      "usage": {
+        "prompt_tokens": 654,
+        "completion_tokens": 158,
+        "total_tokens": 812,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 270
+      }
+    },
+    {
+      "evaluation": "exam-season-guidance-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "e90b3716-33e7-49c4-afbe-3159817ba2b3",
+      "usage": {
+        "prompt_tokens": 767,
+        "completion_tokens": 32,
+        "total_tokens": 799,
+        "prompt_tokens_details": {
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 255
+      }
+    },
+    {
+      "evaluation": "exam-season-guidance-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "405c54e4-85f6-48cd-a1b3-eeaa9e9d79e2",
+      "usage": {
+        "prompt_tokens": 767,
+        "completion_tokens": 32,
+        "total_tokens": 799,
+        "prompt_tokens_details": {
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 255
+      }
+    },
+    {
+      "evaluation": "exam-season-guidance-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "163f6f20-b941-4c07-b763-1dd84f8861a0",
+      "usage": {
+        "prompt_tokens": 2560,
+        "completion_tokens": 494,
+        "total_tokens": 3054,
+        "prompt_tokens_details": {
+          "cached_tokens": 1664
+        },
+        "prompt_cache_hit_tokens": 1664,
+        "prompt_cache_miss_tokens": 896
+      }
+    },
+    {
+      "evaluation": "exam-season-guidance-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "1462d20e-d3fa-959c-8a64-6b5c51720d6c",
+      "usage": {
+        "prompt_tokens": 28,
+        "total_tokens": 28
+      }
+    },
+    {
+      "evaluation": "exam-season-guidance-1:context_recall",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "9da3678d-3dd6-49f2-ad91-5fb170fecf2b",
+      "usage": {
+        "prompt_tokens": 3007,
+        "completion_tokens": 134,
+        "total_tokens": 3141,
+        "prompt_tokens_details": {
+          "cached_tokens": 2176
+        },
+        "prompt_cache_hit_tokens": 2176,
+        "prompt_cache_miss_tokens": 831
+      }
+    },
+    {
+      "evaluation": "exam-season-guidance-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "8de52f2b-a88d-9bd6-9d3d-e34c8d8cd708",
+      "usage": {
+        "prompt_tokens": 87,
+        "total_tokens": 87
+      }
+    },
+    {
+      "evaluation": "exam-season-guidance-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "e7fd00a9-6817-4f31-b7c1-ee194b60a599",
+      "usage": {
+        "prompt_tokens": 1997,
+        "completion_tokens": 6,
+        "total_tokens": 2003,
+        "prompt_tokens_details": {
+          "cached_tokens": 1280
+        },
+        "prompt_cache_hit_tokens": 1280,
+        "prompt_cache_miss_tokens": 717
+      }
+    },
+    {
+      "evaluation": "exam-season-guidance-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "862d49a9-8b0b-45bd-a47e-b69009563dc8",
+      "usage": {
+        "prompt_tokens": 1991,
+        "completion_tokens": 6,
+        "total_tokens": 1997,
+        "prompt_tokens_details": {
+          "cached_tokens": 1280
+        },
+        "prompt_cache_hit_tokens": 1280,
+        "prompt_cache_miss_tokens": 711
+      }
+    },
+    {
+      "evaluation": "low-mood-depression-support-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "17fad589-b108-46de-94f4-d81804647205",
+      "usage": {
+        "prompt_tokens": 686,
+        "completion_tokens": 224,
+        "total_tokens": 910,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 302
+      }
+    },
+    {
+      "evaluation": "low-mood-depression-support-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "05f0851c-70a5-492f-836b-606e022fcfc3",
+      "usage": {
+        "prompt_tokens": 796,
+        "completion_tokens": 27,
+        "total_tokens": 823,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 412
+      }
+    },
+    {
+      "evaluation": "low-mood-depression-support-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "8888c234-ae61-4c8e-8542-9cb259244a1b",
+      "usage": {
+        "prompt_tokens": 796,
+        "completion_tokens": 36,
+        "total_tokens": 832,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 156
+      }
+    },
+    {
+      "evaluation": "low-mood-depression-support-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "94713b76-34ca-4d92-b9d6-4a66c1c3b0a6",
+      "usage": {
+        "prompt_tokens": 796,
+        "completion_tokens": 36,
+        "total_tokens": 832,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 156
+      }
+    },
+    {
+      "evaluation": "low-mood-depression-support-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "299f22fd-5572-9664-b64c-d275d71f1f83",
+      "usage": {
+        "prompt_tokens": 31,
+        "total_tokens": 31
+      }
+    },
+    {
+      "evaluation": "low-mood-depression-support-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "832126a0-3846-9ce9-a9c5-ee9269a76859",
+      "usage": {
+        "prompt_tokens": 96,
+        "total_tokens": 96
+      }
+    },
+    {
+      "evaluation": "low-mood-depression-support-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "491b1901-9203-4c7c-8ce2-c03e724d0bbc",
+      "usage": {
+        "prompt_tokens": 2388,
+        "completion_tokens": 920,
+        "total_tokens": 3308,
+        "prompt_tokens_details": {
+          "cached_tokens": 1920
+        },
+        "prompt_cache_hit_tokens": 1920,
+        "prompt_cache_miss_tokens": 468
+      }
+    },
+    {
+      "evaluation": "low-mood-depression-support-1:context_recall",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "de04ba55-7e6c-4490-93a4-ba55f7f17622",
+      "usage": {
+        "prompt_tokens": 2770,
+        "completion_tokens": 119,
+        "total_tokens": 2889,
+        "prompt_tokens_details": {
+          "cached_tokens": 2560
+        },
+        "prompt_cache_hit_tokens": 2560,
+        "prompt_cache_miss_tokens": 210
+      }
+    },
+    {
+      "evaluation": "low-mood-depression-support-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "00c9b9bd-b835-4859-912c-0be1ff2ccfae",
+      "usage": {
+        "prompt_tokens": 1762,
+        "completion_tokens": 6,
+        "total_tokens": 1768,
+        "prompt_tokens_details": {
+          "cached_tokens": 1536
+        },
+        "prompt_cache_hit_tokens": 1536,
+        "prompt_cache_miss_tokens": 226
+      }
+    },
+    {
+      "evaluation": "low-mood-depression-support-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "38a5dfbd-6c41-4171-a986-d33f5ef63490",
+      "usage": {
+        "prompt_tokens": 1756,
+        "completion_tokens": 6,
+        "total_tokens": 1762,
+        "prompt_tokens_details": {
+          "cached_tokens": 1536
+        },
+        "prompt_cache_hit_tokens": 1536,
+        "prompt_cache_miss_tokens": 220
+      }
+    },
+    {
+      "evaluation": "privacy-boundaries-and-ethics-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "488cac7d-f4bb-43d5-9ba1-4cb35432a886",
+      "usage": {
+        "prompt_tokens": 712,
+        "completion_tokens": 321,
+        "total_tokens": 1033,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 328
+      }
+    },
+    {
+      "evaluation": "privacy-boundaries-and-ethics-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "b556a71b-1d71-4af3-8cee-dccbb7b3bd1f",
+      "usage": {
+        "prompt_tokens": 822,
+        "completion_tokens": 30,
+        "total_tokens": 852,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 438
+      }
+    },
+    {
+      "evaluation": "privacy-boundaries-and-ethics-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "07586dc8-ca84-4f29-b445-9578c0829fdd",
+      "usage": {
+        "prompt_tokens": 822,
+        "completion_tokens": 31,
+        "total_tokens": 853,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 182
+      }
+    },
+    {
+      "evaluation": "privacy-boundaries-and-ethics-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "ad468cd8-056f-45ce-a820-74612c5bffbb",
+      "usage": {
+        "prompt_tokens": 822,
+        "completion_tokens": 31,
+        "total_tokens": 853,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 182
+      }
+    },
+    {
+      "evaluation": "privacy-boundaries-and-ethics-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "1da0edea-a707-93d9-9b04-753786182a11",
+      "usage": {
+        "prompt_tokens": 31,
+        "total_tokens": 31
+      }
+    },
+    {
+      "evaluation": "privacy-boundaries-and-ethics-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "7e55ae52-efd3-91f2-b329-41d4cdf39049",
+      "usage": {
+        "prompt_tokens": 89,
+        "total_tokens": 89
+      }
+    },
+    {
+      "evaluation": "privacy-boundaries-and-ethics-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "cc8193c3-1d45-4368-aa95-a26b33785aa3",
+      "usage": {
+        "prompt_tokens": 2604,
+        "completion_tokens": 1239,
+        "total_tokens": 3843,
+        "prompt_tokens_details": {
+          "cached_tokens": 1536
+        },
+        "prompt_cache_hit_tokens": 1536,
+        "prompt_cache_miss_tokens": 1068
+      }
+    },
+    {
+      "evaluation": "privacy-boundaries-and-ethics-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "56ce2b77-b329-4956-90f6-05e7f25a11f1",
+      "usage": {
+        "prompt_tokens": 1881,
+        "completion_tokens": 6,
+        "total_tokens": 1887,
+        "prompt_tokens_details": {
+          "cached_tokens": 1152
+        },
+        "prompt_cache_hit_tokens": 1152,
+        "prompt_cache_miss_tokens": 729
+      }
+    },
+    {
+      "evaluation": "privacy-boundaries-and-ethics-1:context_recall",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "6bc223a7-6a79-4ee5-bcfd-1e5ade50601f",
+      "usage": {
+        "prompt_tokens": 2886,
+        "completion_tokens": 169,
+        "total_tokens": 3055,
+        "prompt_tokens_details": {
+          "cached_tokens": 2176
+        },
+        "prompt_cache_hit_tokens": 2176,
+        "prompt_cache_miss_tokens": 710
+      }
+    },
+    {
+      "evaluation": "privacy-boundaries-and-ethics-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "8e0ba0ad-740b-43a7-84e3-3c5f2f4f3342",
+      "usage": {
+        "prompt_tokens": 1875,
+        "completion_tokens": 6,
+        "total_tokens": 1881,
+        "prompt_tokens_details": {
+          "cached_tokens": 1152
+        },
+        "prompt_cache_hit_tokens": 1152,
+        "prompt_cache_miss_tokens": 723
+      }
+    },
+    {
+      "evaluation": "relationships-and-family-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "3d189e67-2bce-40d5-bd56-35b4fc280879",
+      "usage": {
+        "prompt_tokens": 689,
+        "completion_tokens": 248,
+        "total_tokens": 937,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 305
+      }
+    },
+    {
+      "evaluation": "relationships-and-family-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "9b1c2a14-97d3-4493-9128-b471ca90fb71",
+      "usage": {
+        "prompt_tokens": 800,
+        "completion_tokens": 36,
+        "total_tokens": 836,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 416
+      }
+    },
+    {
+      "evaluation": "relationships-and-family-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "a98609ce-473f-441b-bde2-a3a304410e1d",
+      "usage": {
+        "prompt_tokens": 800,
+        "completion_tokens": 36,
+        "total_tokens": 836,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 160
+      }
+    },
+    {
+      "evaluation": "relationships-and-family-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "9a9c8cc1-32fc-4332-b3a2-8db1f8d01d21",
+      "usage": {
+        "prompt_tokens": 800,
+        "completion_tokens": 36,
+        "total_tokens": 836,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 160
+      }
+    },
+    {
+      "evaluation": "relationships-and-family-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "040df711-c4e3-9a00-872f-57943dde94c5",
+      "usage": {
+        "prompt_tokens": 30,
+        "total_tokens": 30
+      }
+    },
+    {
+      "evaluation": "relationships-and-family-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "c50c1815-beb9-47a0-a138-0d4d4f4cb21a",
+      "usage": {
+        "prompt_tokens": 2629,
+        "completion_tokens": 1105,
+        "total_tokens": 3734,
+        "prompt_tokens_details": {
+          "cached_tokens": 2176
+        },
+        "prompt_cache_hit_tokens": 2176,
+        "prompt_cache_miss_tokens": 453
+      }
+    },
+    {
+      "evaluation": "relationships-and-family-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "ff48c1f0-4d14-99a1-acfc-78c9fb82a7df",
+      "usage": {
+        "prompt_tokens": 102,
+        "total_tokens": 102
+      }
+    },
+    {
+      "evaluation": "relationships-and-family-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "9dd03249-457c-41f2-9c79-33de11cd63c5",
+      "usage": {
+        "prompt_tokens": 1978,
+        "completion_tokens": 6,
+        "total_tokens": 1984,
+        "prompt_tokens_details": {
+          "cached_tokens": 1792
+        },
+        "prompt_cache_hit_tokens": 1792,
+        "prompt_cache_miss_tokens": 186
+      }
+    },
+    {
+      "evaluation": "relationships-and-family-1:context_recall",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "b528ec85-d333-4d73-a812-6cecb6aaac19",
+      "usage": {
+        "prompt_tokens": 2991,
+        "completion_tokens": 150,
+        "total_tokens": 3141,
+        "prompt_tokens_details": {
+          "cached_tokens": 2816
+        },
+        "prompt_cache_hit_tokens": 2816,
+        "prompt_cache_miss_tokens": 175
+      }
+    },
+    {
+      "evaluation": "relationships-and-family-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "3612a097-09e6-424f-88ee-d30bd44e04b4",
+      "usage": {
+        "prompt_tokens": 1972,
+        "completion_tokens": 6,
+        "total_tokens": 1978,
+        "prompt_tokens_details": {
+          "cached_tokens": 1792
+        },
+        "prompt_cache_hit_tokens": 1792,
+        "prompt_cache_miss_tokens": 180
+      }
+    },
+    {
+      "evaluation": "risk-policy-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "620b3f29-a253-4c87-985a-d732484e625e",
+      "usage": {
+        "prompt_tokens": 831,
+        "completion_tokens": 39,
+        "total_tokens": 870,
+        "prompt_tokens_details": {
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 319
+      }
+    },
+    {
+      "evaluation": "risk-policy-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "04a409d8-5e4c-42a6-88da-84d5244fd621",
+      "usage": {
+        "prompt_tokens": 724,
+        "completion_tokens": 225,
+        "total_tokens": 949,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 340
+      }
+    },
+    {
+      "evaluation": "risk-policy-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "e2462492-f161-4621-9c29-bb55a65dceb3",
+      "usage": {
+        "prompt_tokens": 831,
+        "completion_tokens": 39,
+        "total_tokens": 870,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 191
+      }
+    },
+    {
+      "evaluation": "risk-policy-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "c417c28f-f290-4ebe-9f7d-fc6f988f7661",
+      "usage": {
+        "prompt_tokens": 831,
+        "completion_tokens": 39,
+        "total_tokens": 870,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 191
+      }
+    },
+    {
+      "evaluation": "risk-policy-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "71c87828-4560-95c7-a854-06c5acd8a184",
+      "usage": {
+        "prompt_tokens": 33,
+        "total_tokens": 33
+      }
+    },
+    {
+      "evaluation": "risk-policy-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "8aa314e7-a5ad-9677-ae48-aeb79b22c797",
+      "usage": {
+        "prompt_tokens": 111,
+        "total_tokens": 111
+      }
+    },
+    {
+      "evaluation": "risk-policy-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "28f80f28-6555-40af-8018-2c732e1cb70d",
+      "usage": {
+        "prompt_tokens": 2464,
+        "completion_tokens": 888,
+        "total_tokens": 3352,
+        "prompt_tokens_details": {
+          "cached_tokens": 2048
+        },
+        "prompt_cache_hit_tokens": 2048,
+        "prompt_cache_miss_tokens": 416
+      }
+    },
+    {
+      "evaluation": "risk-policy-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "fa903564-720c-48b5-b483-53be8b938900",
+      "usage": {
+        "prompt_tokens": 1840,
+        "completion_tokens": 6,
+        "total_tokens": 1846,
+        "prompt_tokens_details": {
+          "cached_tokens": 1664
+        },
+        "prompt_cache_hit_tokens": 1664,
+        "prompt_cache_miss_tokens": 176
+      }
+    },
+    {
+      "evaluation": "risk-policy-1:context_recall",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "23248cf6-92a8-427b-8f5f-15f99e1e71c0",
+      "usage": {
+        "prompt_tokens": 2843,
+        "completion_tokens": 157,
+        "total_tokens": 3000,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 155
+      }
+    },
+    {
+      "evaluation": "risk-policy-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "28e1ef5d-f0e4-4cdb-956e-e4b99a821302",
+      "usage": {
+        "prompt_tokens": 1834,
+        "completion_tokens": 6,
+        "total_tokens": 1840,
+        "prompt_tokens_details": {
+          "cached_tokens": 1664
+        },
+        "prompt_cache_hit_tokens": 1664,
+        "prompt_cache_miss_tokens": 170
+      }
+    },
+    {
+      "evaluation": "sleep-routine-self-care-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "042d5de9-d185-4d50-badf-deb9804b1ba5",
+      "usage": {
+        "prompt_tokens": 812,
+        "completion_tokens": 37,
+        "total_tokens": 849,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 428
+      }
+    },
+    {
+      "evaluation": "sleep-routine-self-care-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "48a9afdb-815c-4ead-ad8b-e6d4209e5210",
+      "usage": {
+        "prompt_tokens": 702,
+        "completion_tokens": 233,
+        "total_tokens": 935,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 318
+      }
+    },
+    {
+      "evaluation": "sleep-routine-self-care-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "d1d341c6-bfe7-4ab0-a3a8-96e5fe55714a",
+      "usage": {
+        "prompt_tokens": 812,
+        "completion_tokens": 37,
+        "total_tokens": 849,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 172
+      }
+    },
+    {
+      "evaluation": "sleep-routine-self-care-1:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "abd73931-7f10-43de-98a6-31652440c891",
+      "usage": {
+        "prompt_tokens": 812,
+        "completion_tokens": 37,
+        "total_tokens": 849,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 172
+      }
+    },
+    {
+      "evaluation": "sleep-routine-self-care-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "853847f4-471f-923c-9ab6-c7f54afa72a7",
+      "usage": {
+        "prompt_tokens": 30,
+        "total_tokens": 30
+      }
+    },
+    {
+      "evaluation": "sleep-routine-self-care-1:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "7253d2e4-dfad-4ceb-9858-3a6103a9e42a",
+      "usage": {
+        "prompt_tokens": 2687,
+        "completion_tokens": 892,
+        "total_tokens": 3579,
+        "prompt_tokens_details": {
+          "cached_tokens": 2304
+        },
+        "prompt_cache_hit_tokens": 2304,
+        "prompt_cache_miss_tokens": 383
+      }
+    },
+    {
+      "evaluation": "sleep-routine-self-care-1:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "5fd9e390-39a5-9f21-ba46-7bb945059d52",
+      "usage": {
+        "prompt_tokens": 99,
+        "total_tokens": 99
+      }
+    },
+    {
+      "evaluation": "sleep-routine-self-care-1:context_recall",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "ad5f7521-5da4-4e7a-9daf-ce40f210f3da",
+      "usage": {
+        "prompt_tokens": 3057,
+        "completion_tokens": 150,
+        "total_tokens": 3207,
+        "prompt_tokens_details": {
+          "cached_tokens": 2816
+        },
+        "prompt_cache_hit_tokens": 2816,
+        "prompt_cache_miss_tokens": 241
+      }
+    },
+    {
+      "evaluation": "sleep-routine-self-care-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "52a1b4e2-e039-4f74-b629-fb2352cd9ab8",
+      "usage": {
+        "prompt_tokens": 2052,
+        "completion_tokens": 6,
+        "total_tokens": 2058,
+        "prompt_tokens_details": {
+          "cached_tokens": 1918
+        },
+        "prompt_cache_hit_tokens": 1918,
+        "prompt_cache_miss_tokens": 134
+      }
+    },
+    {
+      "evaluation": "sleep-routine-self-care-1:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "97726dde-a313-4844-9640-c5362e49f6a2",
+      "usage": {
+        "prompt_tokens": 2046,
+        "completion_tokens": 6,
+        "total_tokens": 2052,
+        "prompt_tokens_details": {
+          "cached_tokens": 1792
+        },
+        "prompt_cache_hit_tokens": 1792,
+        "prompt_cache_miss_tokens": 254
+      }
+    },
+    {
+      "evaluation": "academic-stress-and-burnout-2:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "0c09d892-2b47-4699-a3e2-9ca803847151",
+      "usage": {
+        "prompt_tokens": 708,
+        "completion_tokens": 283,
+        "total_tokens": 991,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 324
+      }
+    },
+    {
+      "evaluation": "academic-stress-and-burnout-2:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "bf0c8272-dc18-43b2-9639-ffab595841eb",
+      "usage": {
+        "prompt_tokens": 821,
+        "completion_tokens": 28,
+        "total_tokens": 849,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 437
+      }
+    },
+    {
+      "evaluation": "academic-stress-and-burnout-2:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "b8f946d4-3074-4b1b-8774-7c4b41af80be",
+      "usage": {
+        "prompt_tokens": 821,
+        "completion_tokens": 28,
+        "total_tokens": 849,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 181
+      }
+    },
+    {
+      "evaluation": "academic-stress-and-burnout-2:answer_relevancy",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "9775d174-ad2e-4ed3-84fa-93e65e82e7c5",
+      "usage": {
+        "prompt_tokens": 821,
+        "completion_tokens": 28,
+        "total_tokens": 849,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 181
+      }
+    },
+    {
+      "evaluation": "academic-stress-and-burnout-2:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "fa7ec7dc-baa8-98a5-873a-54e8c990ead7",
+      "usage": {
+        "prompt_tokens": 27,
+        "total_tokens": 27
+      }
+    },
+    {
+      "evaluation": "academic-stress-and-burnout-2:answer_relevancy",
+      "status": 200,
+      "model": "qwen3.7-text-embedding",
+      "requestId": "8180ac23-254e-94e5-98b9-2bd2bb49c63c",
+      "usage": {
+        "prompt_tokens": 78,
+        "total_tokens": 78
+      }
+    },
+    {
+      "evaluation": "academic-stress-and-burnout-2:context_recall",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "6509ce68-5f0d-491d-b804-cb02f3f441fc",
+      "usage": {
+        "prompt_tokens": 2823,
+        "completion_tokens": 173,
+        "total_tokens": 2996,
+        "prompt_tokens_details": {
+          "cached_tokens": 1920
+        },
+        "prompt_cache_hit_tokens": 1920,
+        "prompt_cache_miss_tokens": 903
+      }
+    },
+    {
+      "evaluation": "academic-stress-and-burnout-2:faithfulness",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "4329a436-9c18-4b93-b1a1-2a7e49230e90",
+      "usage": {
+        "prompt_tokens": 2501,
+        "completion_tokens": 1345,
+        "total_tokens": 3846,
+        "prompt_tokens_details": {
+          "cached_tokens": 1408
+        },
+        "prompt_cache_hit_tokens": 1408,
+        "prompt_cache_miss_tokens": 1093
+      }
+    },
+    {
+      "evaluation": "academic-stress-and-burnout-2:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "5c23b0fa-a8a1-44e0-b5c0-0a58cedd97e7",
+      "usage": {
+        "prompt_tokens": 1813,
+        "completion_tokens": 6,
+        "total_tokens": 1819,
+        "prompt_tokens_details": {
+          "cached_tokens": 1024
+        },
+        "prompt_cache_hit_tokens": 1024,
+        "prompt_cache_miss_tokens": 789
+      }
+    },
+    {
+      "evaluation": "academic-stress-and-burnout-2:context_relevance",
+      "status": 200,
+      "model": "deepseek-flash",
+      "requestId": "7bced55e-956d-4afc-8725-773b88006a9e",
+      "usage": {
+        "prompt_tokens": 1807,
+        "completion_tokens": 6,
+        "total_tokens": 1813,
+        "prompt_tokens_details": {
+          "cached_tokens": 1024
+        },
+        "prompt_cache_hit_tokens": 1024,
+        "prompt_cache_miss_tokens": 783
+      }
+    }
+  ]
+}

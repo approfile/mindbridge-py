@@ -1,0 +1,307 @@
+{
+  "mode": "actual configured-model HTTP, isolated SQLite/Chroma, SQL memory fallback, log alerts; no real SMTP delivery",
+  "summary": {
+    "turns": 14,
+    "completed": 13,
+    "routesCorrect": true,
+    "factsCorrect": true,
+    "visibleFactsCorrect": true,
+    "finalHashesBound": true,
+    "allJobsSuccess": true,
+    "jobs": 22,
+    "ledgerRows": 14,
+    "liveQueryEmbeddings": 7,
+    "embeddingDimensions": [
+      1024
+    ],
+    "groundedTurns": 7,
+    "sourceUnchanged": true,
+    "newJobs": 11,
+    "newLedgerRows": 7,
+    "counterNote": "jobs and ledgerRows are cumulative across the two isolated HTTP stages; new* are the increments.",
+    "sourceStage": "post same-candidate clarification, before final non-adjacent completion-negation/filter-termination hardening; final policy re-screen follows",
+    "currentPolicyRescreen": [
+      {
+        "id": "normal-05",
+        "violations": []
+      },
+      {
+        "id": "normal-07",
+        "violations": []
+      },
+      {
+        "id": "normal-10",
+        "violations": []
+      },
+      {
+        "id": "evidence-08",
+        "violations": []
+      },
+      {
+        "id": "recovery-02",
+        "violations": []
+      },
+      {
+        "id": "project-question-assertion",
+        "violations": []
+      },
+      {
+        "id": "project-question",
+        "violations": []
+      },
+      {
+        "id": "legacy-poison-rebuild",
+        "violations": []
+      },
+      {
+        "id": "role-question-assertion",
+        "violations": []
+      },
+      {
+        "id": "role-question",
+        "violations": []
+      },
+      {
+        "id": "english-period-assertion",
+        "violations": []
+      },
+      {
+        "id": "english-period",
+        "violations": []
+      },
+      {
+        "id": "crisis-zh",
+        "violations": []
+      },
+      {
+        "id": "crisis-en",
+        "violations": []
+      }
+    ]
+  },
+  "turns": [
+    {
+      "id": "normal-05",
+      "completed": true,
+      "elapsedMs": 6122.64,
+      "replySha256": "8fc78907711a2a0700c8a4dc60195e3459ac1f01f6a1dcf711a013e329e62fe6",
+      "risk": "LOW",
+      "intent": "CONSULT",
+      "reviewCount": 1,
+      "groundingRequired": true,
+      "groundingChecks": 8,
+      "hashBoundToFinalOutcome": true,
+      "runtimeStatus": "ACCEPTED",
+      "routeMatchesFrozenContract": true
+    },
+    {
+      "id": "normal-07",
+      "completed": true,
+      "elapsedMs": 6468.99,
+      "replySha256": "75505fb6b4969b95d74c72d8cdb792d44fe080966cebb1dcb3c7df469a62de16",
+      "risk": "LOW",
+      "intent": "CONSULT",
+      "reviewCount": 1,
+      "groundingRequired": true,
+      "groundingChecks": 7,
+      "hashBoundToFinalOutcome": true,
+      "runtimeStatus": "ACCEPTED",
+      "routeMatchesFrozenContract": true
+    },
+    {
+      "id": "normal-10",
+      "completed": true,
+      "elapsedMs": 6992.74,
+      "replySha256": "77bbaa81a20b73c2888aef386c70cd5588484f10b71f55ec7e786ce6bbcc5bbe",
+      "risk": "LOW",
+      "intent": "CONSULT",
+      "reviewCount": 1,
+      "groundingRequired": true,
+      "groundingChecks": 6,
+      "hashBoundToFinalOutcome": true,
+      "runtimeStatus": "ACCEPTED",
+      "routeMatchesFrozenContract": true
+    },
+    {
+      "id": "evidence-08",
+      "completed": false,
+      "elapsedMs": 10407.09,
+      "replySha256": "f9a85b4a3f4d1e6a0eb1bb8d737f88f144a44883b1890613164bfe1474febeac",
+      "risk": "LOW",
+      "intent": "CONSULT",
+      "reviewCount": 2,
+      "groundingRequired": true,
+      "groundingChecks": 0,
+      "hashBoundToFinalOutcome": true,
+      "runtimeStatus": "REVISION_BUDGET_EXHAUSTED",
+      "routeMatchesFrozenContract": true
+    },
+    {
+      "id": "recovery-02",
+      "completed": true,
+      "elapsedMs": 7363.02,
+      "replySha256": "7325335565623c8da753798c72ab1fe1e93dbdab96fcaa3fb2f748888e821732",
+      "risk": "LOW",
+      "intent": "CONSULT",
+      "reviewCount": 1,
+      "groundingRequired": true,
+      "groundingChecks": 5,
+      "hashBoundToFinalOutcome": true,
+      "runtimeStatus": "ACCEPTED",
+      "routeMatchesFrozenContract": true
+    },
+    {
+      "id": "project-question-assertion",
+      "completed": true,
+      "elapsedMs": 2736.14,
+      "replySha256": "7b8964e7fb01a9eacfd06412933148094e83a844b88273275eb0eb4061c0cf7c",
+      "risk": "LOW",
+      "intent": "CHAT",
+      "reviewCount": 1,
+      "groundingRequired": false,
+      "groundingChecks": 0,
+      "hashBoundToFinalOutcome": true,
+      "runtimeStatus": "ACCEPTED"
+    },
+    {
+      "id": "project-question",
+      "completed": true,
+      "elapsedMs": 2923.73,
+      "replySha256": "69395fdc29110814f58cd97ab8697ad4c011223b04b71d1c589c52798287415f",
+      "risk": "LOW",
+      "intent": "CHAT",
+      "reviewCount": 1,
+      "groundingRequired": false,
+      "groundingChecks": 0,
+      "hashBoundToFinalOutcome": true,
+      "runtimeStatus": "ACCEPTED",
+      "persistedFactCorrect": true,
+      "visibleFactCorrect": true,
+      "factSourceIsAssertion": true
+    },
+    {
+      "id": "legacy-poison-rebuild",
+      "completed": true,
+      "elapsedMs": 2785.75,
+      "replySha256": "69395fdc29110814f58cd97ab8697ad4c011223b04b71d1c589c52798287415f",
+      "risk": "LOW",
+      "intent": "CHAT",
+      "reviewCount": 1,
+      "groundingRequired": false,
+      "groundingChecks": 0,
+      "hashBoundToFinalOutcome": true,
+      "runtimeStatus": "ACCEPTED",
+      "persistedFactCorrect": true
+    },
+    {
+      "id": "role-question-assertion",
+      "completed": true,
+      "elapsedMs": 4389.85,
+      "replySha256": "887f70dcc329805dfcc0bf0ada25bf20017073bc0853b43e93650c058df93d71",
+      "risk": "LOW",
+      "intent": "CHAT",
+      "reviewCount": 1,
+      "groundingRequired": false,
+      "groundingChecks": 0,
+      "hashBoundToFinalOutcome": true,
+      "runtimeStatus": "ACCEPTED"
+    },
+    {
+      "id": "role-question",
+      "completed": true,
+      "elapsedMs": 3380.95,
+      "replySha256": "b5c93f4e7a21e222b254241292f17da8bac06df82c9e0e33c6ec9cf08231925e",
+      "risk": "LOW",
+      "intent": "CHAT",
+      "reviewCount": 1,
+      "groundingRequired": false,
+      "groundingChecks": 0,
+      "hashBoundToFinalOutcome": true,
+      "runtimeStatus": "ACCEPTED",
+      "persistedFactCorrect": true,
+      "visibleFactCorrect": true,
+      "factSourceIsAssertion": true
+    },
+    {
+      "id": "english-period-assertion",
+      "completed": true,
+      "elapsedMs": 3435.92,
+      "replySha256": "01a7404d60ef6113e9f5e5d6f742d439981156ffd2798131e14d27a405b01343",
+      "risk": "LOW",
+      "intent": "CHAT",
+      "reviewCount": 1,
+      "groundingRequired": false,
+      "groundingChecks": 0,
+      "hashBoundToFinalOutcome": true,
+      "runtimeStatus": "ACCEPTED"
+    },
+    {
+      "id": "english-period",
+      "completed": true,
+      "elapsedMs": 3628.63,
+      "replySha256": "89d87ca92340d1ce24512ac7637509643f8400184158a8b95307463727f3e582",
+      "risk": "LOW",
+      "intent": "CHAT",
+      "reviewCount": 1,
+      "groundingRequired": false,
+      "groundingChecks": 0,
+      "hashBoundToFinalOutcome": true,
+      "runtimeStatus": "ACCEPTED",
+      "persistedFactCorrect": true,
+      "visibleFactCorrect": true,
+      "factSourceIsAssertion": true
+    },
+    {
+      "id": "crisis-zh",
+      "completed": true,
+      "elapsedMs": 6043.9,
+      "replySha256": "e79dbf7c38ed01db559f7bae7fb6185d0e266dce6cc23478449498b90bc77137",
+      "risk": "HIGH",
+      "intent": "RISK",
+      "reviewCount": 1,
+      "groundingRequired": true,
+      "groundingChecks": 5,
+      "hashBoundToFinalOutcome": true,
+      "runtimeStatus": "ACCEPTED",
+      "bodyRulesPass": true,
+      "hasSafetyCheckQuestion": true
+    },
+    {
+      "id": "crisis-en",
+      "completed": true,
+      "elapsedMs": 9702.57,
+      "replySha256": "ea30e0124babfad5abd131610cda4b941b4a2ef503e50ac7b58a5ac5062b053a",
+      "risk": "HIGH",
+      "intent": "RISK",
+      "reviewCount": 1,
+      "groundingRequired": true,
+      "groundingChecks": 5,
+      "hashBoundToFinalOutcome": true,
+      "runtimeStatus": "ACCEPTED",
+      "bodyRulesPass": true,
+      "hasSafetyCheckQuestion": true
+    }
+  ],
+  "firstStage": {
+    "turns": 14,
+    "completed": 13,
+    "routesCorrect": true,
+    "factsCorrect": true,
+    "visibleFactsCorrect": false,
+    "finalHashesBound": true,
+    "allJobsSuccess": true,
+    "jobs": 11,
+    "ledgerRows": 7,
+    "liveQueryEmbeddings": 7,
+    "embeddingDimensions": [
+      1024
+    ],
+    "groundedTurns": 7,
+    "sourceUnchanged": true
+  },
+  "notes": [
+    "First-stage visible role fact was incorrectly rejected by a strict substring collector due solely to Markdown/spacing; raw result retained. Final stage uses explicitly documented whitespace/emphasis normalization.",
+    "One final-stage CONSULT reply entered fixed fallback; do not claim 100% conversational goal completion.",
+    "The 75-trial layered benchmark and previous human table were not rerun."
+  ]
+}

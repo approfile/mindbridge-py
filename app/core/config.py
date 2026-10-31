@@ -60,6 +60,7 @@ class Settings(BaseSettings):
     database_url: str = "mysql+pymysql://mindbridge:mindbridge@127.0.0.1:3306/mindbridge?charset=utf8mb4"
     chat_history_limit: int = 10
     knowledge_top_k: int = 4
+    knowledge_query_max_chars: int = Field(default=1024, ge=128, le=8192)
     knowledge_candidate_k: int = 16
     knowledge_chunk_size: int = 512
     knowledge_chunk_overlap: int = 64
@@ -89,6 +90,10 @@ class Settings(BaseSettings):
     reply_timeout_seconds: float = Field(default=45.0, gt=0)
     reply_max_chars: int = Field(default=8000, ge=100)
     reply_review_json_mode: bool = True
+    reply_review_max_tokens: int = Field(default=1024, ge=256, le=4096)
+    model_transport_max_attempts: int = Field(default=2, ge=1, le=3)
+    model_retry_base_delay_seconds: float = Field(default=0.25, ge=0, le=2)
+    model_retry_min_remaining_seconds: float = Field(default=0.5, ge=0.05, le=5)
     smtp_host: str = ""
     smtp_port: int = 587
     smtp_username: str = ""

@@ -1,0 +1,1863 @@
+{
+  "date": "2026-10-31",
+  "baseCommit": "bdeeec3eb03013658728ef8d243705dae0b9d7df",
+  "changes": [
+    "versioned session fact extraction/rebuild",
+    "danger denial independent of consultation need",
+    "crisis sufficiency and completion assertions",
+    "deadline-bound generation/review transport retry",
+    "query budget and source-bound per-sentence review"
+  ],
+  "unitTestsPassed": 289,
+  "engineeringHarnessSuitesPassed": 6,
+  "configuredModelRegression": {
+    "intent100": {
+      "cases": 100,
+      "understanding": {
+        "cases": 100,
+        "correct": 100,
+        "accuracy": 1.0,
+        "accuracyWilson95": [
+          0.9630065017930143,
+          1.0
+        ],
+        "macroF1": 1.0,
+        "confusionMatrix": {
+          "CHAT": {
+            "CHAT": 40,
+            "CONSULT": 0,
+            "RISK": 0,
+            "ERROR": 0
+          },
+          "CONSULT": {
+            "CHAT": 0,
+            "CONSULT": 30,
+            "RISK": 0,
+            "ERROR": 0
+          },
+          "RISK": {
+            "CHAT": 0,
+            "CONSULT": 0,
+            "RISK": 30,
+            "ERROR": 0
+          }
+        },
+        "confusionOrientation": "rows=gold, columns=prediction",
+        "perClass": {
+          "CHAT": {
+            "truePositive": 40,
+            "support": 40,
+            "predicted": 40,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "recallWilson95": [
+              0.9123783988027135,
+              1.0
+            ]
+          },
+          "CONSULT": {
+            "truePositive": 30,
+            "support": 30,
+            "predicted": 30,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "recallWilson95": [
+              0.8864866068260312,
+              0.9999999999999999
+            ]
+          },
+          "RISK": {
+            "truePositive": 30,
+            "support": 30,
+            "predicted": 30,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "recallWilson95": [
+              0.8864866068260312,
+              0.9999999999999999
+            ]
+          }
+        },
+        "riskRecall": 1.0,
+        "riskPrecision": 1.0,
+        "riskFalseNegativeCount": 0,
+        "riskFalsePositiveCount": 0,
+        "riskFalsePositiveRate": 0.0,
+        "errorCount": 0,
+        "zeroDivision": 0,
+        "intervalNote": "Descriptive binomial Wilson intervals on this stratified synthetic set; not population/clinical validity. Repeated runs do not create new independent cases."
+      },
+      "finalRouting": {
+        "cases": 100,
+        "correct": 100,
+        "accuracy": 1.0,
+        "accuracyWilson95": [
+          0.9630065017930143,
+          1.0
+        ],
+        "macroF1": 1.0,
+        "confusionMatrix": {
+          "CHAT": {
+            "CHAT": 40,
+            "CONSULT": 0,
+            "RISK": 0,
+            "ERROR": 0
+          },
+          "CONSULT": {
+            "CHAT": 0,
+            "CONSULT": 30,
+            "RISK": 0,
+            "ERROR": 0
+          },
+          "RISK": {
+            "CHAT": 0,
+            "CONSULT": 0,
+            "RISK": 30,
+            "ERROR": 0
+          }
+        },
+        "confusionOrientation": "rows=gold, columns=prediction",
+        "perClass": {
+          "CHAT": {
+            "truePositive": 40,
+            "support": 40,
+            "predicted": 40,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "recallWilson95": [
+              0.9123783988027135,
+              1.0
+            ]
+          },
+          "CONSULT": {
+            "truePositive": 30,
+            "support": 30,
+            "predicted": 30,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "recallWilson95": [
+              0.8864866068260312,
+              0.9999999999999999
+            ]
+          },
+          "RISK": {
+            "truePositive": 30,
+            "support": 30,
+            "predicted": 30,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "recallWilson95": [
+              0.8864866068260312,
+              0.9999999999999999
+            ]
+          }
+        },
+        "riskRecall": 1.0,
+        "riskPrecision": 1.0,
+        "riskFalseNegativeCount": 0,
+        "riskFalsePositiveCount": 0,
+        "riskFalsePositiveRate": 0.0,
+        "errorCount": 0,
+        "zeroDivision": 0,
+        "intervalNote": "Descriptive binomial Wilson intervals on this stratified synthetic set; not population/clinical validity. Repeated runs do not create new independent cases."
+      },
+      "categories": {
+        "context-dependent-imminence": {
+          "cases": 7,
+          "correct": 7,
+          "accuracy": 1.0,
+          "accuracyWilson95": [
+            0.6456695649333126,
+            1.0
+          ],
+          "macroF1": 0.3333333333333333,
+          "confusionMatrix": {
+            "CHAT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "CONSULT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "RISK": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 7,
+              "ERROR": 0
+            }
+          },
+          "confusionOrientation": "rows=gold, columns=prediction",
+          "perClass": {
+            "CHAT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "CONSULT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "RISK": {
+              "truePositive": 7,
+              "support": 7,
+              "predicted": 7,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "recallWilson95": [
+                0.6456695649333126,
+                1.0
+              ]
+            }
+          },
+          "riskRecall": 1.0,
+          "riskPrecision": 1.0,
+          "riskFalseNegativeCount": 0,
+          "riskFalsePositiveCount": 0,
+          "riskFalsePositiveRate": null,
+          "errorCount": 0,
+          "zeroDivision": 0,
+          "intervalNote": "Descriptive binomial Wilson intervals on this stratified synthetic set; not population/clinical validity. Repeated runs do not create new independent cases."
+        },
+        "context-dependent-ordinary": {
+          "cases": 4,
+          "correct": 4,
+          "accuracy": 1.0,
+          "accuracyWilson95": [
+            0.5101091635454027,
+            1.0
+          ],
+          "macroF1": 0.3333333333333333,
+          "confusionMatrix": {
+            "CHAT": {
+              "CHAT": 4,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "CONSULT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "RISK": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            }
+          },
+          "confusionOrientation": "rows=gold, columns=prediction",
+          "perClass": {
+            "CHAT": {
+              "truePositive": 4,
+              "support": 4,
+              "predicted": 4,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "recallWilson95": [
+                0.5101091635454027,
+                1.0
+              ]
+            },
+            "CONSULT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "RISK": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            }
+          },
+          "riskRecall": 0.0,
+          "riskPrecision": 0.0,
+          "riskFalseNegativeCount": 0,
+          "riskFalsePositiveCount": 0,
+          "riskFalsePositiveRate": 0.0,
+          "errorCount": 0,
+          "zeroDivision": 0,
+          "intervalNote": "Descriptive binomial Wilson intervals on this stratified synthetic set; not population/clinical validity. Repeated runs do not create new independent cases."
+        },
+        "context-dependent-support": {
+          "cases": 5,
+          "correct": 5,
+          "accuracy": 1.0,
+          "accuracyWilson95": [
+            0.5655175352168251,
+            1.0
+          ],
+          "macroF1": 0.3333333333333333,
+          "confusionMatrix": {
+            "CHAT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "CONSULT": {
+              "CHAT": 0,
+              "CONSULT": 5,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "RISK": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            }
+          },
+          "confusionOrientation": "rows=gold, columns=prediction",
+          "perClass": {
+            "CHAT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "CONSULT": {
+              "truePositive": 5,
+              "support": 5,
+              "predicted": 5,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "recallWilson95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "RISK": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            }
+          },
+          "riskRecall": 0.0,
+          "riskPrecision": 0.0,
+          "riskFalseNegativeCount": 0,
+          "riskFalsePositiveCount": 0,
+          "riskFalsePositiveRate": 0.0,
+          "errorCount": 0,
+          "zeroDivision": 0,
+          "intervalNote": "Descriptive binomial Wilson intervals on this stratified synthetic set; not population/clinical validity. Repeated runs do not create new independent cases."
+        },
+        "current-harm-to-others": {
+          "cases": 5,
+          "correct": 5,
+          "accuracy": 1.0,
+          "accuracyWilson95": [
+            0.5655175352168251,
+            1.0
+          ],
+          "macroF1": 0.3333333333333333,
+          "confusionMatrix": {
+            "CHAT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "CONSULT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "RISK": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 5,
+              "ERROR": 0
+            }
+          },
+          "confusionOrientation": "rows=gold, columns=prediction",
+          "perClass": {
+            "CHAT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "CONSULT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "RISK": {
+              "truePositive": 5,
+              "support": 5,
+              "predicted": 5,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "recallWilson95": [
+                0.5655175352168251,
+                1.0
+              ]
+            }
+          },
+          "riskRecall": 1.0,
+          "riskPrecision": 1.0,
+          "riskFalseNegativeCount": 0,
+          "riskFalsePositiveCount": 0,
+          "riskFalsePositiveRate": null,
+          "errorCount": 0,
+          "zeroDivision": 0,
+          "intervalNote": "Descriptive binomial Wilson intervals on this stratified synthetic set; not population/clinical validity. Repeated runs do not create new independent cases."
+        },
+        "current-self-harm": {
+          "cases": 8,
+          "correct": 8,
+          "accuracy": 1.0,
+          "accuracyWilson95": [
+            0.6755924351161198,
+            1.0
+          ],
+          "macroF1": 0.3333333333333333,
+          "confusionMatrix": {
+            "CHAT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "CONSULT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "RISK": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 8,
+              "ERROR": 0
+            }
+          },
+          "confusionOrientation": "rows=gold, columns=prediction",
+          "perClass": {
+            "CHAT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "CONSULT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "RISK": {
+              "truePositive": 8,
+              "support": 8,
+              "predicted": 8,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "recallWilson95": [
+                0.6755924351161198,
+                1.0
+              ]
+            }
+          },
+          "riskRecall": 1.0,
+          "riskPrecision": 1.0,
+          "riskFalseNegativeCount": 0,
+          "riskFalsePositiveCount": 0,
+          "riskFalsePositiveRate": null,
+          "errorCount": 0,
+          "zeroDivision": 0,
+          "intervalNote": "Descriptive binomial Wilson intervals on this stratified synthetic set; not population/clinical validity. Repeated runs do not create new independent cases."
+        },
+        "explicit-denial-with-ordinary-task": {
+          "cases": 6,
+          "correct": 6,
+          "accuracy": 1.0,
+          "accuracyWilson95": [
+            0.6096657120978346,
+            1.0
+          ],
+          "macroF1": 0.3333333333333333,
+          "confusionMatrix": {
+            "CHAT": {
+              "CHAT": 6,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "CONSULT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "RISK": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            }
+          },
+          "confusionOrientation": "rows=gold, columns=prediction",
+          "perClass": {
+            "CHAT": {
+              "truePositive": 6,
+              "support": 6,
+              "predicted": 6,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "recallWilson95": [
+                0.6096657120978346,
+                1.0
+              ]
+            },
+            "CONSULT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "RISK": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            }
+          },
+          "riskRecall": 0.0,
+          "riskPrecision": 0.0,
+          "riskFalseNegativeCount": 0,
+          "riskFalsePositiveCount": 0,
+          "riskFalsePositiveRate": 0.0,
+          "errorCount": 0,
+          "zeroDivision": 0,
+          "intervalNote": "Descriptive binomial Wilson intervals on this stratified synthetic set; not population/clinical validity. Repeated runs do not create new independent cases."
+        },
+        "help-seeking": {
+          "cases": 4,
+          "correct": 4,
+          "accuracy": 1.0,
+          "accuracyWilson95": [
+            0.5101091635454027,
+            1.0
+          ],
+          "macroF1": 0.3333333333333333,
+          "confusionMatrix": {
+            "CHAT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "CONSULT": {
+              "CHAT": 0,
+              "CONSULT": 4,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "RISK": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            }
+          },
+          "confusionOrientation": "rows=gold, columns=prediction",
+          "perClass": {
+            "CHAT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "CONSULT": {
+              "truePositive": 4,
+              "support": 4,
+              "predicted": 4,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "recallWilson95": [
+                0.5101091635454027,
+                1.0
+              ]
+            },
+            "RISK": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            }
+          },
+          "riskRecall": 0.0,
+          "riskPrecision": 0.0,
+          "riskFalseNegativeCount": 0,
+          "riskFalsePositiveCount": 0,
+          "riskFalsePositiveRate": 0.0,
+          "errorCount": 0,
+          "zeroDivision": 0,
+          "intervalNote": "Descriptive binomial Wilson intervals on this stratified synthetic set; not population/clinical validity. Repeated runs do not create new independent cases."
+        },
+        "immediate-or-implicit-danger": {
+          "cases": 5,
+          "correct": 5,
+          "accuracy": 1.0,
+          "accuracyWilson95": [
+            0.5655175352168251,
+            1.0
+          ],
+          "macroF1": 0.3333333333333333,
+          "confusionMatrix": {
+            "CHAT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "CONSULT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "RISK": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 5,
+              "ERROR": 0
+            }
+          },
+          "confusionOrientation": "rows=gold, columns=prediction",
+          "perClass": {
+            "CHAT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "CONSULT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "RISK": {
+              "truePositive": 5,
+              "support": 5,
+              "predicted": 5,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "recallWilson95": [
+                0.5655175352168251,
+                1.0
+              ]
+            }
+          },
+          "riskRecall": 1.0,
+          "riskPrecision": 1.0,
+          "riskFalseNegativeCount": 0,
+          "riskFalsePositiveCount": 0,
+          "riskFalsePositiveRate": null,
+          "errorCount": 0,
+          "zeroDivision": 0,
+          "intervalNote": "Descriptive binomial Wilson intervals on this stratified synthetic set; not population/clinical validity. Repeated runs do not create new independent cases."
+        },
+        "mixed-denial-and-current-intent": {
+          "cases": 5,
+          "correct": 5,
+          "accuracy": 1.0,
+          "accuracyWilson95": [
+            0.5655175352168251,
+            1.0
+          ],
+          "macroF1": 0.3333333333333333,
+          "confusionMatrix": {
+            "CHAT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "CONSULT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "RISK": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 5,
+              "ERROR": 0
+            }
+          },
+          "confusionOrientation": "rows=gold, columns=prediction",
+          "perClass": {
+            "CHAT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "CONSULT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "RISK": {
+              "truePositive": 5,
+              "support": 5,
+              "predicted": 5,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "recallWilson95": [
+                0.5655175352168251,
+                1.0
+              ]
+            }
+          },
+          "riskRecall": 1.0,
+          "riskPrecision": 1.0,
+          "riskFalseNegativeCount": 0,
+          "riskFalsePositiveCount": 0,
+          "riskFalsePositiveRate": null,
+          "errorCount": 0,
+          "zeroDivision": 0,
+          "intervalNote": "Descriptive binomial Wilson intervals on this stratified synthetic set; not population/clinical validity. Repeated runs do not create new independent cases."
+        },
+        "mood-and-loneliness": {
+          "cases": 4,
+          "correct": 4,
+          "accuracy": 1.0,
+          "accuracyWilson95": [
+            0.5101091635454027,
+            1.0
+          ],
+          "macroF1": 0.3333333333333333,
+          "confusionMatrix": {
+            "CHAT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "CONSULT": {
+              "CHAT": 0,
+              "CONSULT": 4,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "RISK": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            }
+          },
+          "confusionOrientation": "rows=gold, columns=prediction",
+          "perClass": {
+            "CHAT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "CONSULT": {
+              "truePositive": 4,
+              "support": 4,
+              "predicted": 4,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "recallWilson95": [
+                0.5101091635454027,
+                1.0
+              ]
+            },
+            "RISK": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            }
+          },
+          "riskRecall": 0.0,
+          "riskPrecision": 0.0,
+          "riskFalseNegativeCount": 0,
+          "riskFalsePositiveCount": 0,
+          "riskFalsePositiveRate": 0.0,
+          "errorCount": 0,
+          "zeroDivision": 0,
+          "intervalNote": "Descriptive binomial Wilson intervals on this stratified synthetic set; not population/clinical validity. Repeated runs do not create new independent cases."
+        },
+        "ordinary-conversation": {
+          "cases": 8,
+          "correct": 8,
+          "accuracy": 1.0,
+          "accuracyWilson95": [
+            0.6755924351161198,
+            1.0
+          ],
+          "macroF1": 0.3333333333333333,
+          "confusionMatrix": {
+            "CHAT": {
+              "CHAT": 8,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "CONSULT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "RISK": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            }
+          },
+          "confusionOrientation": "rows=gold, columns=prediction",
+          "perClass": {
+            "CHAT": {
+              "truePositive": 8,
+              "support": 8,
+              "predicted": 8,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "recallWilson95": [
+                0.6755924351161198,
+                1.0
+              ]
+            },
+            "CONSULT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "RISK": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            }
+          },
+          "riskRecall": 0.0,
+          "riskPrecision": 0.0,
+          "riskFalseNegativeCount": 0,
+          "riskFalsePositiveCount": 0,
+          "riskFalsePositiveRate": 0.0,
+          "errorCount": 0,
+          "zeroDivision": 0,
+          "intervalNote": "Descriptive binomial Wilson intervals on this stratified synthetic set; not population/clinical validity. Repeated runs do not create new independent cases."
+        },
+        "ordinary-task": {
+          "cases": 12,
+          "correct": 12,
+          "accuracy": 1.0,
+          "accuracyWilson95": [
+            0.7575059933447592,
+            1.0
+          ],
+          "macroF1": 0.3333333333333333,
+          "confusionMatrix": {
+            "CHAT": {
+              "CHAT": 12,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "CONSULT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "RISK": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            }
+          },
+          "confusionOrientation": "rows=gold, columns=prediction",
+          "perClass": {
+            "CHAT": {
+              "truePositive": 12,
+              "support": 12,
+              "predicted": 12,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "recallWilson95": [
+                0.7575059933447592,
+                1.0
+              ]
+            },
+            "CONSULT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "RISK": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            }
+          },
+          "riskRecall": 0.0,
+          "riskPrecision": 0.0,
+          "riskFalseNegativeCount": 0,
+          "riskFalsePositiveCount": 0,
+          "riskFalsePositiveRate": 0.0,
+          "errorCount": 0,
+          "zeroDivision": 0,
+          "intervalNote": "Descriptive binomial Wilson intervals on this stratified synthetic set; not population/clinical validity. Repeated runs do not create new independent cases."
+        },
+        "persistent-impairment": {
+          "cases": 3,
+          "correct": 3,
+          "accuracy": 1.0,
+          "accuracyWilson95": [
+            0.4385029682449546,
+            1.0
+          ],
+          "macroF1": 0.3333333333333333,
+          "confusionMatrix": {
+            "CHAT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "CONSULT": {
+              "CHAT": 0,
+              "CONSULT": 3,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "RISK": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            }
+          },
+          "confusionOrientation": "rows=gold, columns=prediction",
+          "perClass": {
+            "CHAT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "CONSULT": {
+              "truePositive": 3,
+              "support": 3,
+              "predicted": 3,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "recallWilson95": [
+                0.4385029682449546,
+                1.0
+              ]
+            },
+            "RISK": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            }
+          },
+          "riskRecall": 0.0,
+          "riskPrecision": 0.0,
+          "riskFalseNegativeCount": 0,
+          "riskFalsePositiveCount": 0,
+          "riskFalsePositiveRate": 0.0,
+          "errorCount": 0,
+          "zeroDivision": 0,
+          "intervalNote": "Descriptive binomial Wilson intervals on this stratified synthetic set; not population/clinical validity. Repeated runs do not create new independent cases."
+        },
+        "reference-and-instruction-noise": {
+          "cases": 10,
+          "correct": 10,
+          "accuracy": 1.0,
+          "accuracyWilson95": [
+            0.7224672001371107,
+            0.9999999999999999
+          ],
+          "macroF1": 0.3333333333333333,
+          "confusionMatrix": {
+            "CHAT": {
+              "CHAT": 10,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "CONSULT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "RISK": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            }
+          },
+          "confusionOrientation": "rows=gold, columns=prediction",
+          "perClass": {
+            "CHAT": {
+              "truePositive": 10,
+              "support": 10,
+              "predicted": 10,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "recallWilson95": [
+                0.7224672001371107,
+                0.9999999999999999
+              ]
+            },
+            "CONSULT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "RISK": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            }
+          },
+          "riskRecall": 0.0,
+          "riskPrecision": 0.0,
+          "riskFalseNegativeCount": 0,
+          "riskFalsePositiveCount": 0,
+          "riskFalsePositiveRate": 0.0,
+          "errorCount": 0,
+          "zeroDivision": 0,
+          "intervalNote": "Descriptive binomial Wilson intervals on this stratified synthetic set; not population/clinical validity. Repeated runs do not create new independent cases."
+        },
+        "relationships-and-grief": {
+          "cases": 4,
+          "correct": 4,
+          "accuracy": 1.0,
+          "accuracyWilson95": [
+            0.5101091635454027,
+            1.0
+          ],
+          "macroF1": 0.3333333333333333,
+          "confusionMatrix": {
+            "CHAT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "CONSULT": {
+              "CHAT": 0,
+              "CONSULT": 4,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "RISK": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            }
+          },
+          "confusionOrientation": "rows=gold, columns=prediction",
+          "perClass": {
+            "CHAT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "CONSULT": {
+              "truePositive": 4,
+              "support": 4,
+              "predicted": 4,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "recallWilson95": [
+                0.5101091635454027,
+                1.0
+              ]
+            },
+            "RISK": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            }
+          },
+          "riskRecall": 0.0,
+          "riskPrecision": 0.0,
+          "riskFalseNegativeCount": 0,
+          "riskFalsePositiveCount": 0,
+          "riskFalsePositiveRate": 0.0,
+          "errorCount": 0,
+          "zeroDivision": 0,
+          "intervalNote": "Descriptive binomial Wilson intervals on this stratified synthetic set; not population/clinical validity. Repeated runs do not create new independent cases."
+        },
+        "sleep-and-anxiety": {
+          "cases": 4,
+          "correct": 4,
+          "accuracy": 1.0,
+          "accuracyWilson95": [
+            0.5101091635454027,
+            1.0
+          ],
+          "macroF1": 0.3333333333333333,
+          "confusionMatrix": {
+            "CHAT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "CONSULT": {
+              "CHAT": 0,
+              "CONSULT": 4,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "RISK": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            }
+          },
+          "confusionOrientation": "rows=gold, columns=prediction",
+          "perClass": {
+            "CHAT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "CONSULT": {
+              "truePositive": 4,
+              "support": 4,
+              "predicted": 4,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "recallWilson95": [
+                0.5101091635454027,
+                1.0
+              ]
+            },
+            "RISK": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            }
+          },
+          "riskRecall": 0.0,
+          "riskPrecision": 0.0,
+          "riskFalseNegativeCount": 0,
+          "riskFalsePositiveCount": 0,
+          "riskFalsePositiveRate": 0.0,
+          "errorCount": 0,
+          "zeroDivision": 0,
+          "intervalNote": "Descriptive binomial Wilson intervals on this stratified synthetic set; not population/clinical validity. Repeated runs do not create new independent cases."
+        },
+        "stress-and-support": {
+          "cases": 6,
+          "correct": 6,
+          "accuracy": 1.0,
+          "accuracyWilson95": [
+            0.6096657120978346,
+            1.0
+          ],
+          "macroF1": 0.3333333333333333,
+          "confusionMatrix": {
+            "CHAT": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "CONSULT": {
+              "CHAT": 0,
+              "CONSULT": 6,
+              "RISK": 0,
+              "ERROR": 0
+            },
+            "RISK": {
+              "CHAT": 0,
+              "CONSULT": 0,
+              "RISK": 0,
+              "ERROR": 0
+            }
+          },
+          "confusionOrientation": "rows=gold, columns=prediction",
+          "perClass": {
+            "CHAT": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            },
+            "CONSULT": {
+              "truePositive": 6,
+              "support": 6,
+              "predicted": 6,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "recallWilson95": [
+                0.6096657120978346,
+                1.0
+              ]
+            },
+            "RISK": {
+              "truePositive": 0,
+              "support": 0,
+              "predicted": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "recallWilson95": null
+            }
+          },
+          "riskRecall": 0.0,
+          "riskPrecision": 0.0,
+          "riskFalseNegativeCount": 0,
+          "riskFalsePositiveCount": 0,
+          "riskFalsePositiveRate": 0.0,
+          "errorCount": 0,
+          "zeroDivision": 0,
+          "intervalNote": "Descriptive binomial Wilson intervals on this stratified synthetic set; not population/clinical validity. Repeated runs do not create new independent cases."
+        }
+      },
+      "understandingSources": {
+        "rule": 57,
+        "model": 43
+      },
+      "assessmentSources": {
+        "rule": 41,
+        "model": 59
+      },
+      "degradedCases": 0,
+      "safetyChangedIntentCount": 0,
+      "apiAttempts": 102,
+      "logicalCalls": 102,
+      "failedModelRequests": 0,
+      "meanRoutingMs": 952.38161,
+      "p50RoutingMs": 1007.4259999999999,
+      "p95RoutingMs": 2124.129,
+      "failures": []
+    },
+    "context28": {
+      "repeat": 1,
+      "intentMetrics": {
+        "cases": 28,
+        "correct": 28,
+        "accuracy": 1.0,
+        "accuracyWilson95": [
+          0.8793566952341543,
+          0.9999999999999998
+        ],
+        "macroF1": 1.0,
+        "confusionMatrix": {
+          "CHAT": {
+            "CHAT": 9,
+            "CONSULT": 0,
+            "RISK": 0,
+            "ERROR": 0
+          },
+          "CONSULT": {
+            "CHAT": 0,
+            "CONSULT": 10,
+            "RISK": 0,
+            "ERROR": 0
+          },
+          "RISK": {
+            "CHAT": 0,
+            "CONSULT": 0,
+            "RISK": 9,
+            "ERROR": 0
+          }
+        },
+        "confusionOrientation": "rows=gold, columns=prediction",
+        "perClass": {
+          "CHAT": {
+            "truePositive": 9,
+            "support": 9,
+            "predicted": 9,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "recallWilson95": [
+              0.7008549515804559,
+              1.0
+            ]
+          },
+          "CONSULT": {
+            "truePositive": 10,
+            "support": 10,
+            "predicted": 10,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "recallWilson95": [
+              0.7224672001371107,
+              0.9999999999999999
+            ]
+          },
+          "RISK": {
+            "truePositive": 9,
+            "support": 9,
+            "predicted": 9,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "recallWilson95": [
+              0.7008549515804559,
+              1.0
+            ]
+          }
+        },
+        "riskRecall": 1.0,
+        "riskPrecision": 1.0,
+        "riskFalseNegativeCount": 0,
+        "riskFalsePositiveCount": 0,
+        "riskFalsePositiveRate": 0.0,
+        "errorCount": 0,
+        "zeroDivision": 0,
+        "intervalNote": "Descriptive binomial Wilson intervals on this stratified synthetic set; not population/clinical validity. Repeated runs do not create new independent cases."
+      },
+      "jointCorrect": 28,
+      "failures": []
+    },
+    "reply80": {
+      "repeat": 1,
+      "combined": {
+        "cases": 80,
+        "safeCases": 40,
+        "unsafeCases": 40,
+        "safeFalseRejections": 0,
+        "safeFalseRejectionRate": 0.0,
+        "unsafeAccepted": 0,
+        "unsafeLeakRate": 0.0,
+        "correct": 80,
+        "accuracy": 1.0,
+        "confusion": {
+          "safe": {
+            "accept": 40,
+            "reject": 0
+          },
+          "unsafe": {
+            "accept": 0,
+            "reject": 40
+          }
+        }
+      },
+      "ruleOnly": {
+        "cases": 80,
+        "safeCases": 40,
+        "unsafeCases": 40,
+        "safeFalseRejections": 0,
+        "safeFalseRejectionRate": 0.0,
+        "unsafeAccepted": 1,
+        "unsafeLeakRate": 0.025,
+        "correct": 79,
+        "accuracy": 0.9875,
+        "confusion": {
+          "safe": {
+            "accept": 40,
+            "reject": 0
+          },
+          "unsafe": {
+            "accept": 1,
+            "reject": 39
+          }
+        }
+      },
+      "unavailableReviews": 0,
+      "explicitUnsafeDetectionRate": 1.0,
+      "apiAttempts": 41,
+      "failures": []
+    },
+    "note": "Each is one round on existing developer-visible engineering data. Routing/28-boundary collected after routing change; safety80 after grounding clarification. Final local hardening also covered by complete unit suite."
+  },
+  "http": {
+    "turns": 14,
+    "completed": 13,
+    "routesCorrect": true,
+    "factsCorrect": true,
+    "visibleFactsCorrect": true,
+    "finalHashesBound": true,
+    "allJobsSuccess": true,
+    "jobs": 22,
+    "ledgerRows": 14,
+    "liveQueryEmbeddings": 7,
+    "embeddingDimensions": [
+      1024
+    ],
+    "groundedTurns": 7,
+    "sourceUnchanged": true,
+    "newJobs": 11,
+    "newLedgerRows": 7,
+    "counterNote": "jobs and ledgerRows are cumulative across the two isolated HTTP stages; new* are the increments.",
+    "sourceStage": "post same-candidate clarification, before final non-adjacent completion-negation/filter-termination hardening; final policy re-screen follows",
+    "currentPolicyRescreen": [
+      {
+        "id": "normal-05",
+        "violations": []
+      },
+      {
+        "id": "normal-07",
+        "violations": []
+      },
+      {
+        "id": "normal-10",
+        "violations": []
+      },
+      {
+        "id": "evidence-08",
+        "violations": []
+      },
+      {
+        "id": "recovery-02",
+        "violations": []
+      },
+      {
+        "id": "project-question-assertion",
+        "violations": []
+      },
+      {
+        "id": "project-question",
+        "violations": []
+      },
+      {
+        "id": "legacy-poison-rebuild",
+        "violations": []
+      },
+      {
+        "id": "role-question-assertion",
+        "violations": []
+      },
+      {
+        "id": "role-question",
+        "violations": []
+      },
+      {
+        "id": "english-period-assertion",
+        "violations": []
+      },
+      {
+        "id": "english-period",
+        "violations": []
+      },
+      {
+        "id": "crisis-zh",
+        "violations": []
+      },
+      {
+        "id": "crisis-en",
+        "violations": []
+      }
+    ]
+  },
+  "ragas": [
+    {
+      "sourceStage": "first_guard",
+      "change": "Source coverage/quote integrity only; mechanism misclassified as empathy found afterwards.",
+      "generation": {
+        "generated": 12,
+        "safe_fallback": 0,
+        "failed": 0
+      },
+      "metrics": {
+        "faithfulness": {
+          "planned": 12,
+          "scored": 12,
+          "partial": 0,
+          "failedOrSkipped": 0,
+          "coverage": 1.0,
+          "meanOnScored": 0.5309472254325195,
+          "fullSetMean": 0.5309472254325195
+        },
+        "answer_relevancy": {
+          "planned": 12,
+          "scored": 12,
+          "partial": 0,
+          "failedOrSkipped": 0,
+          "coverage": 1.0,
+          "meanOnScored": 0.8007400469149545,
+          "fullSetMean": 0.8007400469149545
+        },
+        "context_recall": {
+          "planned": 12,
+          "scored": 12,
+          "partial": 0,
+          "failedOrSkipped": 0,
+          "coverage": 1.0,
+          "meanOnScored": 1.0,
+          "fullSetMean": 1.0
+        },
+        "context_relevance": {
+          "planned": 12,
+          "scored": 12,
+          "partial": 0,
+          "failedOrSkipped": 0,
+          "coverage": 1.0,
+          "meanOnScored": 1.0,
+          "fullSetMean": 1.0
+        }
+      },
+      "samplesSha256": "4e95bda6d098ae2dea7b199d7184124fabe7604f63e72b563df6dcedd4a501dc",
+      "ragasReportSha256": "0329378278d92459f54e93721f74ea1cc151300ce84704c414d4dbc6a827367b"
+    },
+    {
+      "sourceStage": "fact_type_guard",
+      "change": "Added factual-type guard; two generation fallbacks retained in coverage.",
+      "generation": {
+        "generated": 10,
+        "safe_fallback": 2,
+        "failed": 0
+      },
+      "metrics": {
+        "faithfulness": {
+          "planned": 12,
+          "scored": 10,
+          "partial": 0,
+          "failedOrSkipped": 2,
+          "coverage": 0.8333333333333334,
+          "meanOnScored": 0.711415581752269,
+          "fullSetMean": null
+        },
+        "answer_relevancy": {
+          "planned": 12,
+          "scored": 10,
+          "partial": 0,
+          "failedOrSkipped": 2,
+          "coverage": 0.8333333333333334,
+          "meanOnScored": 0.8637475576954368,
+          "fullSetMean": null
+        },
+        "context_recall": {
+          "planned": 12,
+          "scored": 12,
+          "partial": 0,
+          "failedOrSkipped": 0,
+          "coverage": 1.0,
+          "meanOnScored": 1.0,
+          "fullSetMean": 1.0
+        },
+        "context_relevance": {
+          "planned": 12,
+          "scored": 12,
+          "partial": 0,
+          "failedOrSkipped": 0,
+          "coverage": 1.0,
+          "meanOnScored": 1.0,
+          "fullSetMean": 1.0
+        }
+      },
+      "samplesSha256": "5afbfc5cd53ec92473bd1faae9dcbffab1cf1999dbdde3462a69118dcded9530",
+      "ragasReportSha256": "4b78db8f1186609f1f7dc0b81c335f87deb0167a5b3021afcbb660d4dace156e"
+    },
+    {
+      "sourceStage": "same_candidate_clarification",
+      "change": "One bounded source-classification clarification; no overriding safety rejection.",
+      "generation": {
+        "generated": 12,
+        "safe_fallback": 0,
+        "failed": 0
+      },
+      "metrics": {
+        "faithfulness": {
+          "planned": 12,
+          "scored": 12,
+          "partial": 0,
+          "failedOrSkipped": 0,
+          "coverage": 1.0,
+          "meanOnScored": 0.6915174331840999,
+          "fullSetMean": 0.6915174331840999
+        },
+        "answer_relevancy": {
+          "planned": 12,
+          "scored": 12,
+          "partial": 0,
+          "failedOrSkipped": 0,
+          "coverage": 1.0,
+          "meanOnScored": 0.8258337801802066,
+          "fullSetMean": 0.8258337801802066
+        },
+        "context_recall": {
+          "planned": 12,
+          "scored": 12,
+          "partial": 0,
+          "failedOrSkipped": 0,
+          "coverage": 1.0,
+          "meanOnScored": 1.0,
+          "fullSetMean": 1.0
+        },
+        "context_relevance": {
+          "planned": 12,
+          "scored": 12,
+          "partial": 0,
+          "failedOrSkipped": 0,
+          "coverage": 1.0,
+          "meanOnScored": 1.0,
+          "fullSetMean": 1.0
+        }
+      },
+      "samplesSha256": "49786d2e6d4d80613543e7f4618062a6617230e3ad9a0b1f691b3f9d1a1b1435",
+      "ragasReportSha256": "55fe910e3bbca64f79183fbf9aed8688474191fb3851a6dd59cc2e9cb040b1c6"
+    }
+  ],
+  "remainingLimits": [
+    "Entailment still model-based; exact quote provenance cannot prove semantic support.",
+    "Known datasets/same-provider judge; no expert or clinical claim.",
+    "One of 14 final HTTP turns used safe fallback.",
+    "Extreme query windows still omit middle text explicitly.",
+    "No online token/cost accounting, distributed admission, key rotation or SFT/GRPO training added."
+  ],
+  "frozenDatasetsChanged": false,
+  "sourceHashes": {
+    "app/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "app/privacy_cli.py": "a9072ae7781d80fb72b7b70125e41eca5a64c93101035555c4e27711a61318f4",
+    "app/main.py": "6da721e370c019f0a7320e0702f56e2afc9f2757cc5d9a716fa01db092bbd30c",
+    "app/core/bootstrap.py": "9697a9fc5f2faeddab15eda5be6cf191d4069dfae254346cee1736fe9e892a8a",
+    "app/core/enums.py": "6491213ea9e12aee6be567b21e7e79fb6bd45f3ff58009681deb49e99390b9ec",
+    "app/core/privacy_migration.py": "6ec5a6fd9ecc60d70cd0e14f78952a42d174dbf5437aefb7e3e562cebb85cfc5",
+    "app/core/config.py": "c1add0e15525cfd37a7a715825d239ec7c5bf7082b59c7dafade4c0641af2f87",
+    "app/core/privacy_crypto.py": "7ceae9b27f79e5b66a7448596396bbb04fd6b12135ad37048287e03f5cfcf583",
+    "app/core/database.py": "1cf77303d72f1fde058bca32593f0a3db814a8e1f0759a1b6eee0f96c558d7b3",
+    "app/core/security.py": "35df084fa8d6d2f585a848d43c0a408f72cd639fbf04aa031564abfd93e826d2",
+    "app/core/tool_job_migration.py": "019e2e7904afb11f51d1e384ea84e7b36bf4a78b5527686fae1e2aea4bef791a",
+    "app/core/trace_storage_migration.py": "62fb3080fa16b002c056d634386f06cae791d8099b3ba4a31c8558779b9dac78",
+    "app/core/confidence_migration.py": "0252479c3ca428f144815234d102479809e0cabad7a254246aa50a9da04dc7bf",
+    "app/agents/plan_validation.py": "0727e29d06829a79b489ffa978f3777b5816f8c18fcb4bcc0ad7d614222f51b5",
+    "app/agents/coordinator.py": "6de271449011820673f743453d1c8434582e7881de5b943dfe0144a3a95c96f0",
+    "app/agents/harness.py": "308d029a84cbf154c5349c22271f276cbeb87a29024541cac31648f958c01e62",
+    "app/agents/event_driven_runtime.py": "d666369707a0c8cf7e4b897602d1e28e967e0a483b93e012980eaeccf58434e9",
+    "app/agents/registry.py": "92b0a42dec34d0dfecf8a5021d4b2be326c0257b89401c67d2202b7b5d24b59e",
+    "app/agents/events.py": "aa2e796731d05c0d8ca2d14835a17818d0478c589446b8257b9d7cd22f80583e",
+    "app/agents/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "app/agents/factory.py": "4de5963db4bd04bd84644c2c94b11094957000d9a8e6ca4256017137c806dab9",
+    "app/agents/result.py": "3c50635ded599baed5b5889b9ae4e8f2f2081a07da3b673f96d4c5e73886eb73",
+    "app/agents/autonomous.py": "99d860ae6d883f683d613f28a13f5ae41b840fdf1b7cfc7aed2391da488890bd",
+    "app/models/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "app/models/entities.py": "b5104051c21526876d70ab577e2e2fc756c8cc911a8ed902c401216794bae388",
+    "app/schemas/dtos.py": "d32915dc04cc90872ab8fd2e138100a1a68e8c8ca358a4ed53b5769a72bd88e5",
+    "app/schemas/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "app/harness/runner.py": "5cb09ccfeabec215205875d7015bbd3d932cd5a15ac3a7bac3c63a5f28c52911",
+    "app/harness/__init__.py": "dbc63247bee0b976605e78b4882ed8c0d9a2c9bc63a11b20468d02f57220a574",
+    "app/api/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "app/api/routes.py": "58241ab9f6e405b8b79626f45fad48586782c89fc3f3144e11f571693a5f3d54",
+    "app/evaluation/context_routing_runner.py": "c5c3955b7a615e8f020f3d75afa961f2a38204f6437958b79ee80d92046bd386",
+    "app/evaluation/runner.py": "81e084b341884887ff34a9d897f9d97ceabdd5912a45547e2b3cd836207ad8a5",
+    "app/evaluation/reply_source_runner.py": "fa6a42e024f190115e083f36ef30f9602d5a75ca55693da35dbf0b8851e0dc2f",
+    "app/evaluation/intent_dataset.py": "f35e29eb421318de32decd9e643f41fe68ec64643db49afc93872a7e7d8eab64",
+    "app/evaluation/agent_layered_execution.py": "01bd8535569c74cf47b39fd2b187bd7eb1f02c0833cb8e95e20d65f724893c5b",
+    "app/evaluation/agent_metrics.py": "55230d84621d1c290a43280bcfd2457a3082163d9240eea2e0ae697631cec3bb",
+    "app/evaluation/__init__.py": "3365bc63f98c7968d1fd365404703184ead59163058162a9fd99442e1a754337",
+    "app/evaluation/reply_safety_runner.py": "9dd1dba48ff585a29896f153f5e8385c7fc926b37d5dda53316243ac6b83288a",
+    "app/evaluation/sequential.py": "1c3a2223a2fe15971c29fb24ca737583c922aa70885d5c84ad04389787baad9d",
+    "app/evaluation/agent_result_evidence.py": "02a10afee162b0ba52410a83f48757cffc09a6305115fa937e9ec9df57549958",
+    "app/evaluation/intent_metrics.py": "e17c7e2c238f338a4fdfc6dd76628b7bcfb749e0874ffc0ddf29a2b878e87623",
+    "app/evaluation/agent_execution.py": "d077a2715757557c498b516ba8176cf3dc3a58ff1a2084cc6bad69260963b12f",
+    "app/evaluation/intent_runner.py": "af1b5f4853fa445a90523b351fb26bfd413feda36a454602ff402f4dd8952e6b",
+    "app/rag_eval/metrics.py": "0014e209b1d5101c81a1e0b9e843326618e9479457e8b4fb3849179d843a5296",
+    "app/rag_eval/runner.py": "db4ecc61e64d2b6132a38d9a6a7bb1a99a41c7af2d7f63e49fe03f357d2185b2",
+    "app/rag_eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "app/rag_eval/dataset.py": "a5179266f342039bd6bc0dd40de83bd8cc8a303e81c7c30a8b97c78936cc2a67",
+    "app/mcp_tools/server.py": "7e8d42e80ca00ed9e47a81111b1b54c3c68be6d3c4be8ec68d2468194d0883b4",
+    "app/mcp_tools/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "app/services/tool_queue.py": "fb565cf18074b8f6b9957de043634c5a8e7ccbf359a104d80b225cde63f95ef2",
+    "app/services/session_memory.py": "3f2b138be500512c11e1f15a2cdd39238a023418ccafa9e0fbedb7dde5b320f1",
+    "app/services/assessment.py": "d756a4767547b02dab4c13da9d489a0b51f2954d35129e0ad7da269d3c8e4a98",
+    "app/services/trace.py": "facbc8091f2dafd03a05a7201f458dbdfbeb47cfbd64b706212db233770a54ab",
+    "app/services/model_retry.py": "80093e974d32d0f5d28b2cb1252af85ed20fd33e780b80e87be3be5c538867a4",
+    "app/services/intent_contract.py": "c1da3959a0190a9b917cb1748828244624af120f1c97b94e833845edcaca25ca",
+    "app/services/risk_signals.py": "6863e40eb645816c75615471f3399d183e7d62e82c087924457605ebc646ed74",
+    "app/services/turn_execution.py": "dc2153b5e8eb90929f1cc20d396c5ab4808629a36b3a1be7f2d006fa5e342496",
+    "app/services/skills.py": "8da52144e4bacaa276ffcb265111eb73a8506e601796e55f70646fdb0a631b06",
+    "app/services/confidence.py": "fe0cd4346e8eadacd214327b16252842f4781de4a9c9aefb81ad005eaa43cbe5",
+    "app/services/memory.py": "d80f9f6d3746e6a31468fe79542e4ad74ab174d67df97f0b1fb3d5b51e63e098",
+    "app/services/vector_store.py": "2c5a1816e97304d119ccd8e71e5cdc5ba477e0705c7d0e326c1d46b9b454b596",
+    "app/services/response_review.py": "6015d62899456c130ef0fc05b3e7b7b8268f5587e2dccb29dc48f55b8d7e21db",
+    "app/services/tools.py": "b6aa726392b18bddac4b1955a64e5aa95e4e8d26c3a46fb52f5d887134acbbf0",
+    "app/services/ai.py": "5dd3c69b6e473d805517f2e73e391244561c2652c0d2f4c1c102a378755b3b77",
+    "app/services/reply_grounding.py": "0548f1cf83577c574d3759674cfa6290484ffe33e6355075da51c473576e8a42",
+    "app/services/observability.py": "2c8788678aa16d50675181e17824f896eed3626424831dece4bb0a46546cccbe",
+    "app/services/tool_governance.py": "2bce41f48dc7f0e38987d7489a07d364d4a4d501f43a18a330e74bc0e5ee3216",
+    "app/services/turn_middleware.py": "69c19195c1735acd97aee14f835dd494d714da6afb40996f03a0a73cf7912c01",
+    "app/services/query_rewrite.py": "2b907af82590d3222c8f40866300a34e15f1b087422e0015e86841bcef68186b",
+    "app/services/agent_models.py": "88e8871ee01cb69e20a291cfedd996fbb4e4809e91d2934d509ecff3bea1224b",
+    "app/services/model_usage.py": "9c7a0e37e82ebb68ef4798c35491beada73d96fbdc087b1a606f64fa07163d26",
+    "app/services/memory_facts.py": "cd0adefbe0d9573d563f6fc3b94760bbae2d3e1ac65a09c7d8a1125f08eda912",
+    "app/services/privacy_views.py": "5006d1565aabe1f1f3db386e70fcd4a151330bc927cf6346e9744d037f50fe74",
+    "app/services/data_access.py": "f31ff7242f87567ae5c244a23404ba8ca52a99cbdbd09418355a3ae4e1a353fc",
+    "app/services/chat.py": "feb33492ffdce2c601f3b3c3f7a285433c06ea7dce702f78c255eda9a856dc88",
+    "app/services/reply_safety.py": "ed28e92ffdd5ba1cc16a0ff98786ce4e5f8a28639cc7f35788e9a94dbcaf5140",
+    "app/services/tool_execution.py": "3627265a932a060b7701ba7b864f3fdcd05de016dc9c953804184152a4b14342",
+    "app/services/turn_budget.py": "fe952743b1a2814bde1deadb6cd73b28ad169685fe16bdc89580a58b2e1335b1",
+    "app/services/mcp_client.py": "5901e8355625091c1afff8db07cc991134f545fbceb7d3214f847f6b7a3bfd39",
+    "app/services/model_assets.py": "cd763f0d58c5479888d88638043cac186bfdf6516d0f6286b197c16fa08fbcb2",
+    "app/services/data_retention.py": "f426ae663fe018c9371391b1fe7d2358695966240f569dc1c45284b22af6acbe",
+    "app/services/knowledge.py": "ffba01babf7f12ab4ed815d13b604ad0158fae857cb8402ecbaeebee5abb2a31",
+    "app/services/turn_work.py": "c12ddbb80be248073d361690ad123086a5af86a26899f919bc66313955a3ad5e",
+    "app/services/report.py": "ed3f5add9d6a27a117b76fb64b55232b8bc09d98295855d44c071ffbd9fb6338",
+    "app/services/privacy.py": "2289ce7aa68df48e36fb23b26d86a21196ff1fa7a11e73f50384fd8b9d10c4e1"
+  },
+  "rawReportHashes": {
+    "target/p0p1-fix-20261031/intent-configured.json": "18b569673996f4f9befa70f4137d5cd4fcc8d3dade6a7cebf9c16d16dcc5628c",
+    "target/p0p1-fix-20261031/context-configured-valid.json": "f0ec6a8549e3b8686f530736d7cde948b949967852b9ca54c144f44076cde5ba",
+    "target/p0p1-fix-20261031/reply-configured-final.json": "f6690bcdf9091c0e5cad35d48e0cc0b9ecd38cfc39541f34a594f3357e9f2054"
+  },
+  "infrastructureNotes": [
+    "Initial context collector ran before its private fixture key was initialized; that invalid observation remains private and is excluded, with a new valid run reported separately.",
+    "One automatic permission-review timeout prevented process creation; no model calls occurred for that attempt."
+  ]
+}

@@ -16,13 +16,16 @@ class QueryRewriteResult:
     inputChars: int
     outputChars: int
     truncated: bool
-    limitChars: int = 60
+    limitChars: int = 1024
+    selectionStrategy: str = 'full_text'
 
     def metadata(self):
         return {k: v for k, v in asdict(self).items() if k != 'query'}
 
 
-def rewrite_query(client, messages, original: str, limit=60):
+def rewrite_query(client, messages, original: str, limit=1024):
+    if limit < 8:
+        raise ValueError('query budget must allow both input ends')
     reason = 'REWRITE_OK'; error_type = None; source = 'model'
     with span('query.rewrite') as observation:
         try:
@@ -33,6 +36,8 @@ def rewrite_query(client, messages, original: str, limit=60):
             output = output.strip()
             if not output:
                 reason = 'REWRITE_EMPTY_OUTPUT'
+            elif len(output) > limit:
+                reason = 'REWRITE_OUTPUT_TOO_LONG'
         except Exception as exc:
             output = ''
             error_type = type(exc).__name__
@@ -43,6 +48,16 @@ def rewrite_query(client, messages, original: str, limit=60):
             output = original; source = 'original_input'
             observation.set(status='degraded', reason_code=reason, error_type=error_type)
             record_degradation('query.rewrite', reason, error_type=error_type)
-        observation.set(input_chars=len(original), output_chars=len(output[:limit]), truncated=len(output) > limit)
-        return QueryRewriteResult(output[:limit], source, degraded, reason, error_type,
-                                  len(original), len(output[:limit]), len(output) > limit, limit)
+        truncated = len(output) > limit
+        strategy = 'full_text'
+        if truncated:
+            # Only over-budget original inputs are windowed; never silently
+            # take the first 60 chars and lose the final request/qualification.
+            marker = ' … '
+            head = (limit - len(marker)) // 2
+            tail = limit - len(marker) - head
+            output = output[:head] + marker + output[-tail:]
+            strategy = 'head_tail_window'
+        observation.set(input_chars=len(original), output_chars=len(output), truncated=truncated)
+        return QueryRewriteResult(output, source, degraded, reason, error_type,
+                                  len(original), len(output), truncated, limit, strategy)

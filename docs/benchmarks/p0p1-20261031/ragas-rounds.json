@@ -1,0 +1,192 @@
+{
+  "historicalBaseline": "2026-10-28; 12 developer-known RAG component questions",
+  "historicalBaselineSha256": "494d97484b7dcbfbbd680e4f4883b56a0cc09ec1c0dfb165b6aef6a8b13ea5f3",
+  "historicalBaselineMetrics": {
+    "faithfulness": {
+      "planned": 12,
+      "scored": 12,
+      "partial": 0,
+      "failedOrSkipped": 0,
+      "coverage": 1.0,
+      "meanOnScored": 0.5488869372462503,
+      "fullSetMean": 0.5488869372462503
+    },
+    "answer_relevancy": {
+      "planned": 12,
+      "scored": 12,
+      "partial": 0,
+      "failedOrSkipped": 0,
+      "coverage": 1.0,
+      "meanOnScored": 0.8284865928020068,
+      "fullSetMean": 0.8284865928020068
+    },
+    "context_recall": {
+      "planned": 12,
+      "scored": 12,
+      "partial": 0,
+      "failedOrSkipped": 0,
+      "coverage": 1.0,
+      "meanOnScored": 1.0,
+      "fullSetMean": 1.0
+    },
+    "context_relevance": {
+      "planned": 12,
+      "scored": 12,
+      "partial": 0,
+      "failedOrSkipped": 0,
+      "coverage": 1.0,
+      "meanOnScored": 1.0,
+      "fullSetMean": 1.0
+    }
+  },
+  "rounds": [
+    {
+      "sourceStage": "first_guard",
+      "change": "Source coverage/quote integrity only; mechanism misclassified as empathy found afterwards.",
+      "generation": {
+        "generated": 12,
+        "safe_fallback": 0,
+        "failed": 0
+      },
+      "metrics": {
+        "faithfulness": {
+          "planned": 12,
+          "scored": 12,
+          "partial": 0,
+          "failedOrSkipped": 0,
+          "coverage": 1.0,
+          "meanOnScored": 0.5309472254325195,
+          "fullSetMean": 0.5309472254325195
+        },
+        "answer_relevancy": {
+          "planned": 12,
+          "scored": 12,
+          "partial": 0,
+          "failedOrSkipped": 0,
+          "coverage": 1.0,
+          "meanOnScored": 0.8007400469149545,
+          "fullSetMean": 0.8007400469149545
+        },
+        "context_recall": {
+          "planned": 12,
+          "scored": 12,
+          "partial": 0,
+          "failedOrSkipped": 0,
+          "coverage": 1.0,
+          "meanOnScored": 1.0,
+          "fullSetMean": 1.0
+        },
+        "context_relevance": {
+          "planned": 12,
+          "scored": 12,
+          "partial": 0,
+          "failedOrSkipped": 0,
+          "coverage": 1.0,
+          "meanOnScored": 1.0,
+          "fullSetMean": 1.0
+        }
+      },
+      "samplesSha256": "4e95bda6d098ae2dea7b199d7184124fabe7604f63e72b563df6dcedd4a501dc",
+      "ragasReportSha256": "0329378278d92459f54e93721f74ea1cc151300ce84704c414d4dbc6a827367b"
+    },
+    {
+      "sourceStage": "fact_type_guard",
+      "change": "Added factual-type guard; two generation fallbacks retained in coverage.",
+      "generation": {
+        "generated": 10,
+        "safe_fallback": 2,
+        "failed": 0
+      },
+      "metrics": {
+        "faithfulness": {
+          "planned": 12,
+          "scored": 10,
+          "partial": 0,
+          "failedOrSkipped": 2,
+          "coverage": 0.8333333333333334,
+          "meanOnScored": 0.711415581752269,
+          "fullSetMean": null
+        },
+        "answer_relevancy": {
+          "planned": 12,
+          "scored": 10,
+          "partial": 0,
+          "failedOrSkipped": 2,
+          "coverage": 0.8333333333333334,
+          "meanOnScored": 0.8637475576954368,
+          "fullSetMean": null
+        },
+        "context_recall": {
+          "planned": 12,
+          "scored": 12,
+          "partial": 0,
+          "failedOrSkipped": 0,
+          "coverage": 1.0,
+          "meanOnScored": 1.0,
+          "fullSetMean": 1.0
+        },
+        "context_relevance": {
+          "planned": 12,
+          "scored": 12,
+          "partial": 0,
+          "failedOrSkipped": 0,
+          "coverage": 1.0,
+          "meanOnScored": 1.0,
+          "fullSetMean": 1.0
+        }
+      },
+      "samplesSha256": "5afbfc5cd53ec92473bd1faae9dcbffab1cf1999dbdde3462a69118dcded9530",
+      "ragasReportSha256": "4b78db8f1186609f1f7dc0b81c335f87deb0167a5b3021afcbb660d4dace156e"
+    },
+    {
+      "sourceStage": "same_candidate_clarification",
+      "change": "One bounded source-classification clarification; no overriding safety rejection.",
+      "generation": {
+        "generated": 12,
+        "safe_fallback": 0,
+        "failed": 0
+      },
+      "metrics": {
+        "faithfulness": {
+          "planned": 12,
+          "scored": 12,
+          "partial": 0,
+          "failedOrSkipped": 0,
+          "coverage": 1.0,
+          "meanOnScored": 0.6915174331840999,
+          "fullSetMean": 0.6915174331840999
+        },
+        "answer_relevancy": {
+          "planned": 12,
+          "scored": 12,
+          "partial": 0,
+          "failedOrSkipped": 0,
+          "coverage": 1.0,
+          "meanOnScored": 0.8258337801802066,
+          "fullSetMean": 0.8258337801802066
+        },
+        "context_recall": {
+          "planned": 12,
+          "scored": 12,
+          "partial": 0,
+          "failedOrSkipped": 0,
+          "coverage": 1.0,
+          "meanOnScored": 1.0,
+          "fullSetMean": 1.0
+        },
+        "context_relevance": {
+          "planned": 12,
+          "scored": 12,
+          "partial": 0,
+          "failedOrSkipped": 0,
+          "coverage": 1.0,
+          "meanOnScored": 1.0,
+          "fullSetMean": 1.0
+        }
+      },
+      "samplesSha256": "49786d2e6d4d80613543e7f4618062a6617230e3ad9a0b1f691b3f9d1a1b1435",
+      "ragasReportSha256": "55fe910e3bbca64f79183fbf9aed8688474191fb3851a6dd59cc2e9cb040b1c6"
+    }
+  ],
+  "policy": "Sequential code changes on known development questions; not choose-best repeats or a controlled causal ablation. All stages retained. No clinical/expert claim."
+}

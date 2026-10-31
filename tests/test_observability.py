@@ -131,17 +131,17 @@ class QueryRewriteTests(unittest.TestCase):
                 if isinstance(value, Exception): client.complete.side_effect = value
                 else: client.complete.return_value = value
                 result = rewrite_query(client, [], '原始问题' * 30)
-                self.assertEqual(result.query, ('原始问题' * 30)[:60])
+                self.assertEqual(result.query, '原始问题' * 30)
                 self.assertEqual(result.reasonCode, code); self.assertTrue(result.degraded)
-                self.assertTrue(result.truncated)
+                self.assertFalse(result.truncated)
                 self.assertNotIn('query', result.metadata())
                 self.assertEqual(state.snapshot()['degradations'][0]['reasonCode'], code)
 
-    def test_success_keeps_existing_query_limit_without_false_degradation(self):
+    def test_success_keeps_full_query_within_declared_budget(self):
         client = Mock(); client.complete.return_value = ' 检索词 ' * 30
         result = rewrite_query(client, [], '原始输入')
-        self.assertEqual(result.query, (' 检索词 ' * 30).strip()[:60])
-        self.assertTrue(result.truncated); self.assertFalse(result.degraded)
+        self.assertEqual(result.query, (' 检索词 ' * 30).strip())
+        self.assertFalse(result.truncated); self.assertFalse(result.degraded)
         self.assertEqual(result.source, 'model')
 
 

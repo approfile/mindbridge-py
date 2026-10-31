@@ -5,13 +5,45 @@ from dataclasses import dataclass,field
 
 from app.schemas.dtos import AiMessage
 
-POLICY_VERSION='reply-safety-v2'
+POLICY_VERSION='reply-safety-v3'
 _QUOTE=re.compile(r'“[^”]*”|「[^」]*」|"[^"\n]*"|‘[^’]*’')
 _CONTACT=re.compile(r'联系|求助|找|告诉|走到|\bcontact\b|\bcall\b|reach out|talk to|get in touch|connect with|\bfind\b|\bask\b',re.I)
 _HUMAN=re.compile(r'可信任|信任的人|信得过|朋友|室友|同学|家人|父母|辅导员|心理中心|咨询师|医生|紧急服务|急救|保卫|任何人|所有人|现实支持|trusted|friend|family|counselor|counsellor|emergency|someone you trust|anyone',re.I)
 _NEG_ACTION=re.compile(r'(?:不要|不必|无需|不用|别|不需要|不能|禁止|不允许|没必要)(?:再|去|马上|立刻|自行)?$|\b(?:do not|don\x27t|never|must not|should not|shouldn\x27t)\s*$',re.I)
 _SAFETY=re.compile(r'安全(?:最重要|优先|第一)|(?:确保|确认|保证|注意).{0,4}安全|去.{0,12}(?:有人|有他人|人多).{0,6}(?:地方|身边|场所)|不要(?:独自|一个人)|别(?:独处|一个人)|(?:把|将).{0,16}(?:物品|东西).{0,6}(?:移远|放远|移开)|(?:离开|远离).{0,14}(?:危险|伤害|物品|场所)|(?:去|走到).{0,8}(?:室友|同学|朋友).{0,4}身边|safety (?:comes first|is (?:the )?(?:priority|most important))|(?:stay|keep yourself) safe|move to.{0,20}(?:people|others)|(?:do not|don\x27t) (?:stay|be) alone',re.I)
 _NEXT=re.compile(r'请|先|马上|现在|立刻|可以|去|走到|把|将|\bnow\b|\bplease\b|\bmove\b|\bcontact\b',re.I)
+_PROTECTION=re.compile(r'去.{0,12}(?:有人|有他人|人多).{0,6}(?:地方|身边|场所)|'
+                       r'不要(?:独自|一个人)|别(?:独处|一个人)|'
+                       r'(?:把|将).{0,20}(?:物品|东西).{0,8}(?:移远|放远|移开)|'
+                       r'(?:离开|远离).{0,14}(?:危险|伤害|物品|场所)|'
+                       r'(?:去|走到).{0,8}(?:室友|同学|朋友).{0,4}身边|'
+                       r'move to.{0,30}(?:people|others)|(?:do not|don\x27t) (?:stay|be) alone|'
+                       r'(?:move|put|keep).{0,24}(?:dangerous|harm|objects|items).{0,20}(?:away|reach)',re.I)
+_ACTION_WORDS=r'通知|联系|发送|发出|预约|安排|转交|提交|报警|建档|创建|登记'
+_COMPLETION=re.compile(
+    rf'(?:我(?:们|这边)?|系统|平台)(?:已经|已|刚刚|刚才).{{0,16}}?(?:{_ACTION_WORDS})|'
+    rf'(?:已经|已)(?:为你|帮你|替你).{{0,12}}?(?:{_ACTION_WORDS})|'
+    rf'(?:已经|已)(?:{_ACTION_WORDS})|'
+    r'(?:邮件|预警|通知|消息|预约|个案)(?:已经|已|现已)?(?:成功|送达|发出|发送成功|完成|建立|安排好了)|'
+    r'\b(?:i|we|the system)\s*(?:(?:have|has|\x27ve|\u2019ve)\s*)?(?:already\s+)?'
+    r'(?:notified|contacted|sent|booked|scheduled|arranged|alerted|submitted|created|informed|emailed|called)\b|'
+    r'\b(?:the |your )?(?:appointment|alert|notification|email|message|case)\s+'
+    r'(?:has been|was|is|has already been)\s+(?:sent|booked|scheduled|confirmed|created|delivered)\b',re.I)
+
+
+def unverified_completion(part):
+    for match in _COMPLETION.finditer(part):
+        prefix=part[:match.start()].strip()
+        if re.search(r'(?:没有|并未|尚未|未能|无法|不能|不会|不曾)(?:真的|确实|替你|为你|帮你|实际|亲自|能够|能力|办法|成功)*$|'
+                     r'(?:不|不能|不应|不会)(?:声称|说|表示|确认|承诺)(?:我|我们|系统)?$|'
+                     r'(?:没说|没声称|你说|你提到)(?:我|我们|系统)?$|'
+                     r'(?:如果|假如|是否|倘若)(?:我|我们|系统)?$|'
+                     r'\b(?:if|whether|when|once|cannot confirm|can\x27t confirm|do not claim|did not say|never said)(?: that)?$',prefix,re.I):continue
+        if re.search(r'没有|并未|尚未|未能|无法',match.group()):continue
+        if prefix.endswith(('你','您')) or re.search(r'\byou\s*$',prefix,re.I):continue
+        if re.match(r'(?:之后|以后|后|时|前)',part[match.end():]):continue
+        return True
+    return False
 
 
 def reply_policy(risk):
@@ -24,19 +56,32 @@ def reply_policy_message(risk):
     text=('直接回应学生，不输出审核过程或后台字段。不诊断疾病、不指导自行用药、不羞辱，'
           '不隔绝现实支持或承诺AI是唯一支持。只能引用检索资料中可追溯的具体联系方式；'
           '资料缺失时引导核对学校官方渠道，不编造电话或网址。不声称已完成通知、预约或预警。')
-    if risk=='HIGH':text+='先关注当前安全，给出一个立即可做的保护行动，并肯定地引导联系现实中可信任的人或当地紧急服务。'
+    if risk=='HIGH':text+=('先回应当下感受，再给出具体可执行的保护行动（例如去有人陪伴的地方、暂时远离危险物品），'
+                          '肯定地引导现在联系现实支持；若有即时危险或已经受伤，应引导当地紧急服务。'
+                          '用一个简短问题确认是否独处或有人可联系；不能只说安全很重要。')
     return AiMessage(role='system',content=text)
 
 
-def trusted_reply_evidence(outcome):
-    texts=[];sources=[]
-    for item in getattr(outcome,'retrieved_knowledge',[]) or []:
+def bounded_references(items, max_chars=8000):
+    references=[];remaining=max_chars
+    for item in items or []:
         content=getattr(item,'content','');source=getattr(item,'source','')
         if not isinstance(content,str) or not isinstance(source,str) or not source.strip():continue
-        texts.append(content)
-        sources.append({'source':source,'chunkId':getattr(item,'chunk_id',None),
-                        'contentSha256':hashlib.sha256(content.encode()).hexdigest()})
-    return '\n'.join(texts)[:8000],sources
+        if references:remaining-=1
+        if remaining<=0:break
+        included=content[:remaining]
+        if not included.strip():continue
+        references.append({'id':f'R{len(references)+1}','source':source,
+                           'chunkId':getattr(item,'chunk_id',None),'content':included})
+        remaining-=len(included)
+    return references
+
+
+def trusted_reply_evidence(outcome):
+    references=bounded_references(getattr(outcome,'retrieved_knowledge',[]))
+    return '\n'.join(r['content'] for r in references),[
+        {'referenceId':r['id'],'source':r['source'],'chunkId':r['chunkId'],
+         'contentSha256':hashlib.sha256(r['content'].encode()).hexdigest()} for r in references]
 
 
 def clauses(text):
@@ -66,7 +111,7 @@ def crisis_elements(text):
             if indirect_negative or _NEG_ACTION.search(part[max(0,action.start()-18):action.start()].strip()):negative_support=True
             else:positive_support=True
         if _HUMAN.search(part) and re.search(r'(?:请|让).{0,14}(?:陪你|陪伴|陪着|在身边)',part):positive_support=True
-    safety=any(not _NEG_ACTION.search(part[:match.start()].strip()) for part in parts for match in _SAFETY.finditer(part))
+    safety=any(not _NEG_ACTION.search(part[:match.start()].strip()) for part in parts for match in _PROTECTION.finditer(part))
     next_step=any(_NEXT.search(part) and (_CONTACT.search(part) or _SAFETY.search(part)) for part in parts)
     return {'safetyAction':safety,'realWorldSupport':positive_support,
             'immediateNextStep':next_step,'negatedSupport':negative_support}
@@ -122,9 +167,7 @@ def assess_reply(text,risk,evidence=''):
                 add('EXCLUSIVE_DEPENDENCE','support.exclusive-dependence')
         for match in re.finditer(r'(?:继续|试着|可以|应该|建议|不妨).{0,8}(?:伤害自己|自残|自杀|伤害别人|伤人)',part):
             if not _NEG_ACTION.search(part[:match.start()].strip()):add('DANGEROUS_GUIDANCE','support.harm-encouragement')
-        if re.search(r'我(?:已经|已).{0,8}(?:通知|发送|发出)|已为你(?:预约|通知)|预约成功|(?:邮件|预警).{0,8}(?:已|发送成功)|'
-                     r'\bi have already (?:notified|sent|booked)',part,re.I):
-            if not re.search(r'没有|不能|不会|尚未|未能|不声称|not ',part,re.I):add('UNSUPPORTED_CLAIM','actions.unverified-completion')
+        if unverified_completion(part):add('UNSUPPORTED_CLAIM','actions.unverified-completion')
         if re.search(r'绝对保密|永远保密|绝不会告诉任何人|complete secrecy forever',part,re.I):
             if not re.search(r'不能承诺|无法承诺|不承诺|不会承诺|不能保证|无法保证',part):add('UNSUPPORTED_CLAIM','actions.absolute-confidentiality-promise')
     if result.crisis['negatedSupport'] and (not result.crisis['realWorldSupport'] or re.search(r'(?:不要|别|不必).{0,4}(?:联系|告诉).{0,5}(?:任何(?:可信任的)?人|所有人)',plain)):
