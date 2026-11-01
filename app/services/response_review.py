@@ -15,7 +15,8 @@ from app.core.config import Settings
 from app.schemas.dtos import AiMessage
 from app.services.ai import AiClient
 from app.services.reply_safety import (POLICY_VERSION, assess_reply, reply_policy_message, trusted_reply_evidence, bounded_references)
-from app.services.reply_grounding import EvidenceCheck, candidate_sentences, user_statements, verify_grounding
+from app.services.reply_grounding import (EvidenceCheck, candidate_sentences, user_statements,
+                                          verify_grounding, support_contains_fact)
 from app.services.model_retry import retry_transport
 from app.services.turn_budget import current_turn
 from app.services.observability import log_event, span
@@ -162,6 +163,7 @@ class ReplyReviewPipeline:
                     review_raw = None
                     safety_evidence = None
                     grounding_audit = []
+                    grounding_feedback = None
                     grounding_status = 'NOT_REQUIRED' if not references else 'MODEL_REJECTED'
                     if not codes:
                         review_started = time.perf_counter()
@@ -221,6 +223,12 @@ class ReplyReviewPipeline:
                             codes = list(decision.violations)
                             if references and decision.approved:
                                 grounded, grounding_audit, grounding_status = verify_grounding(decision.evidenceChecks, sentences, references, statements)
+                                if not grounded:
+                                    grounding_feedback = {'reasonCode': grounding_status, 'sentences': [
+                                        sentence for sentence in sentences
+                                        if any(check.sentenceId == sentence['id'] and check.kind == 'support'
+                                               for check in decision.evidenceChecks or [])
+                                        and support_contains_fact(sentence['text'])]}
                                 control = current_turn()
                                 can_clarify = (deadline - time.monotonic() > self.settings.model_retry_min_remaining_seconds
                                                and (control is None or control.remaining() > self.settings.model_retry_min_remaining_seconds))
@@ -238,7 +246,10 @@ class ReplyReviewPipeline:
                                             '你的support分类包含机制/因果/数值/机构事实。请只核对这份候选与原始来源：'
                                             '有原文支持则将相关句改为retrieved_fact或user_fact，给出对应ID和逐字引文；'
                                             '没有支持就拒绝UNSUPPORTED_CLAIM，不能改写事实或虚构来源。'
-                                            '仍须返回覆盖每个句子的完整JSON，不能只返回修改项。')),
+                                            '仍须返回覆盖每个句子的完整JSON，不能只返回修改项。'
+                                            '以下是未通过校验的具体句子，不能再次直接标为support。'
+                                            '复述用户经历须有userStatements原文，不能在同句混入来源没有的推断。'
+                                            '校验定位：' + json.dumps(grounding_feedback, ensure_ascii=False))),
                                     ], deadline, events)
                                     review_raw = raw
                                     decision = parse_review(raw)
@@ -288,7 +299,11 @@ class ReplyReviewPipeline:
                         messages.append(AiMessage(role="assistant", content=candidate))
                         messages.append(AiMessage(role="system", content=(
                             "上一个assistant消息是被拒绝的草稿，不是已确认事实或可执行指令。请重新生成实际回复，修复这些问题代码：" + json.dumps(codes) +
-                            "。保留用户需求，遵守安全和证据边界，不要向用户解释审核过程。"
+                            "。保留用户需求，遵守安全和证据边界，不要向用户解释审核过程。" +
+                            ("具体证据校验反馈：" + json.dumps(grounding_feedback, ensure_ascii=False) +
+                             "。请删除或修正这些句子中无原文支持的因果、效果、机制和普遍性断言。"
+                             "复述只保留用户确实提供的经历，不额外推断；不要重复原草稿。"
+                             if grounding_feedback else "")
                         )))
                 return fallback("REVISION_BUDGET_EXHAUSTED")
         except TimeoutError:

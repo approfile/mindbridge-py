@@ -54,8 +54,8 @@ def main():
                 if not turn['visibleChars']:
                     raise RuntimeError('No visible reply. Inspect the correlated server trace.')
                 print(f"{case}: {turn['outcome']}; {turn['visibleChars']} visible characters", flush=True)
-            if not any(turn['outcome'] == 'done' for turn in report['turns']):
-                raise RuntimeError('Both turns fell back; inspect traces before accepting deployment.')
+            if any(turn['outcome'] != 'done' for turn in report['turns']):
+                raise RuntimeError('At least one turn fell back; inspect traces before accepting deployment.')
             latest = client.get('/api/model-profile'); latest.raise_for_status()
             if latest.json()['revision'] != profile['revision']:
                 raise RuntimeError('Profile changed during the smoke run; results need separate attribution.')

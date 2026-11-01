@@ -39,7 +39,7 @@
 
 ## 界面演示
 
-新增[自部署 / 个人 API Key 双模式](docs/DUAL-MODE.md)：学生端“模型设置”提供独立的生成与 embedding 配置、加密凭据和版本化索引。已完成协议与离线验证；AutoDL 真实 GPU 验收待执行。租卡配置与逐步命令见[AutoDL 操作手册](docs/AUTODL.md)。
+新增[自部署 / 个人 API Key 双模式](docs/DUAL-MODE.md)：学生端“模型设置”提供独立的生成与 embedding 配置、加密凭据和版本化索引。已完成协议与离线验证；AutoDL RTX 5090 上的真实双模型、SSH 隧道、普通对话及咨询冒烟已通过，完整质量/并发/成本验收仍待完成，见[GPU 验证记录](docs/SELFHOST-VERIFICATION-20261102.md)。租卡配置与逐步命令见[AutoDL 操作手册](docs/AUTODL.md)。
 
 以下 **5 张截图记录 10 月 30 日的界面**，使用独立 SQLite、合成对话和 `mock` 模型；没有修改页面内容来伪造结果。预警采用 `log` 通道、向量检索在这组界面演示中关闭，真实模型与向量实验见后面的评测章节。11 月 1 日新增的用量面板见[观测验收文档](docs/MODEL-USAGE.md)。
 

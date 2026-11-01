@@ -257,6 +257,39 @@ class ReplyHardeningTests(unittest.TestCase):
 
 
 class GroundingHardeningTests(unittest.TestCase):
+    def test_clarification_identifies_fact_sentence_and_revision_receives_actionable_feedback(self):
+        owner = self
+        class Generator:
+            calls = 0
+            async def stream(self, messages):
+                self.calls += 1
+                if self.calls == 1:
+                    yield '我愿意听你说。这个方法能缓解你的焦虑。'
+                else:
+                    feedback = messages[-1].content
+                    owner.assertIn('FACT_MISCLASSIFIED_AS_SUPPORT', feedback)
+                    owner.assertIn('这个方法能缓解你的焦虑。', feedback)
+                    owner.assertIn('删除或修正', feedback)
+                    yield '我愿意听你说。'
+        class Judge:
+            calls = 0
+            async def complete_async(self, messages):
+                self.calls += 1
+                if self.calls == 1:
+                    return '{"approved":true,"violations":[],"evidenceChecks":[{"sentenceId":1,"kind":"support"},{"sentenceId":2,"kind":"support"}]}'
+                if self.calls == 2:
+                    feedback = messages[-1].content
+                    owner.assertIn('"id": 2', feedback)
+                    owner.assertIn('这个方法能缓解你的焦虑。', feedback)
+                    return '{"approved":false,"violations":["UNSUPPORTED_CLAIM"]}'
+                return '{"approved":true,"violations":[],"evidenceChecks":[{"sentenceId":1,"kind":"support"}]}'
+        gen, judge = Generator(), Judge()
+        result = asyncio.run(ReplyReviewPipeline(Settings(_env_file=None), gen, judge).run(
+            outcome([SearchResult(1, 'support.md', '请联系可信任的人。', 1)])))
+        self.assertTrue(result.accepted)
+        self.assertEqual((gen.calls, judge.calls), (2, 3))
+        self.assertEqual(len([e for e in result.events if e['kind'] == 'grounding_clarification']), 1)
+
     def test_one_clarification_can_bind_existing_numeric_advice_without_regenerating(self):
         class Generator:
             calls=0

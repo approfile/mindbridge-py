@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-11-01T18:48:51.859939+00:00",
+  "scope": "Real selfhost protocol and two-turn synthetic application smoke; not a quality/concurrency benchmark.",
+  "stage3FullyAccepted": false,
+  "runtime": {
+    "gpu": "NVIDIA GeForce RTX 5090",
+    "vramMiB": 32607,
+    "driver": "595.71.05",
+    "gpuAndTmuxConfirmedViaSSH": true,
+    "gpuMemoryUsedMiBObserved": 29307,
+    "samplerSettingFromStartupCommand": "VLLM_USE_FLASHINFER_SAMPLER=0",
+    "modelRevision": "b968826d9c46dd6066d109eabc6255188de91218-97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+    "chatModel": "Qwen/Qwen3-8B",
+    "embeddingModel": "Qwen/Qwen3-Embedding-0.6B"
+  },
+  "protocol": {
+    "passed": true,
+    "capabilities": {
+      "nonStreaming": true,
+      "streaming": true,
+      "json": true,
+      "reviewJson": true,
+      "thinkingCompatible": true,
+      "embeddingDimensions": 1024,
+      "declaredContextTokens": 8192,
+      "contextStatus": "server_declared",
+      "testedAt": "2026-11-01T18:42:59.660711+00:00",
+      "notice": "连接协议测试不代表业务效果评测或完整上下文压力测试。"
+    },
+    "httpAttempts": 5,
+    "tokens": {
+      "inputTokens": 180,
+      "outputTokens": 24,
+      "totalTokens": 204,
+      "cacheHitTokens": 96,
+      "cacheMissTokens": 76,
+      "reasoningTokens": null
+    }
+  },
+  "firstApplicationSmoke": {
+    "accepted": false,
+    "legacyScriptIncorrectlyReportedPassed": true,
+    "turns": [
+      {
+        "case": "chat",
+        "outcome": "done",
+        "durationMs": 4561.683
+      },
+      {
+        "case": "consult",
+        "outcome": "fallback_or_error",
+        "durationMs": 22187.573
+      }
+    ],
+    "consultFallbackReason": "REVISION_BUDGET_EXHAUSTED / FACT_MISCLASSIFIED_AS_SUPPORT"
+  },
+  "afterFixApplicationSmoke": {
+    "passed": true,
+    "mode": "selfhost",
+    "profileRevision": 1,
+    "turns": [
+      {
+        "case": "chat",
+        "outcome": "done",
+        "requestId": "6f32d4f409df479b8f4dfe52f03ccd24",
+        "runId": "8f7a48e8c5a7417c8ff2a0802a0fa468",
+        "durationMs": 4564.032,
+        "visibleChars": 41,
+        "httpAttempts": 4,
+        "tokens": {
+          "inputTokens": 2034,
+          "outputTokens": 83,
+          "totalTokens": 2117,
+          "cacheHitTokens": 2000,
+          "cacheMissTokens": 34,
+          "reasoningTokens": null
+        },
+        "usageCoverage": 1.0,
+        "cacheTokenCoverage": 1.0,
+        "providerCacheHitRate": 0.983284169124877,
+        "providerCacheInputTokensCovered": 2034,
+        "cacheLayers": {
+          "redis_session_history": {
+            "hits": 0,
+            "misses": 1,
+            "errors": 0,
+            "bypasses": 0,
+            "durationMs": 0.292,
+            "unit": "requests",
+            "hitRate": 0.0
+          }
+        },
+        "ledgerWriteErrors": 0,
+        "allModelAttemptsUseSelfhost": true,
+        "infrastructureCostConfigured": false
+      },
+      {
+        "case": "consult",
+        "outcome": "done",
+        "requestId": "0481a73115ba431b927fadc6ee62b132",
+        "runId": "a770a6c68d194873a65829549d5771ae",
+        "durationMs": 15001.561,
+        "visibleChars": 197,
+        "httpAttempts": 6,
+        "tokens": {
+          "inputTokens": 12717,
+          "outputTokens": 870,
+          "totalTokens": 13587,
+          "cacheHitTokens": 11808,
+          "cacheMissTokens": 876,
+          "reasoningTokens": null
+        },
+        "usageCoverage": 1.0,
+        "cacheTokenCoverage": 0.8333333333333334,
+        "providerCacheHitRate": 0.9309366130558183,
+        "providerCacheInputTokensCovered": 12684,
+        "cacheLayers": {
+          "redis_session_history": {
+            "hits": 0,
+            "misses": 1,
+            "errors": 0,
+            "bypasses": 0,
+            "durationMs": 0.307,
+            "unit": "requests",
+            "hitRate": 0.0
+          },
+          "document_embedding_reuse": {
+            "hits": 34,
+            "misses": 0,
+            "errors": 0,
+            "bypasses": 0,
+            "durationMs": 18.689,
+            "unit": "chunks",
+            "hitRate": 1.0
+          }
+        },
+        "ledgerWriteErrors": 0,
+        "allModelAttemptsUseSelfhost": true,
+        "infrastructureCostConfigured": false
+      }
+    ]
+  },
+  "regression": {
+    "passed": true,
+    "tests": 370,
+    "harnessGroups": 6
+  },
+  "localEvidenceSha256": {
+    "protocolReport": "a92fbb1f3fc1ef37c649242858beafb051ce774f61eb3dc1602dca0e89b0f96b",
+    "beforeSmoke": "fc7ecfd8101d4d11543ce17666647fbb6b6f0bc4c2ce0c30e8a9118943d6ae0d",
+    "afterSmoke": "033ae7391b1d836549d750f42110ecc2fb7463ab3297e9b1c5f7f52ae69458a5",
+    "regressionLog": "7cc9c111d17d56f18f818a78d38cf1a2460e1a3a114b9a301caae8e30ac14b35",
+    "harnessLog": "019bd014f3bb159b5f8b0dc4f7e05df4f61155d58e5871cf6f0685e2c34150d8"
+  },
+  "sourceSha256": {
+    "deploy/autodl/serve.py": "0363aa1f977da7033f7fc41da8d7175e75d63497b1bc2736d4206b8c0b504765",
+    "app/services/response_review.py": "50f2b9d45faf52416319e5261cf0d0788d0f88fbd2a3ed478d31fd17cdc21c8f",
+    "scripts/smoke_model_profile.py": "2eb1594e55f4cb7a2fb24652631130ee413ca60e7bfcb5643ff0e1ed2abb95df",
+    "tests/test_p0p1_hardening.py": "7024d5f86999fb6d5ab535ab5575211b0cf3b0dd1f18286ccbd41a1f82417297",
+    "tests/test_model_profile_smoke.py": "c21a338ba44ae720dd5fbc28d11da0ba298250325699113bf6dde356f1412503"
+  },
+  "limitations": [
+    "Only two synthetic application turns; results were used to debug prompts and are not held-out quality evidence.",
+    "Caches were warm after repeated probes/replays; rates are not production hit-rate estimates.",
+    "8192 context is server-declared; full-window capacity was not stress tested.",
+    "All recorded model attempts used selfhost; external model egress was not actively blocked in this run.",
+    "Real two-account concurrency/isolation, risk/empty-evidence cases and same-budget 1/2/4 concurrency benchmark remain.",
+    "Rental GPU, idle time and infrastructure costs are not configured; unknown cost is not zero."
+  ]
+}
