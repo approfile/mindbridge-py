@@ -37,6 +37,8 @@ bash deploy/autodl/install.sh
 
 脚本安装推理依赖、下载模型、记录首次下载的精确 revision，生成私有服务 Key。只拉取仓库，无需上传本机 `.env`、MySQL 数据或原有云端 Key。首次下载较大，等待终端结束。
 
+安装脚本默认使用官方 HTTPS PyPI，缓存放在数据盘；可用 `MINDBRIDGE_PIP_INDEX_URL` 指定其他经过确认的 HTTPS 镜像。不会修改系统 pip 配置。如果旧版源码包打印 `Looking in indexes: http://mirrors.aliyun.com/...`，随后显示 `from versions: none`，只能说明该源未提供可用候选，不能据此断定版本不存在或显卡不兼容。在当前终端执行 `export PIP_INDEX_URL=https://pypi.org/simple` 后重新运行安装脚本即可覆盖旧源；若仍失败，保留 pip 最后的网络/依赖错误再排查，不盲目更换版本或关闭 TLS 验证。
+
 如果访问 GitHub/Hugging Face 失败，先按 [AutoDL 网络加速文档](https://www.autodl.com/docs/network_turbo/)启用平台提供的加速，再重试。不要在终端输出或截图里展示代理凭据。若此前下载中断，原目录内重新执行安装即可；已成功记录的模型 revision 会保持锁定。
 
 推荐在 tmux 中运行服务：

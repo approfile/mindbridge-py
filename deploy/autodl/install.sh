@@ -6,6 +6,10 @@ command -v nvidia-smi >/dev/null || { echo 'NVIDIA driver is required.'; exit 1;
 nvidia-smi --query-gpu=name,memory.total,driver_version --format=csv
 # Keep large model downloads, environments and logs on the AutoDL data disk.
 export MINDBRIDGE_MODEL_HOME="${MINDBRIDGE_MODEL_HOME:-/root/autodl-tmp/mindbridge-models}"
+# Do not inherit an image's HTTP-only or stale package mirror. This selection
+# is process-local; it does not modify the system/Conda pip configuration.
+export PIP_INDEX_URL="${MINDBRIDGE_PIP_INDEX_URL:-https://pypi.org/simple}"
+export PIP_CACHE_DIR="${PIP_CACHE_DIR:-$MINDBRIDGE_MODEL_HOME/pip-cache}"
 mkdir -p "$MINDBRIDGE_MODEL_HOME"
 python3 - <<'PY'
 import os, pathlib, shutil, subprocess, sys
@@ -23,7 +27,7 @@ if int(driver.split('.')[0]) < 580:
 print('Preflight: Python, disk, GPU VRAM and driver major version passed.')
 PY
 python3 -m venv "$MINDBRIDGE_MODEL_HOME/venv"
-"$MINDBRIDGE_MODEL_HOME/venv/bin/python" -m pip install --upgrade pip
-"$MINDBRIDGE_MODEL_HOME/venv/bin/python" -m pip install -r deploy/autodl/requirements.txt
+"$MINDBRIDGE_MODEL_HOME/venv/bin/python" -m pip install --index-url "$PIP_INDEX_URL" --timeout 60 --retries 3 --upgrade pip
+"$MINDBRIDGE_MODEL_HOME/venv/bin/python" -m pip install --index-url "$PIP_INDEX_URL" --timeout 60 --retries 3 --only-binary=vllm -r deploy/autodl/requirements.txt
 "$MINDBRIDGE_MODEL_HOME/venv/bin/python" deploy/autodl/prepare.py
 echo 'Prepared. Run: bash deploy/autodl/start.sh'
