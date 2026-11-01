@@ -98,11 +98,13 @@ class ChatService:
             return
         yield sse('meta', ChatStreamEvent(type='meta', sessionId=outcome.session.public_id,
                   requestId=observation.ids['request_id']).model_dump())
+        if work.settings.model_profile_id:
+            self.ai = AgentModelRegistry(work.settings).client_for('ResponseAgent')
         try:
             checkpoint()
             with span('reply.total'):
-                reply = await within_turn(ReplyReviewPipeline(self.settings, self.ai,
-                    AgentModelRegistry(self.settings).client_for('SafetyAgent')).run(outcome))
+                reply = await within_turn(ReplyReviewPipeline(work.settings, self.ai,
+                    AgentModelRegistry(work.settings).client_for('SafetyAgent')).run(outcome))
             checkpoint()
             with span('persistence.reviewed_reply'):
                 await within_turn(await_owned(lease.submit(lambda: work.persist_reply(reply))))

@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import shutil
+import hashlib
+import math
+import json
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -22,6 +25,18 @@ class VectorStoreUnavailable(RuntimeError):
     pass
 
 
+def bind_embedding_namespace(settings):
+    """Legacy SQL vectors have no model identity; do not import them blindly."""
+    result = settings.model_copy(deep=True)
+    if result.knowledge_vector_enabled and not result.embedding_index_scope:
+        identity = ['public-campus-kb-v1', 'deployment', result.openai_embedding_base_url,
+                    result.openai_embedding_model, result.embedding_dimensions,
+                    hashlib.sha256(result.openai_embedding_api_key.encode()).hexdigest(),
+                    result.knowledge_chunk_size, result.knowledge_chunk_overlap, result.embedding_query_instruction]
+        result.embedding_index_scope = hashlib.sha256(json.dumps(identity).encode()).hexdigest()
+    return result
+
+
 @dataclass
 class VectorSearchHit:
     chunk_id: int | None
@@ -32,7 +47,7 @@ class VectorSearchHit:
 
 
 class ChromaKnowledgeStore:
-    """Primary RAG path: OpenAI text-embedding-3-small embeddings stored and queried in Chroma."""
+    """OpenAI-compatible cloud/selfhost embeddings stored and queried in Chroma."""
 
     def __init__(self, settings: Settings):
         self.settings = settings
@@ -41,10 +56,11 @@ class ChromaKnowledgeStore:
         if not settings.knowledge_vector_enabled:
             self.error = "Chroma 向量库未启用"
             return
-        if not (settings.openai_embedding_api_key or settings.openai_api_key):
+        if not (settings.openai_embedding_api_key or (not settings.embedding_index_scope and settings.openai_api_key)
+                or settings.embedding_allow_no_key):
             if settings.knowledge_vector_required:
-                raise VectorStoreUnavailable("缺少 OPENAI_API_KEY，无法启用 Chroma + text-embedding-3-small 主检索方案")
-            self.error = f"缺少 OPENAI_API_KEY，Chroma + text-embedding-3-small 不可用，已回退到{FALLBACK_RETRIEVAL_LABEL}"
+                raise VectorStoreUnavailable("缺少独立的 embedding 凭据，无法启用 Chroma 主检索方案")
+            self.error = f"缺少独立的 embedding 凭据，Chroma 不可用，已回退到{FALLBACK_RETRIEVAL_LABEL}"
             return
         try:
             import chromadb
@@ -58,12 +74,31 @@ class ChromaKnowledgeStore:
         persist_dir.mkdir(parents=True, exist_ok=True)
         self.persist_dir = persist_dir
         self.client = chromadb.PersistentClient(path=str(persist_dir))
+        self.collection_name = settings.chroma_collection_name
+        if settings.embedding_index_scope:
+            identity = settings.embedding_index_scope + ':' + settings.embedding_corpus_version
+            self.collection_name = 'mb-profile-' + hashlib.sha256(identity.encode()).hexdigest()[:48]
         self.collection = self.client.get_or_create_collection(
-            name=settings.chroma_collection_name,
+            name=self.collection_name,
             embedding_function=None,
             metadata={"hnsw:space": "cosine", "embedding_model": settings.openai_embedding_model},
         )
         self.can_embed = settings.knowledge_vector_enabled
+
+    def cached_embeddings(self, chunks):
+        if not chunks:
+            return {}
+        result = self.collection.get(ids=[self._id(c.id) for c in chunks], include=['embeddings', 'documents'])
+        known = {self._id(c.id): c for c in chunks}
+        cached = {}
+        for index, identity in enumerate(result['ids']):
+            chunk = known[identity]
+            if result['documents'][index] != chunk.content:
+                continue
+            vector = result['embeddings'][index]
+            if len(vector) and (not self.settings.embedding_dimensions or len(vector) == self.settings.embedding_dimensions):
+                cached[chunk.id] = [float(v) for v in vector]
+        return cached
 
     def upsert_chunks(self, chunks: list[KnowledgeChunk], embeddings: list[list[float]]) -> int:
         rows = [chunk for chunk in chunks if chunk.id is not None and chunk.content.strip()]
@@ -155,7 +190,9 @@ class ChromaKnowledgeStore:
     @timed('embedding.request')
     def _embed(self, texts: list[str]) -> list[list[float]]:
         checkpoint()
-        api_key = self.settings.openai_embedding_api_key or self.settings.openai_api_key
+        api_key = self.settings.openai_embedding_api_key
+        if not self.settings.embedding_index_scope:
+            api_key = api_key or self.settings.openai_api_key
         base_url = self.settings.openai_embedding_base_url or "https://api.openai.com/v1"
         payload = {
             "model": self.settings.openai_embedding_model,
@@ -175,9 +212,15 @@ class ChromaKnowledgeStore:
             checkpoint()
             rows = sorted(data.get("data", []), key=lambda item: item.get("index", 0))
             embeddings = [row.get("embedding") for row in rows]
-            if len(embeddings) != len(texts) or any(not embedding for embedding in embeddings):
+            if ([row.get('index') for row in rows] != list(range(len(texts)))
+                    or len(embeddings) != len(texts) or any(not embedding for embedding in embeddings)):
                 raise VectorStoreUnavailable("OpenAI embeddings 接口返回向量数量不匹配")
-            return [[float(value) for value in embedding] for embedding in embeddings]
+            vectors = [[float(value) for value in embedding] for embedding in embeddings]
+            if (any(not all(math.isfinite(v) for v in vector) or not any(v != 0 for v in vector) for vector in vectors)
+                    or len({len(vector) for vector in vectors}) > 1
+                    or (self.settings.embedding_dimensions and any(len(v) != self.settings.embedding_dimensions for v in vectors))):
+                raise VectorStoreUnavailable('Embedding 向量维度或数值不合法')
+            return vectors
 
     def _resolve_path(self, value: str) -> Path:
         path = Path(value)

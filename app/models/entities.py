@@ -77,6 +77,17 @@ class KnowledgeChunk(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
 
 
+class UserModelProfile(Base):
+    __tablename__ = 'user_model_profiles'
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('user_accounts.id'), unique=True)
+    revision: Mapped[int] = mapped_column(Integer, default=1)
+    # Config, provider keys and probe details are encrypted together at rest.
+    config_json: Mapped[str] = mapped_column(SensitiveText())
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=now)
+
+
 class SessionMemory(Base):
     """Derived, session-scoped memory with raw-message provenance."""
 

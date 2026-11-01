@@ -14,12 +14,20 @@ from app.services.turn_execution import TurnRuntime
 from app.services.turn_middleware import TurnBudgetMiddleware
 from app.core.privacy_crypto import PrivacyStorageError
 from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
 
 
 def create_app() -> FastAPI:
     configure_logging(get_settings())
     app = FastAPI(title="MindBridge Python", version="0.1.0")
     app.state.turn_runtime = TurnRuntime(get_settings())
+
+    @app.exception_handler(RequestValidationError)
+    async def invalid_request(request, exc):
+        # Pydantic's default errors include raw inputs, potentially API keys.
+        return JSONResponse(status_code=422, content={'detail': [
+            {'type': error['type'], 'loc': list(error['loc'][:1]), 'msg': '请求参数不合法'}
+            for error in exc.errors()]})
 
     @app.exception_handler(PrivacyStorageError)
     async def unavailable_sensitive_storage(request, exc):
@@ -59,8 +67,12 @@ def create_app() -> FastAPI:
             worker.stop()
 
     app.add_middleware(TurnBudgetMiddleware, settings=get_settings(), runtime=app.state.turn_runtime)
+    from app.services.profile_middleware import ModelProfileMiddleware
+    app.add_middleware(ModelProfileMiddleware)
     app.add_middleware(ObservationMiddleware, session_factory=SessionLocal)
     app.include_router(router)
+    from app.api.model_profiles import router as model_profile_router
+    app.include_router(model_profile_router)
     static_dir = Path(__file__).resolve().parent / "static"
     app.mount("/", StaticFiles(directory=static_dir, html=True), name="static")
     return app

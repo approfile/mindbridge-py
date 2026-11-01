@@ -165,6 +165,8 @@ class AiClient:
             return data["message"]["content"]
 
     def _openai_options(self) -> dict:
+        if self.settings.openai_chat_template_no_thinking:
+            return {'chat_template_kwargs': {'enable_thinking': False}}
         # DeepSeek currently defaults to high-effort reasoning, competing with
         # this interactive app's small output budget. Other endpoints retain
         # their defaults unless explicitly configured. Never expose reasoning.

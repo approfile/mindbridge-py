@@ -172,7 +172,7 @@ class Observation:
                     'logicalModelCalls': sum(r['stage'] in {'model.complete', 'model.stream', 'model.review'} for r in rows),
                     'degradations': list(self.degradations), 'droppedSpans': self.dropped_spans,
                     'tokenUsage': usage['tokens'], 'currencyCost': usage['cost'] if usage['httpAttempts'] else None,
-                    'modelUsage': usage}
+                    'modelUsage': usage, 'modelProfile': getattr(self, 'model_profile', None)}
 
 
 @contextmanager

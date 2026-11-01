@@ -1,0 +1,21 @@
+# Overlay for the existing local stack. No inference ports are published.
+services:
+  model-tunnel:
+    build: ./deploy/tunnel
+    env_file: ./.local-runtime/autodl/tunnel.env
+    volumes:
+      - ./.local-runtime/autodl/id_ed25519:/identity/id_ed25519:ro
+      - ./.local-runtime/autodl/known_hosts:/identity/known_hosts:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 8000 && nc -z 127.0.0.1 8001"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+  app:
+    environment:
+      SELFHOST_CHAT_BASE_URL: http://model-tunnel:8000/v1
+      SELFHOST_EMBEDDING_BASE_URL: http://model-tunnel:8001/v1
+    depends_on:
+      model-tunnel:
+        condition: service_healthy

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MindBridge 模型设置</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    .model-settings{max-width:780px;margin:32px auto;padding:0 20px}
+    .model-settings fieldset{border:1px solid #cbd5e1;border-radius:12px;margin:20px 0;padding:18px}
+    .model-settings label{display:block;margin:12px 0}
+    .model-settings input,.model-settings select{display:block;width:100%;padding:10px;margin-top:6px;box-sizing:border-box}
+    .model-settings .actions{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}
+    #settingsMessage{white-space:pre-wrap;overflow-wrap:anywhere;min-height:48px}
+    a{color:#145e75}
+  </style>
+</head>
+<body>
+  <main class="model-settings panel">
+    <a href="/student.html">← 返回对话</a>
+    <h1>模型设置</h1>
+    <p>为你的账号选择模型。保存后从下一轮对话生效；正在进行的对话轮次继续使用原配置。</p>
+    <p id="currentMode">正在读取配置…</p>
+    <form id="modelSettingsForm">
+      <label>运行方式
+        <select id="runtimeMode"><option value="api">自填 API Key（可搭配自部署服务）</option><option value="selfhost">完整自部署</option></select>
+      </label>
+      <p id="modeHelp"></p>
+      <fieldset><legend>对话模型</legend>
+        <label>服务<select id="chatConnection"></select></label>
+        <label>模型名称<input id="chatModel" maxlength="128" required autocomplete="off"></label>
+        <label id="chatKeyLabel">API Key<input id="chatKey" type="password" autocomplete="new-password" maxlength="4096" placeholder="首次填写；留空保留当前服务已保存的 Key"></label>
+      </fieldset>
+      <fieldset><legend>知识检索模型</legend>
+        <label>服务<select id="embeddingConnection"></select></label>
+        <label>Embedding 模型名称<input id="embeddingModel" maxlength="128" required autocomplete="off"></label>
+        <label id="embeddingKeyLabel">Embedding API Key<input id="embeddingKey" type="password" autocomplete="new-password" maxlength="4096" placeholder="与对话模型分别配置，留空保留已保存的 Key"></label>
+        <label>向量维度<input id="embeddingDimensions" type="number" min="32" max="4096" value="1024" required></label>
+      </fieldset>
+      <p>测试会发送少量合成文本并产生模型用量。保存时会再次测试，并建立独立的知识库索引；成功后才切换配置。</p>
+      <div class="actions">
+        <button type="button" id="testModels" class="ghost">测试连接</button>
+        <button type="submit" class="primary">测试并保存</button>
+        <button type="button" id="resetModels" class="ghost">撤销个人配置</button>
+      </div>
+    </form>
+    <p id="settingsMessage" role="status" aria-live="polite"></p>
+  </main>
+  <script src="/model-settings.js"></script>
+</body>
+</html>

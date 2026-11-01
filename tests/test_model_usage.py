@@ -361,6 +361,7 @@ class DurableUsageTests(ToolRuntimeFixture):
                   KnowledgeChunk(content='missing', source='synthetic', source_index=1)]
         data = {'model': 'qwen3.7-text-embedding', 'data': [{'index': 0, 'embedding': [3, 4]}], 'usage': {'prompt_tokens': 10, 'total_tokens': 10}}
         with observation_scope(reuse=False) as state, patch('app.services.vector_store.httpx.post', return_value=response(data)) as post:
+            service.settings = self.settings
             self.assertEqual(service._embeddings_for_chunks(chunks), [[1, 2], [3, 4]])
         self.assertEqual(post.call_count, 1)
         snapshot = usage_snapshot(state)

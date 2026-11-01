@@ -100,14 +100,19 @@ def chat_stream(
 
 
 @router.get("/api/agent/status")
-def agent_status(user: Annotated[UserAccount, Depends(current_user)]):
-    settings = get_settings()
+def agent_status(user: Annotated[UserAccount, Depends(current_user)], db: Annotated[Session, Depends(get_db)]):
+    from app.services.model_profiles import ModelProfileService, ProfileError, snapshot_metadata
+    try:
+        settings = ModelProfileService(db, get_settings()).resolve(user.id)
+    except ProfileError:
+        raise HTTPException(409, '模型服务配置已变化，请重新测试并保存。') from None
     provider = settings.ai_provider.lower()
     model = settings.ollama_model if provider == "ollama" else settings.openai_model if provider == "openai" else "mock"
     framework = agent_framework_status(settings)
     return {
         "provider": provider,
         "model": model,
+        "modelProfile": snapshot_metadata(settings),
         "realModelEnabled": provider in {"ollama", "openai"},
         "agentFramework": framework,
         "finetunedModel": finetuned_model_status(settings),

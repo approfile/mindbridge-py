@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import logging
 import math
 import re
@@ -13,7 +14,7 @@ from sqlalchemy.orm import Session
 
 from app.core.config import Settings
 from app.models.entities import KnowledgeChunk
-from app.services.vector_store import FALLBACK_RETRIEVAL_LABEL, PRIMARY_RETRIEVAL_LABEL, ChromaKnowledgeStore
+from app.services.vector_store import FALLBACK_RETRIEVAL_LABEL, PRIMARY_RETRIEVAL_LABEL, ChromaKnowledgeStore, bind_embedding_namespace
 from app.services.observability import record_degradation, span, timed
 
 
@@ -38,8 +39,13 @@ class RetrievalCandidate:
 class KnowledgeService:
     def __init__(self, db: Session, settings: Settings):
         self.db = db
-        self.settings = settings
-        self.vector_store = ChromaKnowledgeStore(settings)
+        self.settings = bind_embedding_namespace(settings)
+        if self.settings.embedding_index_scope:
+            rows = db.query(KnowledgeChunk).order_by(KnowledgeChunk.id).all()
+            corpus = [(r.id, r.source, r.source_index, r.content) for r in rows]
+            self.settings.embedding_corpus_version = hashlib.sha256(
+                json.dumps(corpus, ensure_ascii=False, separators=(',', ':')).encode()).hexdigest()
+        self.vector_store = ChromaKnowledgeStore(self.settings)
 
     def count(self) -> int:
         return self.db.query(KnowledgeChunk).count()
@@ -79,7 +85,8 @@ class KnowledgeService:
             "embeddingModel": self.settings.openai_embedding_model,
             "vectorChunks": vector_chunks,
             "chromaPersistDir": self.settings.chroma_persist_dir,
-            "chromaCollectionName": self.settings.chroma_collection_name,
+            "chromaCollectionName": getattr(self.vector_store, 'collection_name', self.settings.chroma_collection_name),
+            "embeddingBinding": self.settings.embedding_index_scope or 'deployment-default',
             "chromaSnapshotDir": self.settings.chroma_snapshot_dir,
             "candidateK": self.settings.knowledge_candidate_k,
             "hybridVectorWeight": self.settings.knowledge_hybrid_vector_weight,
@@ -114,7 +121,16 @@ class KnowledgeService:
             self.db.add(row)
             rows.append(row)
         self.db.flush()
-        self._index_vector_chunks(rows)
+        if self.settings.embedding_index_scope:
+            # Keep the old corpus collection untouched for in-flight turns.
+            # New/changed SQL rows are flushed but not published until their
+            # separately named, complete index is ready.
+            refreshed = KnowledgeService(self.db, self.settings)
+            self.settings, self.vector_store = refreshed.settings, refreshed.vector_store
+            corpus = self.db.query(KnowledgeChunk).order_by(KnowledgeChunk.id).all()
+            self._sync_vector_chunks(corpus)
+        else:
+            self._index_vector_chunks(rows)
         self.db.commit()
         return len(chunks)
 
@@ -227,6 +243,8 @@ class KnowledgeService:
             return []
         try:
             self._ensure_vector_index()
+            if self.settings.embedding_query_instruction:
+                query = f'Instruct: {self.settings.embedding_query_instruction}\nQuery: {query}'
             query_embedding = self.vector_store.embed_texts([query])[0]
             hits = self.vector_store.query(query_embedding, top_k)
         except Exception as exc:
@@ -253,7 +271,7 @@ class KnowledgeService:
             return
         if (
             self.vector_store.count() == len(rows)
-            and all(row.embedding_json for row in rows)
+            and (self.settings.embedding_index_scope or all(row.embedding_json for row in rows))
             and self.vector_store.has_exact_chunk_ids(rows)
         ):
             record_cache('document_embedding_reuse', hits=len(rows), reason='index_already_complete', unit='chunks',
@@ -263,7 +281,7 @@ class KnowledgeService:
         self.db.commit()
 
     def _delete_vector_source(self, source: str) -> None:
-        if not self.vector_store.can_embed:
+        if not self.vector_store.can_embed or self.settings.embedding_index_scope:
             return
         try:
             self.vector_store.delete_source(source)
@@ -276,7 +294,8 @@ class KnowledgeService:
         try:
             embeddings = self._embeddings_for_chunks(chunks)
             for chunk, embedding in zip(chunks, embeddings):
-                chunk.embedding_json = json.dumps(embedding, separators=(",", ":"))
+                if not self.settings.embedding_index_scope:
+                    chunk.embedding_json = json.dumps(embedding, separators=(",", ":"))
             self.vector_store.upsert_chunks(chunks, embeddings)
         except Exception as exc:
             self._handle_vector_error("index", exc)
@@ -287,7 +306,8 @@ class KnowledgeService:
         try:
             embeddings = self._embeddings_for_chunks(chunks)
             for chunk, embedding in zip(chunks, embeddings):
-                chunk.embedding_json = json.dumps(embedding, separators=(",", ":"))
+                if not self.settings.embedding_index_scope:
+                    chunk.embedding_json = json.dumps(embedding, separators=(",", ":"))
             self.vector_store.sync_chunks(chunks, embeddings)
         except Exception as exc:
             self._handle_vector_error("sync", exc)
@@ -298,8 +318,11 @@ class KnowledgeService:
         embeddings: list[list[float] | None] = []
         missing_indexes = []
         missing_texts = []
+        scoped = self.vector_store.cached_embeddings(chunks) if self.settings.embedding_index_scope else {}
         for index, chunk in enumerate(chunks):
-            embedding = parse_embedding(chunk.embedding_json)
+            # Legacy SQL vectors have no provider identity and must never cross
+            # into an account/model-bound collection, even at equal dimension.
+            embedding = scoped.get(chunk.id) if self.settings.embedding_index_scope else parse_embedding(chunk.embedding_json)
             embeddings.append(embedding)
             if embedding is None:
                 missing_indexes.append(index)

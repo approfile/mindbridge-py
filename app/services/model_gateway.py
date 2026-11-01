@@ -86,7 +86,9 @@ def estimate_cost(attempt, settings):
     unknown = {'status': 'usage_unknown', 'currency': None, 'amount': None, 'source': 'public_list_price_estimate'}
     if attempt.get('usageStatus') != 'reported':
         return unknown
-    if attempt['provider'] == 'ollama':
+    local_operation = (settings.embedding_allow_no_key if attempt.get('operation') == 'embedding'
+                       else settings.openai_chat_template_no_thinking)
+    if attempt['provider'] == 'ollama' or settings.model_runtime_mode == 'selfhost' or local_operation:
         return {**unknown, 'status': 'infrastructure_cost_not_configured'}
     try:
         path = Path(settings.model_pricing_file)
@@ -226,6 +228,8 @@ class ModelAttempt:
                     'provider': safe_name(provider), 'host': urlsplit(base_url).hostname,
                     'requestedModel': safe_name(model), 'actualModel': None, 'providerRequestId': None,
                     'operation': operation, 'startedAt': datetime.now(timezone.utc).isoformat(),
+                    'modelProfile': {'id': settings.model_profile_id or 'deployment-default',
+                                     'revision': settings.model_profile_revision, 'mode': settings.model_runtime_mode},
                     'status': 'started', 'httpStatus': None, 'errorType': None, 'durationMs': None,
                     'firstTokenMs': None, **{key: None for key in TOKEN_KEYS}, 'usageStatus': 'missing',
                     'cost': {'status': 'pending', 'currency': None, 'amount': None}}
@@ -350,6 +354,7 @@ def persist_run(state, *, finalized=False):
         from app.models.entities import ModelUsageRun
         snapshot = usage_snapshot(state)
         snapshot.update(correlation=dict(state.ids), scope=state.usage_scope,
+                        modelProfile=getattr(state, 'model_profile', None),
                         durationMs=round(state.elapsed_ms(), 3), streamStatus=state.stream_status,
                         serverFirstTokenMs=state.server_first_token_ms)
         # Attempt/cache rows are authoritative; do not duplicate them into the run blob.

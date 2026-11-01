@@ -7,6 +7,22 @@ from pydantic import Field
 
 
 class Settings(BaseSettings):
+    # Deployment-owned endpoints; clients select IDs, never submit arbitrary URLs.
+    selfhost_chat_base_url: str = ''
+    selfhost_embedding_base_url: str = ''
+    selfhost_api_key: str = ''
+    selfhost_chat_model: str = 'Qwen/Qwen3-8B'
+    selfhost_embedding_model: str = 'Qwen/Qwen3-Embedding-0.6B'
+    selfhost_model_revision: str = 'deployment-v1'
+    model_profile_id: str = ''
+    model_profile_revision: int = 0
+    model_runtime_mode: str = 'deployment_default'
+    embedding_index_scope: str = ''
+    embedding_dimensions: int = 0
+    embedding_allow_no_key: bool = False
+    embedding_query_instruction: str = ''
+    embedding_corpus_version: str = ''
+    openai_chat_template_no_thinking: bool = False
     model_pricing_file: str = 'app/pricing/model-prices-v1.json'
     model_stream_include_usage: bool = True
     privacy_key_file: str = 'data/privacy.key'
@@ -55,8 +71,6 @@ class Settings(BaseSettings):
     openai_model: str = "gpt-4o-mini"
     openai_thinking_mode: Literal["auto", "enabled", "disabled"] = "auto"
     openai_embedding_model: str = "text-embedding-3-small"
-    openai_embedding_base_url: str = "https://api.openai.com/v1"
-    openai_embedding_api_key: str = ""
     openai_embedding_base_url: str = "https://api.openai.com/v1"
     openai_embedding_api_key: str = ""
     database_url: str = "mysql+pymysql://mindbridge:mindbridge@127.0.0.1:3306/mindbridge?charset=utf8mb4"

@@ -26,6 +26,9 @@ class OwnedTurnWork:
         signal = current_signal(self.request.message)
         if signal.level: self.control.note_risk(signal.level.value)
         with self.sessions() as db:
+            from app.services.model_profiles import ModelProfileService, snapshot_metadata
+            self.settings = ModelProfileService(db, self.settings).resolve(self.user_id)
+            self.observation.model_profile = snapshot_metadata(self.settings)
             user = db.get(UserAccount, self.user_id)
             if user is None or 'ROLE_ADMIN' in user.roles:
                 raise ValueError('Student account not available')

@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-11-01T07:20:50.141848+00:00",
+  "codeReady": true,
+  "stage3FullyAccepted": false,
+  "unitRegression": {
+    "passed": true,
+    "tests": 364,
+    "focusedProfileTests": 22
+  },
+  "engineeringHarness": {
+    "passed": true,
+    "groups": 6
+  },
+  "realApiCapabilityProbe": {
+    "passed": true,
+    "requests": 5,
+    "tokens": {
+      "inputTokens": 191,
+      "outputTokens": 20,
+      "totalTokens": 211,
+      "cacheHitTokens": 0,
+      "cacheMissTokens": 168,
+      "reasoningTokens": null
+    },
+    "capabilities": {
+      "nonStreaming": true,
+      "streaming": true,
+      "json": true,
+      "reviewJson": true,
+      "thinkingCompatible": true,
+      "embeddingDimensions": 1024,
+      "declaredContextTokens": null,
+      "contextStatus": "unknown",
+      "testedAt": "2026-11-01T07:01:45.141528+00:00",
+      "notice": "连接协议测试不代表业务效果评测或完整上下文压力测试。"
+    }
+  },
+  "realHttpSmoke": {
+    "passed": true,
+    "mode": "deployment_default",
+    "syntheticTurns": [
+      {
+        "case": "chat",
+        "outcome": "done",
+        "httpAttempts": 4,
+        "tokens": {
+          "inputTokens": 2021,
+          "outputTokens": 83,
+          "totalTokens": 2104,
+          "cacheHitTokens": 1024,
+          "cacheMissTokens": 997,
+          "reasoningTokens": null
+        },
+        "modelProfile": {
+          "id": "deployment-default",
+          "revision": 0,
+          "mode": "deployment_default",
+          "chatModel": "deepseek-flash",
+          "embeddingModel": "qwen3.7-text-embedding",
+          "embeddingBinding": "b2e576a5e89c4e477d6d5a784aff1d13a0c6a3856be0c5677afbfbb10ef21e91"
+        },
+        "cacheLayers": {
+          "redis_session_history": {
+            "hits": 0,
+            "misses": 1,
+            "errors": 0,
+            "bypasses": 0,
+            "durationMs": 0.316,
+            "unit": "requests",
+            "hitRate": 0.0
+          }
+        },
+        "ledgerWriteErrors": 0
+      },
+      {
+        "case": "consult",
+        "outcome": "done",
+        "httpAttempts": 7,
+        "tokens": {
+          "inputTokens": 14721,
+          "outputTokens": 583,
+          "totalTokens": 15304,
+          "cacheHitTokens": 2176,
+          "cacheMissTokens": 5080,
+          "reasoningTokens": null
+        },
+        "modelProfile": {
+          "id": "deployment-default",
+          "revision": 0,
+          "mode": "deployment_default",
+          "chatModel": "deepseek-flash",
+          "embeddingModel": "qwen3.7-text-embedding",
+          "embeddingBinding": "b2e576a5e89c4e477d6d5a784aff1d13a0c6a3856be0c5677afbfbb10ef21e91"
+        },
+        "cacheLayers": {
+          "redis_session_history": {
+            "hits": 0,
+            "misses": 1,
+            "errors": 0,
+            "bypasses": 0,
+            "durationMs": 0.327,
+            "unit": "requests",
+            "hitRate": 0.0
+          },
+          "document_embedding_reuse": {
+            "hits": 0,
+            "misses": 34,
+            "errors": 0,
+            "bypasses": 0,
+            "durationMs": 1.392,
+            "unit": "chunks",
+            "hitRate": 0.0
+          }
+        },
+        "ledgerWriteErrors": 0
+      }
+    ]
+  },
+  "knowledge": {
+    "databaseChunks": 34,
+    "vectorChunks": 34,
+    "embeddingModel": "qwen3.7-text-embedding"
+  },
+  "selfhostProtocolTests": {
+    "usesMockModelResponses": true,
+    "fullHarnessReplyReviewAndEmbeddingCovered": true,
+    "externalModelCallsBlockedInMockTransport": true,
+    "realGpuTested": false
+  },
+  "deploymentChecks": {
+    "recordedAt": "2026-11-01T07:20:48.659453+00:00",
+    "provenance": "Operator recorded successful actual build/config/syntax/key-generation and live browser checks. The exporter does not execute these checks.",
+    "sourceSha256": {
+      "deploy/autodl/install.sh": "a5b129f492591519cfc20122e57383507e95d28314a4443670242ebe98e1acbc",
+      "deploy/autodl/start.sh": "32a71f9e44b6a46b3a376958f2e71d44c689bc14f20746b1376d7fa88548630f",
+      "deploy/autodl/prepare.py": "a81fce0a6fa9c5b9bd785c41b4fb4881f0e4d4429fe682b25cacc10c4949b5ba",
+      "deploy/autodl/serve.py": "17034dc3df9f941a026ec88cb3cd10d48b78b4d3d62f0ddcc27a4d8f9fc1c548",
+      "deploy/tunnel/Dockerfile": "51ce157df6602cf0c001b930724ed4c7800ce880d821b8f15dc429b8a3d7bd31",
+      "deploy/tunnel/entrypoint.sh": "7b2fd0b95446cb6539a254d8972bfc6e327badaba703b4d9bde5fefb66622061",
+      "docker-compose.selfhost.yml": "cdda860ba849d95fcaa5210fb22b1540fca29f2159df52d8ed8e810e9f8fc563",
+      "scripts/start-local.ps1": "a0b347535cdd9d1c8bd6ae7dd68dc165119b345d6addac5d113da4048f0a32d3",
+      "scripts/connect-autodl.ps1": "991c9e8e700b4934b1eb05daf3010a07b9930afbb63fce9419090453918ec80c",
+      "app/static/model-settings.js": "be5b22ac23f6f5c2a82b38ae5faf58304e9af3dc48b2fb2d01f2a57c675bcdcf",
+      "app/static/model-settings.html": "df99b91501609ad70b3302b74e296f4d21d4f0270362d263d58349e3dc0fd541"
+    },
+    "checks": {
+      "sshTunnelImageBuild": true,
+      "composeOverlayWithSyntheticEnv": true,
+      "windowsNativeKeyGenerationWithSpaces": true,
+      "powershellSyntax": true,
+      "bashSyntax": true,
+      "javascriptSyntax": true,
+      "liveSettingsPageChecked": true,
+      "realAutoDlSshConnectionTested": false
+    }
+  },
+  "plannedGpu": {
+    "gpu": "RTX 5090",
+    "vramGB": 32,
+    "recommendedSystemRamGB": 64,
+    "recommendedDataDiskGB": 150,
+    "models": [
+      "Qwen/Qwen3-8B",
+      "Qwen/Qwen3-Embedding-0.6B"
+    ]
+  },
+  "screenshot": {
+    "file": "docs/screenshots/model-settings-20261101.jpg",
+    "bytes": 89605,
+    "sha256": "874b88f39987495edfe40d48e8bb436d17e3ad87d1cbb234ea0bae281df2bb23"
+  },
+  "remaining": [
+    "Real AutoDL model startup and SSH connection",
+    "Real GPU full local-mode run with external model APIs disabled",
+    "Two-account real GPU concurrency and same-budget quality/latency/throughput/cost benchmark"
+  ],
+  "notice": "Mocks, declared context and SSE done are not model-quality or production-capacity evidence."
+}

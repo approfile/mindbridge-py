@@ -1,4 +1,4 @@
-param([switch]$RealModels, [switch]$RealGenerationOnly)
+param([switch]$RealModels, [switch]$RealGenerationOnly, [switch]$WithSelfhost)
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $savedProvider = $env:MINDBRIDGE_LOCAL_PROVIDER
@@ -29,7 +29,9 @@ try {
         docker desktop start --timeout 120
         if ($LASTEXITCODE -ne 0) { throw 'Start Docker Desktop with its Linux engine, then retry.' }
     }
-    docker compose -f docker-compose.local.yml up -d --build --wait --wait-timeout 240
+    $composeFiles = @('-f', 'docker-compose.local.yml')
+    if ($WithSelfhost) { $composeFiles += @('-f', 'docker-compose.selfhost.yml') }
+    docker compose @composeFiles up -d --build --wait --wait-timeout 240
     if ($LASTEXITCODE -ne 0) { throw 'Local stack startup failed; inspect docker compose logs.' }
     Write-Output 'MindBridge: http://127.0.0.1:8080'
     Write-Output 'Mailpit:    http://127.0.0.1:8025'

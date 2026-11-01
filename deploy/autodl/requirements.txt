@@ -1,0 +1,2 @@
+# Inference only. Training uses a separate environment in a later phase.
+vllm==0.29.0
