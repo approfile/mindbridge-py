@@ -139,6 +139,8 @@ def write_report(folder, manifest, observations, judgments, factory):
                 'highRiskReports':len(high_ids),'mailpitReceipts':len(received),
                 'smtpMeans':'Receipt by local Mailpit, not a human or real emergency service'}
     public = {'protocol':manifest['protocol'],'datasetSha256':manifest['datasetSha256'],
+              'graderVersion':manifest.get('graderVersion','system-baseline-judge-v1'),
+              'replyPolicyVersion':manifest.get('replyPolicyVersion','reply-safety-v3'),
               'sourceHashes':manifest['sourceHashes'],'plannedScenarios':len(manifest['plannedTrials']),
               'capturedScenarios':len(observations),'smoke':manifest['smoke'],'mock':manifest['mock'],
               'groups':groups,'cohortPerformance':cohorts,'costScopes':costs,'admission':admission,'pairedComparison':paired,

@@ -39,7 +39,15 @@ class SessionMemoryService:
         owned = self.db.query(ChatSession).filter_by(id=session.id, user_id=user.id).with_for_update().first()
         if owned is None:
             raise ValueError("Session not found")
-        memory = self.db.query(SessionMemory).filter_by(session_id=session.id).with_for_update().first()
+        if self.db.get_bind().dialect.name == 'mysql':
+            # An absent FOR UPDATE lookup takes an InnoDB gap lock. Multiple
+            # new sessions can share that gap, then deadlock while inserting.
+            # Materialize the unique child first, under its existing parent
+            # row lock; a subsequent current read locks an existing record.
+            from sqlalchemy.dialects.mysql import insert
+            create = insert(SessionMemory).values(session_id=session.id,last_message_id=0,state_json='{}')
+            self.db.execute(create.on_duplicate_key_update(session_id=create.inserted.session_id))
+        memory = self.db.query(SessionMemory).filter_by(session_id=session.id).populate_existing().with_for_update().first()
         if memory is None:
             memory = SessionMemory(session_id=session.id, last_message_id=0, state_json="{}")
             self.db.add(memory)

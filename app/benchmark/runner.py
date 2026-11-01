@@ -251,6 +251,9 @@ def run_benchmark(args):
                 'sourceHashes':source_hashes(), 'plannedTrials':plan,
                 'qualityOrigin':dataset['origin'], 'judgeBias':'separate requests/prompt, same configured provider/model; no human/expert validation',
                 'orderNotice':'event-driven first; shared cloud cache and sequential execution can bias comparison; no causal speedup claim'}
+    from app.benchmark.judge import GRADER_VERSION
+    from app.services.reply_safety import POLICY_VERSION
+    manifest.update(graderVersion=GRADER_VERSION,replyPolicyVersion=POLICY_VERSION)
     from importlib.metadata import version
     from urllib.parse import urlsplit
     manifest['environment'] = {'python':sys.version.split()[0],'platform':sys.platform,'visibleCpuCount':os.cpu_count(),

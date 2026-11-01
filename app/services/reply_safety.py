@@ -5,7 +5,7 @@ from dataclasses import dataclass,field
 
 from app.schemas.dtos import AiMessage
 
-POLICY_VERSION='reply-safety-v3'
+POLICY_VERSION='reply-safety-v4'
 _QUOTE=re.compile(r'“[^”]*”|「[^」]*」|"[^"\n]*"|‘[^’]*’')
 _CONTACT=re.compile(r'联系|求助|找|告诉|走到|\bcontact\b|\bcall\b|reach out|talk to|get in touch|connect with|\bfind\b|\bask\b',re.I)
 _HUMAN=re.compile(r'可信任|信任的人|信得过|朋友|室友|同学|家人|父母|辅导员|心理中心|咨询师|医生|紧急服务|急救|保卫|任何人|所有人|现实支持|trusted|friend|family|counselor|counsellor|emergency|someone you trust|anyone',re.I)
@@ -34,12 +34,23 @@ _COMPLETION=re.compile(
 def unverified_completion(part):
     for match in _COMPLETION.finditer(part):
         prefix=part[:match.start()].strip()
+        double_denial=bool(re.search(r'(?:不能不|不是不能|并非不能|并非无法|不是无法)(?:向你|对你|为你|替你)?(?:保证|承诺|确认)'
+                                    r'(?:你|您|我|今晚|今天|本次|这次|能|会|已经|已|的|可以|是否|一定|就|马上|立即|能够|成功){0,10}$',prefix))
         if re.search(r'(?:没有|并未|尚未|未能|无法|不能|不会|不曾)(?:真的|确实|替你|为你|帮你|实际|亲自|能够|能力|办法|成功)*$|'
                      r'(?:不|不能|不应|不会)(?:声称|说|表示|确认|承诺)(?:我|我们|系统)?$|'
                      r'(?:没说|没声称|你说|你提到)(?:我|我们|系统)?$|'
                      r'(?:如果|假如|是否|倘若)(?:我|我们|系统)?$|'
-                     r'\b(?:if|whether|when|once|cannot confirm|can\x27t confirm|do not claim|did not say|never said)(?: that)?$',prefix,re.I):continue
+                     r'\b(?:if|whether|when|once|cannot confirm|can\x27t confirm|do not claim|did not say|never said)(?: that)?$',prefix,re.I) and not double_denial:continue
         if re.search(r'没有|并未|尚未|未能|无法',match.group()):continue
+        # Refusing to guarantee a future booking is not a completed action.
+        # Restrict modifiers to the denial immediately governing this match;
+        # another positive action in the same reply must still be rejected.
+        denial=re.search(r'(?:不能|无法|没法|不敢|不可以|不应|不)(?:向你|对你|为你|替你)?(?:保证|承诺|确认)'
+                         r'(?:你|您|我|今晚|今天|本次|这次|能|会|已经|已|的|可以|是否|一定|就|马上|立即|能够|成功){0,10}$',prefix)
+        if denial and not double_denial and not re.search(r'(?:不是|并非|不能|不可能)$',prefix[:denial.start()]):continue
+        denial=re.search(r"\b(?:cannot|can't|can not|won't|will not|do not|don't|unable to)\s+"
+                         r'(?:guarantee|promise|confirm)(?:\s+(?:that|the|your|an|my|it|was|is|has|been|will|be|already))*\s*$',prefix,re.I)
+        if denial and not re.search(r'\b(?:not|never)\s*$',prefix[:denial.start()],re.I):continue
         if prefix.endswith(('你','您')) or re.search(r'\byou\s*$',prefix,re.I):continue
         if re.match(r'(?:之后|以后|后|时|前)',part[match.end():]):continue
         return True

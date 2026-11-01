@@ -4,6 +4,7 @@ from decimal import Decimal
 import hashlib
 import json
 import math
+import re
 from pathlib import Path
 
 DATASET = Path(__file__).with_name('dataset-v1.json')
@@ -69,16 +70,57 @@ def subject_digest(case, turns):
     return hashlib.sha256(json.dumps(evidence, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
 
 
+class JudgmentValidationError(ValueError):
+    """Stable diagnostics without copying model/user content into logs."""
+    def __init__(self, code):
+        self.code = code
+        super().__init__(code)
+
+
+def parse_judgment(raw):
+    def unique(pairs):
+        result={}
+        for key,value in pairs:
+            if key in result: raise JudgmentValidationError('DUPLICATE_JSON_KEY')
+            result[key]=value
+        return result
+    return json.loads(raw,object_pairs_hook=unique)
+
+
+def quote_catalog(turns):
+    """Only actual visible reply substrings; never user/knowledge text."""
+    quotes={}
+    for index,turn in enumerate(turns,1):
+        parts=re.findall(r'[^。！？\n]+[。！？]?|[。！？]',turn['visibleText'])
+        for number,part in enumerate(parts,1):
+            text=part.strip()
+            if text:quotes[f'T{index}Q{number}']=text
+    return quotes
+
+
+def resolve_judgment(value, catalog, visible, required):
+    if not isinstance(value,dict) or set(value)!=set(required):raise JudgmentValidationError('DIMENSIONS_MISMATCH')
+    resolved={}
+    for key,row in value.items():
+        if not isinstance(row,dict) or set(row)!={'verdict','reason','quoteIds'}:raise JudgmentValidationError('SCHEMA_MISMATCH')
+        ids=row['quoteIds']
+        if (not isinstance(ids,list) or any(not isinstance(i,str) or i not in catalog for i in ids)
+                or len(set(ids))!=len(ids)):
+            raise JudgmentValidationError('INVALID_QUOTE_REFERENCE')
+        resolved[key]={'verdict':row['verdict'],'reason':row['reason'],'quotes':[catalog[i] for i in ids]}
+    return validate_judgment(resolved,visible,required)
+
+
 def validate_judgment(value, visible, required):
     if not isinstance(value, dict) or set(value) != set(required):
-        raise ValueError('Judge dimensions mismatch')
+        raise JudgmentValidationError('DIMENSIONS_MISMATCH')
     for row in value.values():
         if not isinstance(row, dict) or set(row) != {'verdict', 'reason', 'quotes'}:
-            raise ValueError('Judge schema mismatch')
+            raise JudgmentValidationError('SCHEMA_MISMATCH')
         if row['verdict'] not in {'pass', 'fail', 'unknown'} or not isinstance(row['reason'], str) or not 0 < len(row['reason']) <= 1200:
-            raise ValueError('Invalid judge verdict')
+            raise JudgmentValidationError('INVALID_VERDICT_OR_REASON')
         if not isinstance(row['quotes'], list) or any(not isinstance(q, str) or not q or q not in visible for q in row['quotes']):
-            raise ValueError('Judge quote is not from visible answer')
+            raise JudgmentValidationError('QUOTE_NOT_IN_VISIBLE_REPLY')
         if visible and row['verdict'] != 'unknown' and not row['quotes']:
-            raise ValueError('Missing judge evidence')
+            raise JudgmentValidationError('MISSING_REPLY_EVIDENCE')
     return value

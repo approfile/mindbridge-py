@@ -1,0 +1,5857 @@
+{
+  "datasetSha256": "80130471723d8f3dc7c332444ffcd252077ec3bf1939ed80edf1a4ab9afcb6bb",
+  "graderVersion": "system-baseline-judge-v3",
+  "protocol": "baseline-reliability-comparison-v1",
+  "identicalExecutionConfiguration": true,
+  "beforeRuntimePolicy": "reply-safety-v3",
+  "afterRuntimePolicy": "reply-safety-v4",
+  "sourceChanges": {
+    "app/benchmark/judge.py": {
+      "before": "78689c6f326b1d7c3b2a317fd81f6d02cb7def665d58d375958b0b00c15f8ed9",
+      "after": "78f782f267b1d68bf48c949dbdc815478e3198f093e56f86667896b731a4772e"
+    },
+    "app/benchmark/protocol.py": {
+      "before": "3da17c32d886f09d13727ba456ae87b1291b37a1c1f8b6f57c0bebf3ff0e5aae",
+      "after": "79c26f3e3eb525445b56461db399a4956ba712a3c95ec4d448ad971d92918048"
+    },
+    "app/benchmark/report.py": {
+      "before": "52da3dbf6617306df43cba89545db4018ec594cb35eb6da4a641cdbacc9c77c4",
+      "after": "1a635deb414854a7a2e54b9471a3164a8e4183e7a1974a96c42a002a86042d2e"
+    },
+    "app/benchmark/runner.py": {
+      "before": "981a955c3423d6bb4aab23c315b71df8ada3570f64b46291abf4810f6fc047e4",
+      "after": "9685a6e5386a4c5903a59797559cacaf630969ebc46cdef65e2690c00323a248"
+    },
+    "app/services/reply_safety.py": {
+      "before": "ed28e92ffdd5ba1cc16a0ff98786ce4e5f8a28639cc7f35788e9a94dbcaf5140",
+      "after": "4183a16811c02a0d3d5d0f867deb06265bad2052fdfd9c493c73c140ee1b8b35"
+    },
+    "app/services/session_memory.py": {
+      "before": "1680afa73aba00efda092f6db2bffef382bbf75ab11e6209d48d2b67f4c973af",
+      "after": "5c53690285005eaa56041385a7192f1ea2a9e069290f4a1306d74cc3de12eed9"
+    }
+  },
+  "plannedScenarios": 110,
+  "capturedScenarios": 110,
+  "controlledTransactionProbe": {
+    "before": {
+      "sourceSha256": "1680afa73aba00efda092f6db2bffef382bbf75ab11e6209d48d2b67f4c973af",
+      "reference": true,
+      "isolation": "REPEATABLE-READ",
+      "committed": 5,
+      "deadlocks": 15,
+      "sameSessionAllAppendsAndCursorCorrect": true,
+      "sameSessionRows": 20,
+      "freshStateAfterEarlierSnapshot": true,
+      "initializationRollsBackWithTransaction": true
+    },
+    "after": {
+      "sourceSha256": "5c53690285005eaa56041385a7192f1ea2a9e069290f4a1306d74cc3de12eed9",
+      "reference": false,
+      "isolation": "REPEATABLE-READ",
+      "committed": 20,
+      "deadlocks": 0,
+      "sameSessionAllAppendsAndCursorCorrect": true,
+      "sameSessionRows": 20,
+      "freshStateAfterEarlierSnapshot": true,
+      "initializationRollsBackWithTransaction": true
+    }
+  },
+  "databaseDiagnostics": {
+    "before": {
+      "event_driven/c4/nominal": {
+        "1213": 2
+      },
+      "event_driven/admission_probe": {
+        "1213": 3
+      },
+      "sequential/c4/nominal": {
+        "1213": 2
+      },
+      "sequential/admission_probe": {
+        "1213": 3
+      }
+    },
+    "after": {}
+  },
+  "qualitySameGrader": {
+    "event_driven/c1/nominal": {
+      "beforeSameGrader": {
+        "samples": 14,
+        "pass": 13,
+        "fail": 1,
+        "unknown": 0,
+        "rate": 0.9285714285714286,
+        "lowerBound": 0.9285714285714286,
+        "upperBound": 0.9285714285714286
+      },
+      "after": {
+        "samples": 14,
+        "pass": 13,
+        "fail": 1,
+        "unknown": 0,
+        "rate": 0.9285714285714286,
+        "lowerBound": 0.9285714285714286,
+        "upperBound": 0.9285714285714286
+      }
+    },
+    "event_driven/c1/context_intervention": {
+      "beforeSameGrader": {
+        "samples": 2,
+        "pass": 0,
+        "fail": 2,
+        "unknown": 0,
+        "rate": 0.0,
+        "lowerBound": 0.0,
+        "upperBound": 0.0
+      },
+      "after": {
+        "samples": 2,
+        "pass": 2,
+        "fail": 0,
+        "unknown": 0,
+        "rate": 1.0,
+        "lowerBound": 1.0,
+        "upperBound": 1.0
+      }
+    },
+    "event_driven/c2/nominal": {
+      "beforeSameGrader": {
+        "samples": 14,
+        "pass": 13,
+        "fail": 1,
+        "unknown": 0,
+        "rate": 0.9285714285714286,
+        "lowerBound": 0.9285714285714286,
+        "upperBound": 0.9285714285714286
+      },
+      "after": {
+        "samples": 14,
+        "pass": 13,
+        "fail": 1,
+        "unknown": 0,
+        "rate": 0.9285714285714286,
+        "lowerBound": 0.9285714285714286,
+        "upperBound": 0.9285714285714286
+      }
+    },
+    "event_driven/c2/context_intervention": {
+      "beforeSameGrader": {
+        "samples": 2,
+        "pass": 1,
+        "fail": 1,
+        "unknown": 0,
+        "rate": 0.5,
+        "lowerBound": 0.5,
+        "upperBound": 0.5
+      },
+      "after": {
+        "samples": 2,
+        "pass": 2,
+        "fail": 0,
+        "unknown": 0,
+        "rate": 1.0,
+        "lowerBound": 1.0,
+        "upperBound": 1.0
+      }
+    },
+    "event_driven/c4/nominal": {
+      "beforeSameGrader": {
+        "samples": 14,
+        "pass": 11,
+        "fail": 3,
+        "unknown": 0,
+        "rate": 0.7857142857142857,
+        "lowerBound": 0.7857142857142857,
+        "upperBound": 0.7857142857142857
+      },
+      "after": {
+        "samples": 14,
+        "pass": 12,
+        "fail": 2,
+        "unknown": 0,
+        "rate": 0.8571428571428571,
+        "lowerBound": 0.8571428571428571,
+        "upperBound": 0.8571428571428571
+      }
+    },
+    "event_driven/c4/context_intervention": {
+      "beforeSameGrader": {
+        "samples": 2,
+        "pass": 1,
+        "fail": 1,
+        "unknown": 0,
+        "rate": 0.5,
+        "lowerBound": 0.5,
+        "upperBound": 0.5
+      },
+      "after": {
+        "samples": 2,
+        "pass": 2,
+        "fail": 0,
+        "unknown": 0,
+        "rate": 1.0,
+        "lowerBound": 1.0,
+        "upperBound": 1.0
+      }
+    },
+    "sequential/c1/nominal": {
+      "beforeSameGrader": {
+        "samples": 14,
+        "pass": 13,
+        "fail": 1,
+        "unknown": 0,
+        "rate": 0.9285714285714286,
+        "lowerBound": 0.9285714285714286,
+        "upperBound": 0.9285714285714286
+      },
+      "after": {
+        "samples": 14,
+        "pass": 14,
+        "fail": 0,
+        "unknown": 0,
+        "rate": 1.0,
+        "lowerBound": 1.0,
+        "upperBound": 1.0
+      }
+    },
+    "sequential/c1/context_intervention": {
+      "beforeSameGrader": {
+        "samples": 2,
+        "pass": 0,
+        "fail": 2,
+        "unknown": 0,
+        "rate": 0.0,
+        "lowerBound": 0.0,
+        "upperBound": 0.0
+      },
+      "after": {
+        "samples": 2,
+        "pass": 2,
+        "fail": 0,
+        "unknown": 0,
+        "rate": 1.0,
+        "lowerBound": 1.0,
+        "upperBound": 1.0
+      }
+    },
+    "sequential/c2/nominal": {
+      "beforeSameGrader": {
+        "samples": 14,
+        "pass": 12,
+        "fail": 2,
+        "unknown": 0,
+        "rate": 0.8571428571428571,
+        "lowerBound": 0.8571428571428571,
+        "upperBound": 0.8571428571428571
+      },
+      "after": {
+        "samples": 14,
+        "pass": 13,
+        "fail": 1,
+        "unknown": 0,
+        "rate": 0.9285714285714286,
+        "lowerBound": 0.9285714285714286,
+        "upperBound": 0.9285714285714286
+      }
+    },
+    "sequential/c2/context_intervention": {
+      "beforeSameGrader": {
+        "samples": 2,
+        "pass": 0,
+        "fail": 2,
+        "unknown": 0,
+        "rate": 0.0,
+        "lowerBound": 0.0,
+        "upperBound": 0.0
+      },
+      "after": {
+        "samples": 2,
+        "pass": 2,
+        "fail": 0,
+        "unknown": 0,
+        "rate": 1.0,
+        "lowerBound": 1.0,
+        "upperBound": 1.0
+      }
+    },
+    "sequential/c4/nominal": {
+      "beforeSameGrader": {
+        "samples": 14,
+        "pass": 11,
+        "fail": 3,
+        "unknown": 0,
+        "rate": 0.7857142857142857,
+        "lowerBound": 0.7857142857142857,
+        "upperBound": 0.7857142857142857
+      },
+      "after": {
+        "samples": 14,
+        "pass": 13,
+        "fail": 1,
+        "unknown": 0,
+        "rate": 0.9285714285714286,
+        "lowerBound": 0.9285714285714286,
+        "upperBound": 0.9285714285714286
+      }
+    },
+    "sequential/c4/context_intervention": {
+      "beforeSameGrader": {
+        "samples": 2,
+        "pass": 0,
+        "fail": 2,
+        "unknown": 0,
+        "rate": 0.0,
+        "lowerBound": 0.0,
+        "upperBound": 0.0
+      },
+      "after": {
+        "samples": 2,
+        "pass": 2,
+        "fail": 0,
+        "unknown": 0,
+        "rate": 1.0,
+        "lowerBound": 1.0,
+        "upperBound": 1.0
+      }
+    }
+  },
+  "emptyEvidenceSameGrader": {
+    "event_driven/c1/context_intervention": {
+      "beforeSameGrader": {
+        "samples": 2,
+        "pass": 0,
+        "fail": 2,
+        "unknown": 0,
+        "rate": 0.0,
+        "lowerBound": 0.0,
+        "upperBound": 0.0
+      },
+      "after": {
+        "samples": 2,
+        "pass": 2,
+        "fail": 0,
+        "unknown": 0,
+        "rate": 1.0,
+        "lowerBound": 1.0,
+        "upperBound": 1.0
+      }
+    },
+    "event_driven/c2/context_intervention": {
+      "beforeSameGrader": {
+        "samples": 2,
+        "pass": 1,
+        "fail": 1,
+        "unknown": 0,
+        "rate": 0.5,
+        "lowerBound": 0.5,
+        "upperBound": 0.5
+      },
+      "after": {
+        "samples": 2,
+        "pass": 2,
+        "fail": 0,
+        "unknown": 0,
+        "rate": 1.0,
+        "lowerBound": 1.0,
+        "upperBound": 1.0
+      }
+    },
+    "event_driven/c4/context_intervention": {
+      "beforeSameGrader": {
+        "samples": 2,
+        "pass": 1,
+        "fail": 1,
+        "unknown": 0,
+        "rate": 0.5,
+        "lowerBound": 0.5,
+        "upperBound": 0.5
+      },
+      "after": {
+        "samples": 2,
+        "pass": 2,
+        "fail": 0,
+        "unknown": 0,
+        "rate": 1.0,
+        "lowerBound": 1.0,
+        "upperBound": 1.0
+      }
+    },
+    "sequential/c1/context_intervention": {
+      "beforeSameGrader": {
+        "samples": 2,
+        "pass": 0,
+        "fail": 2,
+        "unknown": 0,
+        "rate": 0.0,
+        "lowerBound": 0.0,
+        "upperBound": 0.0
+      },
+      "after": {
+        "samples": 2,
+        "pass": 2,
+        "fail": 0,
+        "unknown": 0,
+        "rate": 1.0,
+        "lowerBound": 1.0,
+        "upperBound": 1.0
+      }
+    },
+    "sequential/c2/context_intervention": {
+      "beforeSameGrader": {
+        "samples": 2,
+        "pass": 0,
+        "fail": 2,
+        "unknown": 0,
+        "rate": 0.0,
+        "lowerBound": 0.0,
+        "upperBound": 0.0
+      },
+      "after": {
+        "samples": 2,
+        "pass": 2,
+        "fail": 0,
+        "unknown": 0,
+        "rate": 1.0,
+        "lowerBound": 1.0,
+        "upperBound": 1.0
+      }
+    },
+    "sequential/c4/context_intervention": {
+      "beforeSameGrader": {
+        "samples": 2,
+        "pass": 0,
+        "fail": 2,
+        "unknown": 0,
+        "rate": 0.0,
+        "lowerBound": 0.0,
+        "upperBound": 0.0
+      },
+      "after": {
+        "samples": 2,
+        "pass": 2,
+        "fail": 0,
+        "unknown": 0,
+        "rate": 1.0,
+        "lowerBound": 1.0,
+        "upperBound": 1.0
+      }
+    }
+  },
+  "beforeCohortPerformance": {
+    "event_driven/c1": {
+      "schemaVersion": 1,
+      "logicalCalls": 72,
+      "httpAttempts": 72,
+      "retryAttempts": 0,
+      "attemptStatuses": {
+        "started": 0,
+        "completed": 72,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tokens": {
+        "inputTokens": 112273,
+        "outputTokens": 6709,
+        "totalTokens": 118982,
+        "cacheHitTokens": 64896,
+        "cacheMissTokens": 47199,
+        "reasoningTokens": null
+      },
+      "reportedUsageAttempts": 72,
+      "unknownUsageAttempts": 0,
+      "usageCoverage": 1.0,
+      "tokensComplete": true,
+      "cacheTokenCoverage": 0.9166666666666666,
+      "providerCacheHitRate": 0.5789375083634417,
+      "providerCacheInputTokensCovered": 112095,
+      "cost": {
+        "knownAmounts": {
+          "USD": "0.011299938",
+          "CNY": "0.0000890"
+        },
+        "pricedAttempts": 72,
+        "unknownPriceAttempts": 0,
+        "complete": true,
+        "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+      },
+      "cacheLayers": {
+        "redis_session_history": {
+          "hits": 2,
+          "misses": 16,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 11.456,
+          "unit": "requests",
+          "hitRate": 0.1111111111111111
+        },
+        "document_embedding_reuse": {
+          "hits": 204,
+          "misses": 0,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 69.123,
+          "unit": "chunks",
+          "hitRate": 1.0
+        }
+      },
+      "unimplementedCaches": [
+        "query_embedding",
+        "retrieval_result",
+        "final_answer"
+      ],
+      "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+      "scenarios": 16,
+      "httpRequests": 18,
+      "sseDone": 15,
+      "missingLedgerRequests": 0,
+      "fallbackTurns": 3,
+      "fallbackRate": 0.16666666666666666,
+      "retryTurnRate": 0.0,
+      "completeUsageTurnRate": 1.0,
+      "httpStatuses": {
+        "200": 18
+      },
+      "clientEndToEnd": {
+        "samples": 18,
+        "p50Ms": 3774.607,
+        "p95Ms": 18340.554
+      },
+      "clientFirstVisibleToken": {
+        "samples": 18,
+        "p50Ms": 3743.072,
+        "p95Ms": 18308.019
+      },
+      "serverFirstVisibleToken": {
+        "samples": 18,
+        "p50Ms": 3741.662,
+        "p95Ms": 18306.709
+      },
+      "modelFirstToken": {
+        "samples": 21,
+        "p50Ms": 595.472,
+        "p95Ms": 808.539
+      },
+      "observedWallSeconds": 99.11293232400203,
+      "completedReplyThroughput": 0.151342510490606,
+      "httpThroughput": 0.1816110125887272,
+      "agentCostShares": {
+        "SafetyAgent": {
+          "USD": {
+            "knownAmount": "0.007299504",
+            "shareOfKnownCost": 0.6459773496102368
+          }
+        },
+        "ResponseAgent": {
+          "USD": {
+            "knownAmount": "0.003682266",
+            "shareOfKnownCost": 0.32586603572515177
+          }
+        },
+        "ContextAgent": {
+          "USD": {
+            "knownAmount": "0.00024330",
+            "shareOfKnownCost": 0.02153109158652021
+          }
+        },
+        "EmbeddingService": {
+          "CNY": {
+            "knownAmount": "0.0000890",
+            "shareOfKnownCost": 1.0
+          }
+        },
+        "UnderstandingAgent": {
+          "USD": {
+            "knownAmount": "0.000074868",
+            "shareOfKnownCost": 0.006625523078091225
+          }
+        }
+      },
+      "byStage": [
+        {
+          "agent": "ContextAgent",
+          "stage": "query.rewrite",
+          "schemaVersion": 1,
+          "logicalCalls": 8,
+          "httpAttempts": 8,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 8,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 1174,
+            "outputTokens": 112,
+            "totalTokens": 1286,
+            "cacheHitTokens": 0,
+            "cacheMissTokens": 1174,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 8,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.0,
+          "providerCacheInputTokensCovered": 1174,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.00024330"
+            },
+            "pricedAttempts": 8,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 8,
+            "p50Ms": 811.781,
+            "p95Ms": 951.133
+          }
+        },
+        {
+          "agent": "EmbeddingService",
+          "stage": "embedding.query",
+          "schemaVersion": 1,
+          "logicalCalls": 6,
+          "httpAttempts": 6,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 6,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 178,
+            "outputTokens": 0,
+            "totalTokens": 178,
+            "cacheHitTokens": null,
+            "cacheMissTokens": null,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 6,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 0.0,
+          "providerCacheHitRate": null,
+          "providerCacheInputTokensCovered": 0,
+          "cost": {
+            "knownAmounts": {
+              "CNY": "0.0000890"
+            },
+            "pricedAttempts": 6,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 6,
+            "p50Ms": 1538.449,
+            "p95Ms": 4147.276
+          }
+        },
+        {
+          "agent": "ResponseAgent",
+          "stage": "reply.generate",
+          "schemaVersion": 1,
+          "logicalCalls": 21,
+          "httpAttempts": 21,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 21,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 28823,
+            "outputTokens": 2820,
+            "totalTokens": 31643,
+            "cacheHitTokens": 15872,
+            "cacheMissTokens": 12951,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 21,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.550671338861326,
+          "providerCacheInputTokensCovered": 28823,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.003682266"
+            },
+            "pricedAttempts": 21,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 21,
+            "p50Ms": 1560.504,
+            "p95Ms": 2157.02
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "agent.act",
+          "schemaVersion": 1,
+          "logicalCalls": 16,
+          "httpAttempts": 16,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 16,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 17969,
+            "outputTokens": 803,
+            "totalTokens": 18772,
+            "cacheHitTokens": 8320,
+            "cacheMissTokens": 9649,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 16,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.46301964494407033,
+          "providerCacheInputTokensCovered": 17969,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.001954110"
+            },
+            "pricedAttempts": 16,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 16,
+            "p50Ms": 849.273,
+            "p95Ms": 1245.936
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "reply.review",
+          "schemaVersion": 1,
+          "logicalCalls": 19,
+          "httpAttempts": 19,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 19,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 63443,
+            "outputTokens": 2958,
+            "totalTokens": 66401,
+            "cacheHitTokens": 40448,
+            "cacheMissTokens": 22995,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 19,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.637548665731444,
+          "providerCacheInputTokensCovered": 63443,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.005345394"
+            },
+            "pricedAttempts": 19,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 19,
+            "p50Ms": 943.504,
+            "p95Ms": 2243.401
+          }
+        },
+        {
+          "agent": "UnderstandingAgent",
+          "stage": "agent.act",
+          "schemaVersion": 1,
+          "logicalCalls": 2,
+          "httpAttempts": 2,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 2,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 686,
+            "outputTokens": 16,
+            "totalTokens": 702,
+            "cacheHitTokens": 256,
+            "cacheMissTokens": 430,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 2,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.37317784256559766,
+          "providerCacheInputTokensCovered": 686,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.000074868"
+            },
+            "pricedAttempts": 2,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 2,
+            "p50Ms": 462.285,
+            "p95Ms": 565.671
+          }
+        }
+      ],
+      "labelledInjectedAttempts": 0,
+      "actualNetworkAttempts": 72,
+      "databaseDiagnostics": {}
+    },
+    "event_driven/c2": {
+      "schemaVersion": 1,
+      "logicalCalls": 68,
+      "httpAttempts": 68,
+      "retryAttempts": 0,
+      "attemptStatuses": {
+        "started": 0,
+        "completed": 68,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tokens": {
+        "inputTokens": 93206,
+        "outputTokens": 4865,
+        "totalTokens": 98071,
+        "cacheHitTokens": 65536,
+        "cacheMissTokens": 27492,
+        "reasoningTokens": null
+      },
+      "reportedUsageAttempts": 68,
+      "unknownUsageAttempts": 0,
+      "usageCoverage": 1.0,
+      "tokensComplete": true,
+      "cacheTokenCoverage": 0.9117647058823529,
+      "providerCacheHitRate": 0.7044760717203422,
+      "providerCacheInputTokensCovered": 93028,
+      "cost": {
+        "knownAmounts": {
+          "USD": "0.007239408",
+          "CNY": "0.0000890"
+        },
+        "pricedAttempts": 68,
+        "unknownPriceAttempts": 0,
+        "complete": true,
+        "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+      },
+      "cacheLayers": {
+        "redis_session_history": {
+          "hits": 2,
+          "misses": 16,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 11.859,
+          "unit": "requests",
+          "hitRate": 0.1111111111111111
+        },
+        "document_embedding_reuse": {
+          "hits": 204,
+          "misses": 0,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 57.813,
+          "unit": "chunks",
+          "hitRate": 1.0
+        }
+      },
+      "unimplementedCaches": [
+        "query_embedding",
+        "retrieval_result",
+        "final_answer"
+      ],
+      "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+      "scenarios": 16,
+      "httpRequests": 18,
+      "sseDone": 16,
+      "missingLedgerRequests": 0,
+      "fallbackTurns": 2,
+      "fallbackRate": 0.1111111111111111,
+      "retryTurnRate": 0.0,
+      "completeUsageTurnRate": 1.0,
+      "httpStatuses": {
+        "200": 18
+      },
+      "clientEndToEnd": {
+        "samples": 18,
+        "p50Ms": 3615.842,
+        "p95Ms": 8763.655
+      },
+      "clientFirstVisibleToken": {
+        "samples": 18,
+        "p50Ms": 3585.098,
+        "p95Ms": 8736.097
+      },
+      "serverFirstVisibleToken": {
+        "samples": 18,
+        "p50Ms": 3583.914,
+        "p95Ms": 8734.808
+      },
+      "modelFirstToken": {
+        "samples": 20,
+        "p50Ms": 573.793,
+        "p95Ms": 715.366
+      },
+      "observedWallSeconds": 46.70909000899701,
+      "completedReplyThroughput": 0.34254574424203327,
+      "httpThroughput": 0.3853639622722874,
+      "agentCostShares": {
+        "SafetyAgent": {
+          "USD": {
+            "knownAmount": "0.003988362",
+            "shareOfKnownCost": 0.5509237771928313
+          }
+        },
+        "ResponseAgent": {
+          "USD": {
+            "knownAmount": "0.002932278",
+            "shareOfKnownCost": 0.4050438930918108
+          }
+        },
+        "ContextAgent": {
+          "USD": {
+            "knownAmount": "0.00024390",
+            "shareOfKnownCost": 0.03369060011536855
+          }
+        },
+        "UnderstandingAgent": {
+          "USD": {
+            "knownAmount": "0.000074868",
+            "shareOfKnownCost": 0.01034172959998939
+          }
+        },
+        "EmbeddingService": {
+          "CNY": {
+            "knownAmount": "0.0000890",
+            "shareOfKnownCost": 1.0
+          }
+        }
+      },
+      "byStage": [
+        {
+          "agent": "ContextAgent",
+          "stage": "query.rewrite",
+          "schemaVersion": 1,
+          "logicalCalls": 8,
+          "httpAttempts": 8,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 8,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 1174,
+            "outputTokens": 113,
+            "totalTokens": 1287,
+            "cacheHitTokens": 0,
+            "cacheMissTokens": 1174,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 8,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.0,
+          "providerCacheInputTokensCovered": 1174,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.00024390"
+            },
+            "pricedAttempts": 8,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 8,
+            "p50Ms": 589.144,
+            "p95Ms": 673.728
+          }
+        },
+        {
+          "agent": "EmbeddingService",
+          "stage": "embedding.query",
+          "schemaVersion": 1,
+          "logicalCalls": 6,
+          "httpAttempts": 6,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 6,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 178,
+            "outputTokens": 0,
+            "totalTokens": 178,
+            "cacheHitTokens": null,
+            "cacheMissTokens": null,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 6,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 0.0,
+          "providerCacheHitRate": null,
+          "providerCacheInputTokensCovered": 0,
+          "cost": {
+            "knownAmounts": {
+              "CNY": "0.0000890"
+            },
+            "pricedAttempts": 6,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 6,
+            "p50Ms": 2392.755,
+            "p95Ms": 3729.82
+          }
+        },
+        {
+          "agent": "ResponseAgent",
+          "stage": "reply.generate",
+          "schemaVersion": 1,
+          "logicalCalls": 20,
+          "httpAttempts": 20,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 20,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 27793,
+            "outputTokens": 2392,
+            "totalTokens": 30185,
+            "cacheHitTokens": 18176,
+            "cacheMissTokens": 9617,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 20,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.6539776202640952,
+          "providerCacheInputTokensCovered": 27793,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.002932278"
+            },
+            "pricedAttempts": 20,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 20,
+            "p50Ms": 1450.662,
+            "p95Ms": 2023.83
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "agent.act",
+          "schemaVersion": 1,
+          "logicalCalls": 16,
+          "httpAttempts": 16,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 16,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 17953,
+            "outputTokens": 785,
+            "totalTokens": 18738,
+            "cacheHitTokens": 14080,
+            "cacheMissTokens": 3873,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 16,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.7842700384336879,
+          "providerCacheInputTokensCovered": 17953,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.001094190"
+            },
+            "pricedAttempts": 16,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 16,
+            "p50Ms": 978.312,
+            "p95Ms": 1167.391
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "reply.review",
+          "schemaVersion": 1,
+          "logicalCalls": 16,
+          "httpAttempts": 16,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 16,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 45422,
+            "outputTokens": 1559,
+            "totalTokens": 46981,
+            "cacheHitTokens": 33024,
+            "cacheMissTokens": 12398,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 16,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.72704856677381,
+          "providerCacheInputTokensCovered": 45422,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.002894172"
+            },
+            "pricedAttempts": 16,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 16,
+            "p50Ms": 603.232,
+            "p95Ms": 1846.437
+          }
+        },
+        {
+          "agent": "UnderstandingAgent",
+          "stage": "agent.act",
+          "schemaVersion": 1,
+          "logicalCalls": 2,
+          "httpAttempts": 2,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 2,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 686,
+            "outputTokens": 16,
+            "totalTokens": 702,
+            "cacheHitTokens": 256,
+            "cacheMissTokens": 430,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 2,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.37317784256559766,
+          "providerCacheInputTokensCovered": 686,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.000074868"
+            },
+            "pricedAttempts": 2,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 2,
+            "p50Ms": 701.437,
+            "p95Ms": 787.293
+          }
+        }
+      ],
+      "labelledInjectedAttempts": 0,
+      "actualNetworkAttempts": 68,
+      "databaseDiagnostics": {}
+    },
+    "event_driven/c4": {
+      "schemaVersion": 1,
+      "logicalCalls": 64,
+      "httpAttempts": 64,
+      "retryAttempts": 0,
+      "attemptStatuses": {
+        "started": 0,
+        "completed": 64,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tokens": {
+        "inputTokens": 97442,
+        "outputTokens": 5112,
+        "totalTokens": 102554,
+        "cacheHitTokens": 71296,
+        "cacheMissTokens": 25968,
+        "reasoningTokens": null
+      },
+      "reportedUsageAttempts": 64,
+      "unknownUsageAttempts": 0,
+      "usageCoverage": 1.0,
+      "tokensComplete": true,
+      "cacheTokenCoverage": 0.90625,
+      "providerCacheHitRate": 0.7330152985688435,
+      "providerCacheInputTokensCovered": 97264,
+      "cost": {
+        "knownAmounts": {
+          "USD": "0.007176288",
+          "CNY": "0.0000890"
+        },
+        "pricedAttempts": 64,
+        "unknownPriceAttempts": 0,
+        "complete": true,
+        "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+      },
+      "cacheLayers": {
+        "redis_session_history": {
+          "hits": 1,
+          "misses": 15,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 13.65,
+          "unit": "requests",
+          "hitRate": 0.0625
+        },
+        "document_embedding_reuse": {
+          "hits": 204,
+          "misses": 0,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 63.831,
+          "unit": "chunks",
+          "hitRate": 1.0
+        }
+      },
+      "unimplementedCaches": [
+        "query_embedding",
+        "retrieval_result",
+        "final_answer"
+      ],
+      "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+      "scenarios": 16,
+      "httpRequests": 18,
+      "sseDone": 14,
+      "missingLedgerRequests": 2,
+      "fallbackTurns": 2,
+      "fallbackRate": 0.1111111111111111,
+      "retryTurnRate": 0.0,
+      "completeUsageTurnRate": 0.8888888888888888,
+      "httpStatuses": {
+        "200": 18
+      },
+      "clientEndToEnd": {
+        "samples": 18,
+        "p50Ms": 3567.854,
+        "p95Ms": 14832.911
+      },
+      "clientFirstVisibleToken": {
+        "samples": 16,
+        "p50Ms": 4370.255,
+        "p95Ms": 14790.658
+      },
+      "serverFirstVisibleToken": {
+        "samples": 16,
+        "p50Ms": 4368.604,
+        "p95Ms": 14789.487
+      },
+      "modelFirstToken": {
+        "samples": 18,
+        "p50Ms": 608.816,
+        "p95Ms": 839.824
+      },
+      "observedWallSeconds": 25.7334694079982,
+      "completedReplyThroughput": 0.5440385739689134,
+      "httpThroughput": 0.6994781665314601,
+      "agentCostShares": {
+        "ContextAgent": {
+          "USD": {
+            "knownAmount": "0.00024690",
+            "shareOfKnownCost": 0.034404973713429564
+          }
+        },
+        "EmbeddingService": {
+          "CNY": {
+            "knownAmount": "0.0000890",
+            "shareOfKnownCost": 1.0
+          }
+        },
+        "ResponseAgent": {
+          "USD": {
+            "knownAmount": "0.002798160",
+            "shareOfKnownCost": 0.3899174615065616
+          }
+        },
+        "SafetyAgent": {
+          "USD": {
+            "knownAmount": "0.004056360",
+            "shareOfKnownCost": 0.5652448731154602
+          }
+        },
+        "UnderstandingAgent": {
+          "USD": {
+            "knownAmount": "0.000074868",
+            "shareOfKnownCost": 0.01043269166454858
+          }
+        }
+      },
+      "byStage": [
+        {
+          "agent": "ContextAgent",
+          "stage": "query.rewrite",
+          "schemaVersion": 1,
+          "logicalCalls": 8,
+          "httpAttempts": 8,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 8,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 1174,
+            "outputTokens": 118,
+            "totalTokens": 1292,
+            "cacheHitTokens": 0,
+            "cacheMissTokens": 1174,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 8,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.0,
+          "providerCacheInputTokensCovered": 1174,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.00024690"
+            },
+            "pricedAttempts": 8,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 8,
+            "p50Ms": 659.166,
+            "p95Ms": 872.998
+          }
+        },
+        {
+          "agent": "EmbeddingService",
+          "stage": "embedding.query",
+          "schemaVersion": 1,
+          "logicalCalls": 6,
+          "httpAttempts": 6,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 6,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 178,
+            "outputTokens": 0,
+            "totalTokens": 178,
+            "cacheHitTokens": null,
+            "cacheMissTokens": null,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 6,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 0.0,
+          "providerCacheHitRate": null,
+          "providerCacheInputTokensCovered": 0,
+          "cost": {
+            "knownAmounts": {
+              "CNY": "0.0000890"
+            },
+            "pricedAttempts": 6,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 6,
+            "p50Ms": 1437.768,
+            "p95Ms": 5869.936
+          }
+        },
+        {
+          "agent": "ResponseAgent",
+          "stage": "reply.generate",
+          "schemaVersion": 1,
+          "logicalCalls": 18,
+          "httpAttempts": 18,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 18,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 26980,
+            "outputTokens": 2309,
+            "totalTokens": 29289,
+            "cacheHitTokens": 17920,
+            "cacheMissTokens": 9060,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 18,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.6641957005189029,
+          "providerCacheInputTokensCovered": 26980,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.002798160"
+            },
+            "pricedAttempts": 18,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 18,
+            "p50Ms": 1581.994,
+            "p95Ms": 2125.626
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "agent.act",
+          "schemaVersion": 1,
+          "logicalCalls": 14,
+          "httpAttempts": 14,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 14,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 17058,
+            "outputTokens": 713,
+            "totalTokens": 17771,
+            "cacheHitTokens": 13696,
+            "cacheMissTokens": 3362,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 14,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.8029077265799038,
+          "providerCacheInputTokensCovered": 17058,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.000973188"
+            },
+            "pricedAttempts": 14,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 14,
+            "p50Ms": 1006.324,
+            "p95Ms": 1312.806
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "reply.review",
+          "schemaVersion": 1,
+          "logicalCalls": 16,
+          "httpAttempts": 16,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 16,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 51366,
+            "outputTokens": 1956,
+            "totalTokens": 53322,
+            "cacheHitTokens": 39424,
+            "cacheMissTokens": 11942,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 16,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.7675115835377487,
+          "providerCacheInputTokensCovered": 51366,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.003083172"
+            },
+            "pricedAttempts": 16,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 16,
+            "p50Ms": 928.279,
+            "p95Ms": 1705.705
+          }
+        },
+        {
+          "agent": "UnderstandingAgent",
+          "stage": "agent.act",
+          "schemaVersion": 1,
+          "logicalCalls": 2,
+          "httpAttempts": 2,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 2,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 686,
+            "outputTokens": 16,
+            "totalTokens": 702,
+            "cacheHitTokens": 256,
+            "cacheMissTokens": 430,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 2,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.37317784256559766,
+          "providerCacheInputTokensCovered": 686,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.000074868"
+            },
+            "pricedAttempts": 2,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 2,
+            "p50Ms": 835.354,
+            "p95Ms": 841.275
+          }
+        }
+      ],
+      "labelledInjectedAttempts": 0,
+      "actualNetworkAttempts": 64,
+      "databaseDiagnostics": {
+        "1213": 2
+      }
+    },
+    "sequential/c1": {
+      "schemaVersion": 1,
+      "logicalCalls": 72,
+      "httpAttempts": 72,
+      "retryAttempts": 0,
+      "attemptStatuses": {
+        "started": 0,
+        "completed": 72,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tokens": {
+        "inputTokens": 111044,
+        "outputTokens": 6312,
+        "totalTokens": 117356,
+        "cacheHitTokens": 79488,
+        "cacheMissTokens": 31375,
+        "reasoningTokens": null
+      },
+      "reportedUsageAttempts": 72,
+      "unknownUsageAttempts": 0,
+      "usageCoverage": 1.0,
+      "tokensComplete": true,
+      "cacheTokenCoverage": 0.9166666666666666,
+      "providerCacheHitRate": 0.7169930454705357,
+      "providerCacheInputTokensCovered": 110863,
+      "cost": {
+        "knownAmounts": {
+          "USD": "0.008731914",
+          "CNY": "0.0000905"
+        },
+        "pricedAttempts": 72,
+        "unknownPriceAttempts": 0,
+        "complete": true,
+        "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+      },
+      "cacheLayers": {
+        "redis_session_history": {
+          "hits": 2,
+          "misses": 16,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 11.88,
+          "unit": "requests",
+          "hitRate": 0.1111111111111111
+        },
+        "document_embedding_reuse": {
+          "hits": 204,
+          "misses": 0,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 76.515,
+          "unit": "chunks",
+          "hitRate": 1.0
+        }
+      },
+      "unimplementedCaches": [
+        "query_embedding",
+        "retrieval_result",
+        "final_answer"
+      ],
+      "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+      "scenarios": 16,
+      "httpRequests": 18,
+      "sseDone": 15,
+      "missingLedgerRequests": 0,
+      "fallbackTurns": 3,
+      "fallbackRate": 0.16666666666666666,
+      "retryTurnRate": 0.0,
+      "completeUsageTurnRate": 1.0,
+      "httpStatuses": {
+        "200": 18
+      },
+      "clientEndToEnd": {
+        "samples": 18,
+        "p50Ms": 3389.988,
+        "p95Ms": 14188.527
+      },
+      "clientFirstVisibleToken": {
+        "samples": 18,
+        "p50Ms": 3364.074,
+        "p95Ms": 14161.655
+      },
+      "serverFirstVisibleToken": {
+        "samples": 18,
+        "p50Ms": 3362.999,
+        "p95Ms": 14160.35
+      },
+      "modelFirstToken": {
+        "samples": 21,
+        "p50Ms": 653.392,
+        "p95Ms": 859.589
+      },
+      "observedWallSeconds": 97.53596045900485,
+      "completedReplyThroughput": 0.15378943242481957,
+      "httpThroughput": 0.1845473189097835,
+      "agentCostShares": {
+        "SafetyAgent": {
+          "USD": {
+            "knownAmount": "0.005088954",
+            "shareOfKnownCost": 0.5827993725087077
+          }
+        },
+        "ResponseAgent": {
+          "USD": {
+            "knownAmount": "0.003320592",
+            "shareOfKnownCost": 0.38028226113999747
+          }
+        },
+        "ContextAgent": {
+          "USD": {
+            "knownAmount": "0.00024750",
+            "shareOfKnownCost": 0.028344301146346607
+          }
+        },
+        "EmbeddingService": {
+          "CNY": {
+            "knownAmount": "0.0000905",
+            "shareOfKnownCost": 1.0
+          }
+        },
+        "UnderstandingAgent": {
+          "USD": {
+            "knownAmount": "0.000074868",
+            "shareOfKnownCost": 0.008574065204948194
+          }
+        }
+      },
+      "byStage": [
+        {
+          "agent": "ContextAgent",
+          "stage": "query.rewrite",
+          "schemaVersion": 1,
+          "logicalCalls": 8,
+          "httpAttempts": 8,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 8,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 1174,
+            "outputTokens": 119,
+            "totalTokens": 1293,
+            "cacheHitTokens": 0,
+            "cacheMissTokens": 1174,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 8,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.0,
+          "providerCacheInputTokensCovered": 1174,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.00024750"
+            },
+            "pricedAttempts": 8,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 8,
+            "p50Ms": 806.277,
+            "p95Ms": 973.628
+          }
+        },
+        {
+          "agent": "EmbeddingService",
+          "stage": "embedding.query",
+          "schemaVersion": 1,
+          "logicalCalls": 6,
+          "httpAttempts": 6,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 6,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 181,
+            "outputTokens": 0,
+            "totalTokens": 181,
+            "cacheHitTokens": null,
+            "cacheMissTokens": null,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 6,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 0.0,
+          "providerCacheHitRate": null,
+          "providerCacheInputTokensCovered": 0,
+          "cost": {
+            "knownAmounts": {
+              "CNY": "0.0000905"
+            },
+            "pricedAttempts": 6,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 6,
+            "p50Ms": 2431.71,
+            "p95Ms": 4078.092
+          }
+        },
+        {
+          "agent": "ResponseAgent",
+          "stage": "reply.generate",
+          "schemaVersion": 1,
+          "logicalCalls": 21,
+          "httpAttempts": 21,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 21,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 28720,
+            "outputTokens": 2682,
+            "totalTokens": 31402,
+            "cacheHitTokens": 17664,
+            "cacheMissTokens": 11056,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 21,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.615041782729805,
+          "providerCacheInputTokensCovered": 28720,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.003320592"
+            },
+            "pricedAttempts": 21,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 21,
+            "p50Ms": 1566.274,
+            "p95Ms": 2250.608
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "planning.total",
+          "schemaVersion": 1,
+          "logicalCalls": 16,
+          "httpAttempts": 16,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 16,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 17949,
+            "outputTokens": 808,
+            "totalTokens": 18757,
+            "cacheHitTokens": 14080,
+            "cacheMissTokens": 3869,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 16,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.7844448158671792,
+          "providerCacheInputTokensCovered": 17949,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.001107390"
+            },
+            "pricedAttempts": 16,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 16,
+            "p50Ms": 883.251,
+            "p95Ms": 1245.582
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "reply.review",
+          "schemaVersion": 1,
+          "logicalCalls": 19,
+          "httpAttempts": 19,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 19,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 62334,
+            "outputTokens": 2687,
+            "totalTokens": 65021,
+            "cacheHitTokens": 47488,
+            "cacheMissTokens": 14846,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 19,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.7618314242628421,
+          "providerCacheInputTokensCovered": 62334,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.003981564"
+            },
+            "pricedAttempts": 19,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 19,
+            "p50Ms": 774.105,
+            "p95Ms": 2174.195
+          }
+        },
+        {
+          "agent": "UnderstandingAgent",
+          "stage": "planning.total",
+          "schemaVersion": 1,
+          "logicalCalls": 2,
+          "httpAttempts": 2,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 2,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 686,
+            "outputTokens": 16,
+            "totalTokens": 702,
+            "cacheHitTokens": 256,
+            "cacheMissTokens": 430,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 2,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.37317784256559766,
+          "providerCacheInputTokensCovered": 686,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.000074868"
+            },
+            "pricedAttempts": 2,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 2,
+            "p50Ms": 645.377,
+            "p95Ms": 785.052
+          }
+        }
+      ],
+      "labelledInjectedAttempts": 0,
+      "actualNetworkAttempts": 72,
+      "databaseDiagnostics": {}
+    },
+    "sequential/c2": {
+      "schemaVersion": 1,
+      "logicalCalls": 76,
+      "httpAttempts": 76,
+      "retryAttempts": 0,
+      "attemptStatuses": {
+        "started": 0,
+        "completed": 76,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tokens": {
+        "inputTokens": 126535,
+        "outputTokens": 7051,
+        "totalTokens": 133586,
+        "cacheHitTokens": 94080,
+        "cacheMissTokens": 32278,
+        "reasoningTokens": null
+      },
+      "reportedUsageAttempts": 76,
+      "unknownUsageAttempts": 0,
+      "usageCoverage": 1.0,
+      "tokensComplete": true,
+      "cacheTokenCoverage": 0.9210526315789473,
+      "providerCacheHitRate": 0.744551195808734,
+      "providerCacheInputTokensCovered": 126358,
+      "cost": {
+        "knownAmounts": {
+          "USD": "0.009354540",
+          "CNY": "0.0000885"
+        },
+        "pricedAttempts": 76,
+        "unknownPriceAttempts": 0,
+        "complete": true,
+        "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+      },
+      "cacheLayers": {
+        "redis_session_history": {
+          "hits": 2,
+          "misses": 16,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 11.99,
+          "unit": "requests",
+          "hitRate": 0.1111111111111111
+        },
+        "document_embedding_reuse": {
+          "hits": 204,
+          "misses": 0,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 62.751,
+          "unit": "chunks",
+          "hitRate": 1.0
+        }
+      },
+      "unimplementedCaches": [
+        "query_embedding",
+        "retrieval_result",
+        "final_answer"
+      ],
+      "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+      "scenarios": 16,
+      "httpRequests": 18,
+      "sseDone": 14,
+      "missingLedgerRequests": 0,
+      "fallbackTurns": 4,
+      "fallbackRate": 0.2222222222222222,
+      "retryTurnRate": 0.0,
+      "completeUsageTurnRate": 1.0,
+      "httpStatuses": {
+        "200": 18
+      },
+      "clientEndToEnd": {
+        "samples": 18,
+        "p50Ms": 3599.587,
+        "p95Ms": 13586.232
+      },
+      "clientFirstVisibleToken": {
+        "samples": 18,
+        "p50Ms": 3573.164,
+        "p95Ms": 13556.043
+      },
+      "serverFirstVisibleToken": {
+        "samples": 18,
+        "p50Ms": 3571.849,
+        "p95Ms": 13554.711
+      },
+      "modelFirstToken": {
+        "samples": 22,
+        "p50Ms": 643.818,
+        "p95Ms": 831.489
+      },
+      "observedWallSeconds": 51.635975293997035,
+      "completedReplyThroughput": 0.271128799645769,
+      "httpThroughput": 0.34859417097313156,
+      "agentCostShares": {
+        "SafetyAgent": {
+          "USD": {
+            "knownAmount": "0.005649768",
+            "shareOfKnownCost": 0.6039600023090392
+          }
+        },
+        "ResponseAgent": {
+          "USD": {
+            "knownAmount": "0.003386004",
+            "shareOfKnownCost": 0.36196370959983065
+          }
+        },
+        "ContextAgent": {
+          "USD": {
+            "knownAmount": "0.00024390",
+            "shareOfKnownCost": 0.02607290150023411
+          }
+        },
+        "EmbeddingService": {
+          "CNY": {
+            "knownAmount": "0.0000885",
+            "shareOfKnownCost": 1.0
+          }
+        },
+        "UnderstandingAgent": {
+          "USD": {
+            "knownAmount": "0.000074868",
+            "shareOfKnownCost": 0.00800338659089597
+          }
+        }
+      },
+      "byStage": [
+        {
+          "agent": "ContextAgent",
+          "stage": "query.rewrite",
+          "schemaVersion": 1,
+          "logicalCalls": 8,
+          "httpAttempts": 8,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 8,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 1174,
+            "outputTokens": 113,
+            "totalTokens": 1287,
+            "cacheHitTokens": 0,
+            "cacheMissTokens": 1174,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 8,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.0,
+          "providerCacheInputTokensCovered": 1174,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.00024390"
+            },
+            "pricedAttempts": 8,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 8,
+            "p50Ms": 637.998,
+            "p95Ms": 840.321
+          }
+        },
+        {
+          "agent": "EmbeddingService",
+          "stage": "embedding.query",
+          "schemaVersion": 1,
+          "logicalCalls": 6,
+          "httpAttempts": 6,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 6,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 177,
+            "outputTokens": 0,
+            "totalTokens": 177,
+            "cacheHitTokens": null,
+            "cacheMissTokens": null,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 6,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 0.0,
+          "providerCacheHitRate": null,
+          "providerCacheInputTokensCovered": 0,
+          "cost": {
+            "knownAmounts": {
+              "CNY": "0.0000885"
+            },
+            "pricedAttempts": 6,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 6,
+            "p50Ms": 1579.326,
+            "p95Ms": 3004.002
+          }
+        },
+        {
+          "agent": "ResponseAgent",
+          "stage": "reply.generate",
+          "schemaVersion": 1,
+          "logicalCalls": 22,
+          "httpAttempts": 22,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 22,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 31170,
+            "outputTokens": 2743,
+            "totalTokens": 33913,
+            "cacheHitTokens": 19968,
+            "cacheMissTokens": 11202,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 22,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.6406159769008662,
+          "providerCacheInputTokensCovered": 31170,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.003386004"
+            },
+            "pricedAttempts": 22,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 22,
+            "p50Ms": 1520.304,
+            "p95Ms": 2251.5
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "planning.total",
+          "schemaVersion": 1,
+          "logicalCalls": 16,
+          "httpAttempts": 16,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 16,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 17903,
+            "outputTokens": 822,
+            "totalTokens": 18725,
+            "cacheHitTokens": 14080,
+            "cacheMissTokens": 3823,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 16,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.7864603697704295,
+          "providerCacheInputTokensCovered": 17903,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.001108890"
+            },
+            "pricedAttempts": 16,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 16,
+            "p50Ms": 968.012,
+            "p95Ms": 1235.674
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "reply.review",
+          "schemaVersion": 1,
+          "logicalCalls": 22,
+          "httpAttempts": 22,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 22,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 75425,
+            "outputTokens": 3357,
+            "totalTokens": 78782,
+            "cacheHitTokens": 59776,
+            "cacheMissTokens": 15649,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 22,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.7925223732184289,
+          "providerCacheInputTokensCovered": 75425,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.004540878"
+            },
+            "pricedAttempts": 22,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 22,
+            "p50Ms": 1362.333,
+            "p95Ms": 1740.851
+          }
+        },
+        {
+          "agent": "UnderstandingAgent",
+          "stage": "planning.total",
+          "schemaVersion": 1,
+          "logicalCalls": 2,
+          "httpAttempts": 2,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 2,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 686,
+            "outputTokens": 16,
+            "totalTokens": 702,
+            "cacheHitTokens": 256,
+            "cacheMissTokens": 430,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 2,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.37317784256559766,
+          "providerCacheInputTokensCovered": 686,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.000074868"
+            },
+            "pricedAttempts": 2,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 2,
+            "p50Ms": 606.61,
+            "p95Ms": 708.647
+          }
+        }
+      ],
+      "labelledInjectedAttempts": 0,
+      "actualNetworkAttempts": 76,
+      "databaseDiagnostics": {}
+    },
+    "sequential/c4": {
+      "schemaVersion": 1,
+      "logicalCalls": 66,
+      "httpAttempts": 66,
+      "retryAttempts": 0,
+      "attemptStatuses": {
+        "started": 0,
+        "completed": 66,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tokens": {
+        "inputTokens": 114022,
+        "outputTokens": 6519,
+        "totalTokens": 120541,
+        "cacheHitTokens": 86528,
+        "cacheMissTokens": 27350,
+        "reasoningTokens": null
+      },
+      "reportedUsageAttempts": 66,
+      "unknownUsageAttempts": 0,
+      "usageCoverage": 1.0,
+      "tokensComplete": true,
+      "cacheTokenCoverage": 0.9242424242424242,
+      "providerCacheHitRate": 0.7598306960080086,
+      "providerCacheInputTokensCovered": 113878,
+      "cost": {
+        "knownAmounts": {
+          "USD": "0.008273484",
+          "CNY": "0.0000720"
+        },
+        "pricedAttempts": 66,
+        "unknownPriceAttempts": 0,
+        "complete": true,
+        "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+      },
+      "cacheLayers": {
+        "redis_session_history": {
+          "hits": 2,
+          "misses": 14,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 11.443,
+          "unit": "requests",
+          "hitRate": 0.125
+        },
+        "document_embedding_reuse": {
+          "hits": 170,
+          "misses": 0,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 53.84,
+          "unit": "chunks",
+          "hitRate": 1.0
+        }
+      },
+      "unimplementedCaches": [
+        "query_embedding",
+        "retrieval_result",
+        "final_answer"
+      ],
+      "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+      "scenarios": 16,
+      "httpRequests": 18,
+      "sseDone": 13,
+      "missingLedgerRequests": 2,
+      "fallbackTurns": 3,
+      "fallbackRate": 0.16666666666666666,
+      "retryTurnRate": 0.0,
+      "completeUsageTurnRate": 0.8888888888888888,
+      "httpStatuses": {
+        "200": 18
+      },
+      "clientEndToEnd": {
+        "samples": 18,
+        "p50Ms": 3635.984,
+        "p95Ms": 14117.35
+      },
+      "clientFirstVisibleToken": {
+        "samples": 16,
+        "p50Ms": 3617.498,
+        "p95Ms": 14089.494
+      },
+      "serverFirstVisibleToken": {
+        "samples": 16,
+        "p50Ms": 3616.35,
+        "p95Ms": 14088.276
+      },
+      "modelFirstToken": {
+        "samples": 20,
+        "p50Ms": 581.483,
+        "p95Ms": 786.584
+      },
+      "observedWallSeconds": 33.615434192004614,
+      "completedReplyThroughput": 0.3867271184345444,
+      "httpThroughput": 0.5354683178324461,
+      "agentCostShares": {
+        "SafetyAgent": {
+          "USD": {
+            "knownAmount": "0.004884984",
+            "shareOfKnownCost": 0.5904385625209404
+          }
+        },
+        "ResponseAgent": {
+          "USD": {
+            "knownAmount": "0.003141666",
+            "shareOfKnownCost": 0.3797270895791906
+          }
+        },
+        "ContextAgent": {
+          "USD": {
+            "knownAmount": "0.00020940",
+            "shareOfKnownCost": 0.025309772763203505
+          }
+        },
+        "EmbeddingService": {
+          "CNY": {
+            "knownAmount": "0.0000720",
+            "shareOfKnownCost": 1.0
+          }
+        },
+        "UnderstandingAgent": {
+          "USD": {
+            "knownAmount": "0.000037434",
+            "shareOfKnownCost": 0.004524575136665521
+          }
+        }
+      },
+      "byStage": [
+        {
+          "agent": "ContextAgent",
+          "stage": "query.rewrite",
+          "schemaVersion": 1,
+          "logicalCalls": 7,
+          "httpAttempts": 7,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 7,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 1028,
+            "outputTokens": 92,
+            "totalTokens": 1120,
+            "cacheHitTokens": 0,
+            "cacheMissTokens": 1028,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 7,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.0,
+          "providerCacheInputTokensCovered": 1028,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.00020940"
+            },
+            "pricedAttempts": 7,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 7,
+            "p50Ms": 701.87,
+            "p95Ms": 900.922
+          }
+        },
+        {
+          "agent": "EmbeddingService",
+          "stage": "embedding.query",
+          "schemaVersion": 1,
+          "logicalCalls": 5,
+          "httpAttempts": 5,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 5,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 144,
+            "outputTokens": 0,
+            "totalTokens": 144,
+            "cacheHitTokens": null,
+            "cacheMissTokens": null,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 5,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 0.0,
+          "providerCacheHitRate": null,
+          "providerCacheInputTokensCovered": 0,
+          "cost": {
+            "knownAmounts": {
+              "CNY": "0.0000720"
+            },
+            "pricedAttempts": 5,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 5,
+            "p50Ms": 1920.037,
+            "p95Ms": 2830.153
+          }
+        },
+        {
+          "agent": "ResponseAgent",
+          "stage": "reply.generate",
+          "schemaVersion": 1,
+          "logicalCalls": 20,
+          "httpAttempts": 20,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 20,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 28779,
+            "outputTokens": 2714,
+            "totalTokens": 31493,
+            "cacheHitTokens": 19072,
+            "cacheMissTokens": 9707,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 20,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.6627054449424928,
+          "providerCacheInputTokensCovered": 28779,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.003141666"
+            },
+            "pricedAttempts": 20,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 20,
+            "p50Ms": 1400.183,
+            "p95Ms": 2370.566
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "planning.total",
+          "schemaVersion": 1,
+          "logicalCalls": 14,
+          "httpAttempts": 14,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 14,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 17265,
+            "outputTokens": 688,
+            "totalTokens": 17953,
+            "cacheHitTokens": 13824,
+            "cacheMissTokens": 3441,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 14,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.8006950477845352,
+          "providerCacheInputTokensCovered": 17265,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.000970422"
+            },
+            "pricedAttempts": 14,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 14,
+            "p50Ms": 922.126,
+            "p95Ms": 1268.17
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "reply.review",
+          "schemaVersion": 1,
+          "logicalCalls": 19,
+          "httpAttempts": 19,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 19,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 66463,
+            "outputTokens": 3017,
+            "totalTokens": 69480,
+            "cacheHitTokens": 53504,
+            "cacheMissTokens": 12959,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 19,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.8050193340655704,
+          "providerCacheInputTokensCovered": 66463,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.003914562"
+            },
+            "pricedAttempts": 19,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 19,
+            "p50Ms": 1230.334,
+            "p95Ms": 1990.271
+          }
+        },
+        {
+          "agent": "UnderstandingAgent",
+          "stage": "planning.total",
+          "schemaVersion": 1,
+          "logicalCalls": 1,
+          "httpAttempts": 1,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 1,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 343,
+            "outputTokens": 8,
+            "totalTokens": 351,
+            "cacheHitTokens": 128,
+            "cacheMissTokens": 215,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 1,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.37317784256559766,
+          "providerCacheInputTokensCovered": 343,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.000037434"
+            },
+            "pricedAttempts": 1,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 1,
+            "p50Ms": 581.032,
+            "p95Ms": 581.032
+          }
+        }
+      ],
+      "labelledInjectedAttempts": 0,
+      "actualNetworkAttempts": 66,
+      "databaseDiagnostics": {
+        "1213": 2
+      }
+    }
+  },
+  "afterCohortPerformance": {
+    "event_driven/c1": {
+      "schemaVersion": 1,
+      "logicalCalls": 72,
+      "httpAttempts": 72,
+      "retryAttempts": 0,
+      "attemptStatuses": {
+        "started": 0,
+        "completed": 72,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tokens": {
+        "inputTokens": 112015,
+        "outputTokens": 5933,
+        "totalTokens": 117948,
+        "cacheHitTokens": 84608,
+        "cacheMissTokens": 27221,
+        "reasoningTokens": null
+      },
+      "reportedUsageAttempts": 72,
+      "unknownUsageAttempts": 0,
+      "usageCoverage": 1.0,
+      "tokensComplete": true,
+      "cacheTokenCoverage": 0.9166666666666666,
+      "providerCacheHitRate": 0.7565837126326802,
+      "providerCacheInputTokensCovered": 111829,
+      "cost": {
+        "knownAmounts": {
+          "USD": "0.007896774",
+          "CNY": "0.0000930"
+        },
+        "pricedAttempts": 72,
+        "unknownPriceAttempts": 0,
+        "complete": true,
+        "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+      },
+      "cacheLayers": {
+        "redis_session_history": {
+          "hits": 2,
+          "misses": 16,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 11.753,
+          "unit": "requests",
+          "hitRate": 0.1111111111111111
+        },
+        "document_embedding_reuse": {
+          "hits": 204,
+          "misses": 0,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 57.217,
+          "unit": "chunks",
+          "hitRate": 1.0
+        }
+      },
+      "unimplementedCaches": [
+        "query_embedding",
+        "retrieval_result",
+        "final_answer"
+      ],
+      "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+      "scenarios": 16,
+      "httpRequests": 18,
+      "sseDone": 17,
+      "missingLedgerRequests": 0,
+      "fallbackTurns": 1,
+      "fallbackRate": 0.05555555555555555,
+      "retryTurnRate": 0.0,
+      "completeUsageTurnRate": 1.0,
+      "httpStatuses": {
+        "200": 18
+      },
+      "clientEndToEnd": {
+        "samples": 18,
+        "p50Ms": 3459.607,
+        "p95Ms": 15622.99
+      },
+      "clientFirstVisibleToken": {
+        "samples": 18,
+        "p50Ms": 3427.383,
+        "p95Ms": 15587.454
+      },
+      "serverFirstVisibleToken": {
+        "samples": 18,
+        "p50Ms": 3426.041,
+        "p95Ms": 15585.649
+      },
+      "modelFirstToken": {
+        "samples": 19,
+        "p50Ms": 618.004,
+        "p95Ms": 992.35
+      },
+      "observedWallSeconds": 97.90763986999809,
+      "completedReplyThroughput": 0.173633028255738,
+      "httpThroughput": 0.18384673580019317,
+      "agentCostShares": {
+        "SafetyAgent": {
+          "USD": {
+            "knownAmount": "0.005099334",
+            "shareOfKnownCost": 0.6457490109252209
+          }
+        },
+        "ResponseAgent": {
+          "USD": {
+            "knownAmount": "0.002473872",
+            "shareOfKnownCost": 0.3132762821881442
+          }
+        },
+        "ContextAgent": {
+          "USD": {
+            "knownAmount": "0.00024870",
+            "shareOfKnownCost": 0.03149387332092827
+          }
+        },
+        "EmbeddingService": {
+          "CNY": {
+            "knownAmount": "0.0000930",
+            "shareOfKnownCost": 1.0
+          }
+        },
+        "UnderstandingAgent": {
+          "USD": {
+            "knownAmount": "0.000074868",
+            "shareOfKnownCost": 0.009480833565706705
+          }
+        }
+      },
+      "byStage": [
+        {
+          "agent": "ContextAgent",
+          "stage": "query.rewrite",
+          "schemaVersion": 1,
+          "logicalCalls": 8,
+          "httpAttempts": 8,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 8,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 1174,
+            "outputTokens": 121,
+            "totalTokens": 1295,
+            "cacheHitTokens": 0,
+            "cacheMissTokens": 1174,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 8,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.0,
+          "providerCacheInputTokensCovered": 1174,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.00024870"
+            },
+            "pricedAttempts": 8,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 8,
+            "p50Ms": 833.515,
+            "p95Ms": 927.982
+          }
+        },
+        {
+          "agent": "EmbeddingService",
+          "stage": "embedding.query",
+          "schemaVersion": 1,
+          "logicalCalls": 6,
+          "httpAttempts": 6,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 6,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 186,
+            "outputTokens": 0,
+            "totalTokens": 186,
+            "cacheHitTokens": null,
+            "cacheMissTokens": null,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 6,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 0.0,
+          "providerCacheHitRate": null,
+          "providerCacheInputTokensCovered": 0,
+          "cost": {
+            "knownAmounts": {
+              "CNY": "0.0000930"
+            },
+            "pricedAttempts": 6,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 6,
+            "p50Ms": 1576.704,
+            "p95Ms": 3899.665
+          }
+        },
+        {
+          "agent": "ResponseAgent",
+          "stage": "reply.generate",
+          "schemaVersion": 1,
+          "logicalCalls": 19,
+          "httpAttempts": 19,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 19,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 26532,
+            "outputTokens": 2445,
+            "totalTokens": 28977,
+            "cacheHitTokens": 20224,
+            "cacheMissTokens": 6308,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 19,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.7622493592642846,
+          "providerCacheInputTokensCovered": 26532,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.002473872"
+            },
+            "pricedAttempts": 19,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 19,
+            "p50Ms": 1671.299,
+            "p95Ms": 2599.048
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "agent.act",
+          "schemaVersion": 1,
+          "logicalCalls": 16,
+          "httpAttempts": 16,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 16,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 17981,
+            "outputTokens": 782,
+            "totalTokens": 18763,
+            "cacheHitTokens": 14080,
+            "cacheMissTokens": 3901,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 16,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.7830487737055781,
+          "providerCacheInputTokensCovered": 17981,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.001096590"
+            },
+            "pricedAttempts": 16,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 16,
+            "p50Ms": 912.812,
+            "p95Ms": 1325.665
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "reply.review",
+          "schemaVersion": 1,
+          "logicalCalls": 21,
+          "httpAttempts": 21,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 21,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 65456,
+            "outputTokens": 2569,
+            "totalTokens": 68025,
+            "cacheHitTokens": 50048,
+            "cacheMissTokens": 15408,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 21,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.7646052309948668,
+          "providerCacheInputTokensCovered": 65456,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.004002744"
+            },
+            "pricedAttempts": 21,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 21,
+            "p50Ms": 874.483,
+            "p95Ms": 2039.827
+          }
+        },
+        {
+          "agent": "UnderstandingAgent",
+          "stage": "agent.act",
+          "schemaVersion": 1,
+          "logicalCalls": 2,
+          "httpAttempts": 2,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 2,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 686,
+            "outputTokens": 16,
+            "totalTokens": 702,
+            "cacheHitTokens": 256,
+            "cacheMissTokens": 430,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 2,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.37317784256559766,
+          "providerCacheInputTokensCovered": 686,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.000074868"
+            },
+            "pricedAttempts": 2,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 2,
+            "p50Ms": 466.217,
+            "p95Ms": 823.897
+          }
+        }
+      ],
+      "labelledInjectedAttempts": 0,
+      "actualNetworkAttempts": 72,
+      "databaseDiagnostics": {}
+    },
+    "event_driven/c2": {
+      "schemaVersion": 1,
+      "logicalCalls": 72,
+      "httpAttempts": 72,
+      "retryAttempts": 0,
+      "attemptStatuses": {
+        "started": 0,
+        "completed": 72,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tokens": {
+        "inputTokens": 112860,
+        "outputTokens": 6387,
+        "totalTokens": 119247,
+        "cacheHitTokens": 91648,
+        "cacheMissTokens": 21034,
+        "reasoningTokens": null
+      },
+      "reportedUsageAttempts": 72,
+      "unknownUsageAttempts": 0,
+      "usageCoverage": 1.0,
+      "tokensComplete": true,
+      "cacheTokenCoverage": 0.9166666666666666,
+      "providerCacheHitRate": 0.8133330966791502,
+      "providerCacheInputTokensCovered": 112682,
+      "cost": {
+        "knownAmounts": {
+          "USD": "0.007262244",
+          "CNY": "0.0000890"
+        },
+        "pricedAttempts": 72,
+        "unknownPriceAttempts": 0,
+        "complete": true,
+        "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+      },
+      "cacheLayers": {
+        "redis_session_history": {
+          "hits": 2,
+          "misses": 16,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 12.427,
+          "unit": "requests",
+          "hitRate": 0.1111111111111111
+        },
+        "document_embedding_reuse": {
+          "hits": 204,
+          "misses": 0,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 63.086,
+          "unit": "chunks",
+          "hitRate": 1.0
+        }
+      },
+      "unimplementedCaches": [
+        "query_embedding",
+        "retrieval_result",
+        "final_answer"
+      ],
+      "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+      "scenarios": 16,
+      "httpRequests": 18,
+      "sseDone": 17,
+      "missingLedgerRequests": 0,
+      "fallbackTurns": 1,
+      "fallbackRate": 0.05555555555555555,
+      "retryTurnRate": 0.0,
+      "completeUsageTurnRate": 1.0,
+      "httpStatuses": {
+        "200": 18
+      },
+      "clientEndToEnd": {
+        "samples": 18,
+        "p50Ms": 3650.838,
+        "p95Ms": 16281.337
+      },
+      "clientFirstVisibleToken": {
+        "samples": 18,
+        "p50Ms": 3620.113,
+        "p95Ms": 16230.412
+      },
+      "serverFirstVisibleToken": {
+        "samples": 18,
+        "p50Ms": 3618.478,
+        "p95Ms": 16228.818
+      },
+      "modelFirstToken": {
+        "samples": 19,
+        "p50Ms": 536.787,
+        "p95Ms": 746.946
+      },
+      "observedWallSeconds": 57.0918737250031,
+      "completedReplyThroughput": 0.29776566945209465,
+      "httpThroughput": 0.31528129706692376,
+      "agentCostShares": {
+        "SafetyAgent": {
+          "USD": {
+            "knownAmount": "0.004686210",
+            "shareOfKnownCost": 0.6452840196501247
+          }
+        },
+        "ResponseAgent": {
+          "USD": {
+            "knownAmount": "0.002256066",
+            "shareOfKnownCost": 0.31065687134720343
+          }
+        },
+        "ContextAgent": {
+          "USD": {
+            "knownAmount": "0.00024510",
+            "shareOfKnownCost": 0.03374989879161317
+          }
+        },
+        "UnderstandingAgent": {
+          "USD": {
+            "knownAmount": "0.000074868",
+            "shareOfKnownCost": 0.01030921021105873
+          }
+        },
+        "EmbeddingService": {
+          "CNY": {
+            "knownAmount": "0.0000890",
+            "shareOfKnownCost": 1.0
+          }
+        }
+      },
+      "byStage": [
+        {
+          "agent": "ContextAgent",
+          "stage": "query.rewrite",
+          "schemaVersion": 1,
+          "logicalCalls": 8,
+          "httpAttempts": 8,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 8,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 1174,
+            "outputTokens": 115,
+            "totalTokens": 1289,
+            "cacheHitTokens": 0,
+            "cacheMissTokens": 1174,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 8,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.0,
+          "providerCacheInputTokensCovered": 1174,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.00024510"
+            },
+            "pricedAttempts": 8,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 8,
+            "p50Ms": 641.942,
+            "p95Ms": 914.922
+          }
+        },
+        {
+          "agent": "EmbeddingService",
+          "stage": "embedding.query",
+          "schemaVersion": 1,
+          "logicalCalls": 6,
+          "httpAttempts": 6,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 6,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 178,
+            "outputTokens": 0,
+            "totalTokens": 178,
+            "cacheHitTokens": null,
+            "cacheMissTokens": null,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 6,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 0.0,
+          "providerCacheHitRate": null,
+          "providerCacheInputTokensCovered": 0,
+          "cost": {
+            "knownAmounts": {
+              "CNY": "0.0000890"
+            },
+            "pricedAttempts": 6,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 6,
+            "p50Ms": 1510.503,
+            "p95Ms": 3740.352
+          }
+        },
+        {
+          "agent": "ResponseAgent",
+          "stage": "reply.generate",
+          "schemaVersion": 1,
+          "logicalCalls": 19,
+          "httpAttempts": 19,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 19,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 26687,
+            "outputTokens": 2545,
+            "totalTokens": 29232,
+            "cacheHitTokens": 22272,
+            "cacheMissTokens": 4415,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 19,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.8345636452205194,
+          "providerCacheInputTokensCovered": 26687,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.002256066"
+            },
+            "pricedAttempts": 19,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 19,
+            "p50Ms": 1586.35,
+            "p95Ms": 2671.911
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "agent.act",
+          "schemaVersion": 1,
+          "logicalCalls": 16,
+          "httpAttempts": 16,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 16,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 17990,
+            "outputTokens": 800,
+            "totalTokens": 18790,
+            "cacheHitTokens": 14080,
+            "cacheMissTokens": 3910,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 16,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.782657031684269,
+          "providerCacheInputTokensCovered": 17990,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.001108740"
+            },
+            "pricedAttempts": 16,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 16,
+            "p50Ms": 890.635,
+            "p95Ms": 1263.563
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "reply.review",
+          "schemaVersion": 1,
+          "logicalCalls": 21,
+          "httpAttempts": 21,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 21,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 66145,
+            "outputTokens": 2911,
+            "totalTokens": 69056,
+            "cacheHitTokens": 55040,
+            "cacheMissTokens": 11105,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 21,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.832111270693174,
+          "providerCacheInputTokensCovered": 66145,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.003577470"
+            },
+            "pricedAttempts": 21,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 21,
+            "p50Ms": 968.407,
+            "p95Ms": 2026.643
+          }
+        },
+        {
+          "agent": "UnderstandingAgent",
+          "stage": "agent.act",
+          "schemaVersion": 1,
+          "logicalCalls": 2,
+          "httpAttempts": 2,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 2,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 686,
+            "outputTokens": 16,
+            "totalTokens": 702,
+            "cacheHitTokens": 256,
+            "cacheMissTokens": 430,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 2,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.37317784256559766,
+          "providerCacheInputTokensCovered": 686,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.000074868"
+            },
+            "pricedAttempts": 2,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 2,
+            "p50Ms": 388.735,
+            "p95Ms": 966.131
+          }
+        }
+      ],
+      "labelledInjectedAttempts": 0,
+      "actualNetworkAttempts": 72,
+      "databaseDiagnostics": {}
+    },
+    "event_driven/c4": {
+      "schemaVersion": 1,
+      "logicalCalls": 76,
+      "httpAttempts": 76,
+      "retryAttempts": 0,
+      "attemptStatuses": {
+        "started": 0,
+        "completed": 76,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tokens": {
+        "inputTokens": 128803,
+        "outputTokens": 7588,
+        "totalTokens": 136391,
+        "cacheHitTokens": 96512,
+        "cacheMissTokens": 32113,
+        "reasoningTokens": null
+      },
+      "reportedUsageAttempts": 76,
+      "unknownUsageAttempts": 0,
+      "usageCoverage": 1.0,
+      "tokensComplete": true,
+      "cacheTokenCoverage": 0.9210526315789473,
+      "providerCacheHitRate": 0.7503362487852284,
+      "providerCacheInputTokensCovered": 128625,
+      "cost": {
+        "knownAmounts": {
+          "USD": "0.009659286",
+          "CNY": "0.0000890"
+        },
+        "pricedAttempts": 76,
+        "unknownPriceAttempts": 0,
+        "complete": true,
+        "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+      },
+      "cacheLayers": {
+        "redis_session_history": {
+          "hits": 2,
+          "misses": 16,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 15.469,
+          "unit": "requests",
+          "hitRate": 0.1111111111111111
+        },
+        "document_embedding_reuse": {
+          "hits": 204,
+          "misses": 0,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 147.694,
+          "unit": "chunks",
+          "hitRate": 1.0
+        }
+      },
+      "unimplementedCaches": [
+        "query_embedding",
+        "retrieval_result",
+        "final_answer"
+      ],
+      "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+      "scenarios": 16,
+      "httpRequests": 18,
+      "sseDone": 16,
+      "missingLedgerRequests": 0,
+      "fallbackTurns": 2,
+      "fallbackRate": 0.1111111111111111,
+      "retryTurnRate": 0.0,
+      "completeUsageTurnRate": 1.0,
+      "httpStatuses": {
+        "200": 18
+      },
+      "clientEndToEnd": {
+        "samples": 18,
+        "p50Ms": 3895.135,
+        "p95Ms": 15883.963
+      },
+      "clientFirstVisibleToken": {
+        "samples": 18,
+        "p50Ms": 3862.649,
+        "p95Ms": 15854.233
+      },
+      "serverFirstVisibleToken": {
+        "samples": 18,
+        "p50Ms": 3860.753,
+        "p95Ms": 15852.98
+      },
+      "modelFirstToken": {
+        "samples": 20,
+        "p50Ms": 610.465,
+        "p95Ms": 804.11
+      },
+      "observedWallSeconds": 37.53398691799521,
+      "completedReplyThroughput": 0.4262803212181277,
+      "httpThroughput": 0.4795653613703937,
+      "agentCostShares": {
+        "ContextAgent": {
+          "USD": {
+            "knownAmount": "0.00024210",
+            "shareOfKnownCost": 0.025063964355129354
+          }
+        },
+        "EmbeddingService": {
+          "CNY": {
+            "knownAmount": "0.0000890",
+            "shareOfKnownCost": 1.0
+          }
+        },
+        "ResponseAgent": {
+          "USD": {
+            "knownAmount": "0.003055368",
+            "shareOfKnownCost": 0.3163140629649024
+          }
+        },
+        "SafetyAgent": {
+          "USD": {
+            "knownAmount": "0.006286950",
+            "shareOfKnownCost": 0.6508710892295766
+          }
+        },
+        "UnderstandingAgent": {
+          "USD": {
+            "knownAmount": "0.000074868",
+            "shareOfKnownCost": 0.0077508834503916746
+          }
+        }
+      },
+      "byStage": [
+        {
+          "agent": "ContextAgent",
+          "stage": "query.rewrite",
+          "schemaVersion": 1,
+          "logicalCalls": 8,
+          "httpAttempts": 8,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 8,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 1174,
+            "outputTokens": 110,
+            "totalTokens": 1284,
+            "cacheHitTokens": 0,
+            "cacheMissTokens": 1174,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 8,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.0,
+          "providerCacheInputTokensCovered": 1174,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.00024210"
+            },
+            "pricedAttempts": 8,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 8,
+            "p50Ms": 680.726,
+            "p95Ms": 930.504
+          }
+        },
+        {
+          "agent": "EmbeddingService",
+          "stage": "embedding.query",
+          "schemaVersion": 1,
+          "logicalCalls": 6,
+          "httpAttempts": 6,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 6,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 178,
+            "outputTokens": 0,
+            "totalTokens": 178,
+            "cacheHitTokens": null,
+            "cacheMissTokens": null,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 6,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 0.0,
+          "providerCacheHitRate": null,
+          "providerCacheInputTokensCovered": 0,
+          "cost": {
+            "knownAmounts": {
+              "CNY": "0.0000890"
+            },
+            "pricedAttempts": 6,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 6,
+            "p50Ms": 1482.83,
+            "p95Ms": 3137.644
+          }
+        },
+        {
+          "agent": "ResponseAgent",
+          "stage": "reply.generate",
+          "schemaVersion": 1,
+          "logicalCalls": 20,
+          "httpAttempts": 20,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 20,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 29104,
+            "outputTokens": 2583,
+            "totalTokens": 31687,
+            "cacheHitTokens": 19456,
+            "cacheMissTokens": 9648,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 20,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.668499175371083,
+          "providerCacheInputTokensCovered": 29104,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.003055368"
+            },
+            "pricedAttempts": 20,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 20,
+            "p50Ms": 1575.195,
+            "p95Ms": 1971.966
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "agent.act",
+          "schemaVersion": 1,
+          "logicalCalls": 16,
+          "httpAttempts": 16,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 16,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 17961,
+            "outputTokens": 779,
+            "totalTokens": 18740,
+            "cacheHitTokens": 14080,
+            "cacheMissTokens": 3881,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 16,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.7839207171092923,
+          "providerCacheInputTokensCovered": 17961,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.001091790"
+            },
+            "pricedAttempts": 16,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 16,
+            "p50Ms": 862.411,
+            "p95Ms": 1543.182
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "reply.review",
+          "schemaVersion": 1,
+          "logicalCalls": 24,
+          "httpAttempts": 24,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 24,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 79700,
+            "outputTokens": 4100,
+            "totalTokens": 83800,
+            "cacheHitTokens": 62720,
+            "cacheMissTokens": 16980,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 24,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.7869510664993726,
+          "providerCacheInputTokensCovered": 79700,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.005195160"
+            },
+            "pricedAttempts": 24,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 24,
+            "p50Ms": 891.026,
+            "p95Ms": 1972.621
+          }
+        },
+        {
+          "agent": "UnderstandingAgent",
+          "stage": "agent.act",
+          "schemaVersion": 1,
+          "logicalCalls": 2,
+          "httpAttempts": 2,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 2,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 686,
+            "outputTokens": 16,
+            "totalTokens": 702,
+            "cacheHitTokens": 256,
+            "cacheMissTokens": 430,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 2,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.37317784256559766,
+          "providerCacheInputTokensCovered": 686,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.000074868"
+            },
+            "pricedAttempts": 2,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 2,
+            "p50Ms": 467.276,
+            "p95Ms": 908.157
+          }
+        }
+      ],
+      "labelledInjectedAttempts": 0,
+      "actualNetworkAttempts": 76,
+      "databaseDiagnostics": {}
+    },
+    "sequential/c1": {
+      "schemaVersion": 1,
+      "logicalCalls": 68,
+      "httpAttempts": 68,
+      "retryAttempts": 0,
+      "attemptStatuses": {
+        "started": 0,
+        "completed": 68,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tokens": {
+        "inputTokens": 95371,
+        "outputTokens": 4773,
+        "totalTokens": 100144,
+        "cacheHitTokens": 67584,
+        "cacheMissTokens": 27609,
+        "reasoningTokens": null
+      },
+      "reportedUsageAttempts": 68,
+      "unknownUsageAttempts": 0,
+      "usageCoverage": 1.0,
+      "tokensComplete": true,
+      "cacheTokenCoverage": 0.9117647058823529,
+      "providerCacheHitRate": 0.7099681699284611,
+      "providerCacheInputTokensCovered": 95193,
+      "cost": {
+        "knownAmounts": {
+          "USD": "0.007207902",
+          "CNY": "0.0000890"
+        },
+        "pricedAttempts": 68,
+        "unknownPriceAttempts": 0,
+        "complete": true,
+        "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+      },
+      "cacheLayers": {
+        "redis_session_history": {
+          "hits": 2,
+          "misses": 16,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 12.108,
+          "unit": "requests",
+          "hitRate": 0.1111111111111111
+        },
+        "document_embedding_reuse": {
+          "hits": 204,
+          "misses": 0,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 78.582,
+          "unit": "chunks",
+          "hitRate": 1.0
+        }
+      },
+      "unimplementedCaches": [
+        "query_embedding",
+        "retrieval_result",
+        "final_answer"
+      ],
+      "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+      "scenarios": 16,
+      "httpRequests": 18,
+      "sseDone": 18,
+      "missingLedgerRequests": 0,
+      "fallbackTurns": 0,
+      "fallbackRate": 0.0,
+      "retryTurnRate": 0.0,
+      "completeUsageTurnRate": 1.0,
+      "httpStatuses": {
+        "200": 18
+      },
+      "clientEndToEnd": {
+        "samples": 18,
+        "p50Ms": 3563.31,
+        "p95Ms": 8923.985
+      },
+      "clientFirstVisibleToken": {
+        "samples": 18,
+        "p50Ms": 3537.432,
+        "p95Ms": 8896.627
+      },
+      "serverFirstVisibleToken": {
+        "samples": 18,
+        "p50Ms": 3536.149,
+        "p95Ms": 8895.468
+      },
+      "modelFirstToken": {
+        "samples": 18,
+        "p50Ms": 594.22,
+        "p95Ms": 720.837
+      },
+      "observedWallSeconds": 87.71371452300082,
+      "completedReplyThroughput": 0.20521306272213488,
+      "httpThroughput": 0.20521306272213488,
+      "agentCostShares": {
+        "SafetyAgent": {
+          "USD": {
+            "knownAmount": "0.004155540",
+            "shareOfKnownCost": 0.5765255964911843
+          }
+        },
+        "ResponseAgent": {
+          "USD": {
+            "knownAmount": "0.002733594",
+            "shareOfKnownCost": 0.37924960688977183
+          }
+        },
+        "ContextAgent": {
+          "USD": {
+            "knownAmount": "0.00024390",
+            "shareOfKnownCost": 0.03383786294541741
+          }
+        },
+        "EmbeddingService": {
+          "CNY": {
+            "knownAmount": "0.0000890",
+            "shareOfKnownCost": 1.0
+          }
+        },
+        "UnderstandingAgent": {
+          "USD": {
+            "knownAmount": "0.000074868",
+            "shareOfKnownCost": 0.010386933673626529
+          }
+        }
+      },
+      "byStage": [
+        {
+          "agent": "ContextAgent",
+          "stage": "query.rewrite",
+          "schemaVersion": 1,
+          "logicalCalls": 8,
+          "httpAttempts": 8,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 8,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 1174,
+            "outputTokens": 113,
+            "totalTokens": 1287,
+            "cacheHitTokens": 0,
+            "cacheMissTokens": 1174,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 8,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.0,
+          "providerCacheInputTokensCovered": 1174,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.00024390"
+            },
+            "pricedAttempts": 8,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 8,
+            "p50Ms": 711.978,
+            "p95Ms": 883.327
+          }
+        },
+        {
+          "agent": "EmbeddingService",
+          "stage": "embedding.query",
+          "schemaVersion": 1,
+          "logicalCalls": 6,
+          "httpAttempts": 6,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 6,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 178,
+            "outputTokens": 0,
+            "totalTokens": 178,
+            "cacheHitTokens": null,
+            "cacheMissTokens": null,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 6,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 0.0,
+          "providerCacheHitRate": null,
+          "providerCacheInputTokensCovered": 0,
+          "cost": {
+            "knownAmounts": {
+              "CNY": "0.0000890"
+            },
+            "pricedAttempts": 6,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 6,
+            "p50Ms": 2081.184,
+            "p95Ms": 2845.039
+          }
+        },
+        {
+          "agent": "ResponseAgent",
+          "stage": "reply.generate",
+          "schemaVersion": 1,
+          "logicalCalls": 18,
+          "httpAttempts": 18,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 18,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 24095,
+            "outputTokens": 2170,
+            "totalTokens": 26265,
+            "cacheHitTokens": 14848,
+            "cacheMissTokens": 9247,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 18,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.6162274330774019,
+          "providerCacheInputTokensCovered": 24095,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.002733594"
+            },
+            "pricedAttempts": 18,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 18,
+            "p50Ms": 1565.916,
+            "p95Ms": 2318.745
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "planning.total",
+          "schemaVersion": 1,
+          "logicalCalls": 16,
+          "httpAttempts": 16,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 16,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 17962,
+            "outputTokens": 803,
+            "totalTokens": 18765,
+            "cacheHitTokens": 14080,
+            "cacheMissTokens": 3882,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 16,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.7838770738225141,
+          "providerCacheInputTokensCovered": 17962,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.001106340"
+            },
+            "pricedAttempts": 16,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 16,
+            "p50Ms": 817.367,
+            "p95Ms": 1207.804
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "reply.review",
+          "schemaVersion": 1,
+          "logicalCalls": 18,
+          "httpAttempts": 18,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 18,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 51276,
+            "outputTokens": 1671,
+            "totalTokens": 52947,
+            "cacheHitTokens": 38400,
+            "cacheMissTokens": 12876,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 18,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.7488883688275216,
+          "providerCacheInputTokensCovered": 51276,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.003049200"
+            },
+            "pricedAttempts": 18,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 18,
+            "p50Ms": 707.568,
+            "p95Ms": 1885.814
+          }
+        },
+        {
+          "agent": "UnderstandingAgent",
+          "stage": "planning.total",
+          "schemaVersion": 1,
+          "logicalCalls": 2,
+          "httpAttempts": 2,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 2,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 686,
+            "outputTokens": 16,
+            "totalTokens": 702,
+            "cacheHitTokens": 256,
+            "cacheMissTokens": 430,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 2,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.37317784256559766,
+          "providerCacheInputTokensCovered": 686,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.000074868"
+            },
+            "pricedAttempts": 2,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 2,
+            "p50Ms": 360.327,
+            "p95Ms": 541.349
+          }
+        }
+      ],
+      "labelledInjectedAttempts": 0,
+      "actualNetworkAttempts": 68,
+      "databaseDiagnostics": {}
+    },
+    "sequential/c2": {
+      "schemaVersion": 1,
+      "logicalCalls": 70,
+      "httpAttempts": 70,
+      "retryAttempts": 0,
+      "attemptStatuses": {
+        "started": 0,
+        "completed": 70,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tokens": {
+        "inputTokens": 102643,
+        "outputTokens": 5496,
+        "totalTokens": 108139,
+        "cacheHitTokens": 75264,
+        "cacheMissTokens": 27201,
+        "reasoningTokens": null
+      },
+      "reportedUsageAttempts": 70,
+      "unknownUsageAttempts": 0,
+      "usageCoverage": 1.0,
+      "tokensComplete": true,
+      "cacheTokenCoverage": 0.9142857142857143,
+      "providerCacheHitRate": 0.7345337432293954,
+      "providerCacheInputTokensCovered": 102465,
+      "cost": {
+        "knownAmounts": {
+          "USD": "0.007603542",
+          "CNY": "0.0000890"
+        },
+        "pricedAttempts": 70,
+        "unknownPriceAttempts": 0,
+        "complete": true,
+        "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+      },
+      "cacheLayers": {
+        "redis_session_history": {
+          "hits": 2,
+          "misses": 16,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 12.101,
+          "unit": "requests",
+          "hitRate": 0.1111111111111111
+        },
+        "document_embedding_reuse": {
+          "hits": 204,
+          "misses": 0,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 54.468,
+          "unit": "chunks",
+          "hitRate": 1.0
+        }
+      },
+      "unimplementedCaches": [
+        "query_embedding",
+        "retrieval_result",
+        "final_answer"
+      ],
+      "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+      "scenarios": 16,
+      "httpRequests": 18,
+      "sseDone": 17,
+      "missingLedgerRequests": 0,
+      "fallbackTurns": 1,
+      "fallbackRate": 0.05555555555555555,
+      "retryTurnRate": 0.0,
+      "completeUsageTurnRate": 1.0,
+      "httpStatuses": {
+        "200": 18
+      },
+      "clientEndToEnd": {
+        "samples": 18,
+        "p50Ms": 3689.579,
+        "p95Ms": 13522.262
+      },
+      "clientFirstVisibleToken": {
+        "samples": 18,
+        "p50Ms": 3663.175,
+        "p95Ms": 13487.185
+      },
+      "serverFirstVisibleToken": {
+        "samples": 18,
+        "p50Ms": 3661.914,
+        "p95Ms": 13485.813
+      },
+      "modelFirstToken": {
+        "samples": 19,
+        "p50Ms": 620.065,
+        "p95Ms": 969.457
+      },
+      "observedWallSeconds": 50.68810581199796,
+      "completedReplyThroughput": 0.33538440088988436,
+      "httpThroughput": 0.35511289505987753,
+      "agentCostShares": {
+        "SafetyAgent": {
+          "USD": {
+            "knownAmount": "0.004371450",
+            "shareOfKnownCost": 0.5749228451687385
+          }
+        },
+        "ContextAgent": {
+          "USD": {
+            "knownAmount": "0.00024210",
+            "shareOfKnownCost": 0.031840423844571385
+          }
+        },
+        "ResponseAgent": {
+          "USD": {
+            "knownAmount": "0.002915124",
+            "shareOfKnownCost": 0.3833902673254123
+          }
+        },
+        "UnderstandingAgent": {
+          "USD": {
+            "knownAmount": "0.000074868",
+            "shareOfKnownCost": 0.009846463661277862
+          }
+        },
+        "EmbeddingService": {
+          "CNY": {
+            "knownAmount": "0.0000890",
+            "shareOfKnownCost": 1.0
+          }
+        }
+      },
+      "byStage": [
+        {
+          "agent": "ContextAgent",
+          "stage": "query.rewrite",
+          "schemaVersion": 1,
+          "logicalCalls": 8,
+          "httpAttempts": 8,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 8,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 1174,
+            "outputTokens": 110,
+            "totalTokens": 1284,
+            "cacheHitTokens": 0,
+            "cacheMissTokens": 1174,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 8,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.0,
+          "providerCacheInputTokensCovered": 1174,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.00024210"
+            },
+            "pricedAttempts": 8,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 8,
+            "p50Ms": 647.656,
+            "p95Ms": 960.1
+          }
+        },
+        {
+          "agent": "EmbeddingService",
+          "stage": "embedding.query",
+          "schemaVersion": 1,
+          "logicalCalls": 6,
+          "httpAttempts": 6,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 6,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 178,
+            "outputTokens": 0,
+            "totalTokens": 178,
+            "cacheHitTokens": null,
+            "cacheMissTokens": null,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 6,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 0.0,
+          "providerCacheHitRate": null,
+          "providerCacheInputTokensCovered": 0,
+          "cost": {
+            "knownAmounts": {
+              "CNY": "0.0000890"
+            },
+            "pricedAttempts": 6,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 6,
+            "p50Ms": 2807.242,
+            "p95Ms": 4215.502
+          }
+        },
+        {
+          "agent": "ResponseAgent",
+          "stage": "reply.generate",
+          "schemaVersion": 1,
+          "logicalCalls": 19,
+          "httpAttempts": 19,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 19,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 26622,
+            "outputTokens": 2468,
+            "totalTokens": 29090,
+            "cacheHitTokens": 17408,
+            "cacheMissTokens": 9214,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 19,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.6538952745849298,
+          "providerCacheInputTokensCovered": 26622,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.002915124"
+            },
+            "pricedAttempts": 19,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 19,
+            "p50Ms": 1560.736,
+            "p95Ms": 2372.886
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "planning.total",
+          "schemaVersion": 1,
+          "logicalCalls": 16,
+          "httpAttempts": 16,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 16,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 17990,
+            "outputTokens": 789,
+            "totalTokens": 18779,
+            "cacheHitTokens": 14080,
+            "cacheMissTokens": 3910,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 16,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.782657031684269,
+          "providerCacheInputTokensCovered": 17990,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.001102140"
+            },
+            "pricedAttempts": 16,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 16,
+            "p50Ms": 892.155,
+            "p95Ms": 989.915
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "reply.review",
+          "schemaVersion": 1,
+          "logicalCalls": 19,
+          "httpAttempts": 19,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 19,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 55993,
+            "outputTokens": 2113,
+            "totalTokens": 58106,
+            "cacheHitTokens": 43520,
+            "cacheMissTokens": 12473,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 19,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.7772400121443752,
+          "providerCacheInputTokensCovered": 55993,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.003269310"
+            },
+            "pricedAttempts": 19,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 19,
+            "p50Ms": 866.919,
+            "p95Ms": 2026.958
+          }
+        },
+        {
+          "agent": "UnderstandingAgent",
+          "stage": "planning.total",
+          "schemaVersion": 1,
+          "logicalCalls": 2,
+          "httpAttempts": 2,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 2,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 686,
+            "outputTokens": 16,
+            "totalTokens": 702,
+            "cacheHitTokens": 256,
+            "cacheMissTokens": 430,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 2,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.37317784256559766,
+          "providerCacheInputTokensCovered": 686,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.000074868"
+            },
+            "pricedAttempts": 2,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 2,
+            "p50Ms": 582.166,
+            "p95Ms": 829.407
+          }
+        }
+      ],
+      "labelledInjectedAttempts": 0,
+      "actualNetworkAttempts": 70,
+      "databaseDiagnostics": {}
+    },
+    "sequential/c4": {
+      "schemaVersion": 1,
+      "logicalCalls": 75,
+      "httpAttempts": 75,
+      "retryAttempts": 0,
+      "attemptStatuses": {
+        "started": 0,
+        "completed": 75,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tokens": {
+        "inputTokens": 122768,
+        "outputTokens": 6125,
+        "totalTokens": 128893,
+        "cacheHitTokens": 92928,
+        "cacheMissTokens": 29662,
+        "reasoningTokens": null
+      },
+      "reportedUsageAttempts": 75,
+      "unknownUsageAttempts": 0,
+      "usageCoverage": 1.0,
+      "tokensComplete": true,
+      "cacheTokenCoverage": 0.92,
+      "providerCacheHitRate": 0.7580389917611551,
+      "providerCacheInputTokensCovered": 122590,
+      "cost": {
+        "knownAmounts": {
+          "USD": "0.008403084",
+          "CNY": "0.0000890"
+        },
+        "pricedAttempts": 75,
+        "unknownPriceAttempts": 0,
+        "complete": true,
+        "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+      },
+      "cacheLayers": {
+        "redis_session_history": {
+          "hits": 2,
+          "misses": 16,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 19.327,
+          "unit": "requests",
+          "hitRate": 0.1111111111111111
+        },
+        "document_embedding_reuse": {
+          "hits": 204,
+          "misses": 0,
+          "errors": 0,
+          "bypasses": 0,
+          "durationMs": 57.172,
+          "unit": "chunks",
+          "hitRate": 1.0
+        }
+      },
+      "unimplementedCaches": [
+        "query_embedding",
+        "retrieval_result",
+        "final_answer"
+      ],
+      "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+      "scenarios": 16,
+      "httpRequests": 18,
+      "sseDone": 17,
+      "missingLedgerRequests": 0,
+      "fallbackTurns": 1,
+      "fallbackRate": 0.05555555555555555,
+      "retryTurnRate": 0.0,
+      "completeUsageTurnRate": 1.0,
+      "httpStatuses": {
+        "200": 18
+      },
+      "clientEndToEnd": {
+        "samples": 18,
+        "p50Ms": 3809.923,
+        "p95Ms": 14595.759
+      },
+      "clientFirstVisibleToken": {
+        "samples": 18,
+        "p50Ms": 3769.274,
+        "p95Ms": 14558.032
+      },
+      "serverFirstVisibleToken": {
+        "samples": 18,
+        "p50Ms": 3767.943,
+        "p95Ms": 14556.743
+      },
+      "modelFirstToken": {
+        "samples": 20,
+        "p50Ms": 539.338,
+        "p95Ms": 802.104
+      },
+      "observedWallSeconds": 34.287543323000136,
+      "completedReplyThroughput": 0.4958068835627653,
+      "httpThroughput": 0.5249719943605751,
+      "agentCostShares": {
+        "SafetyAgent": {
+          "USD": {
+            "knownAmount": "0.005145948",
+            "shareOfKnownCost": 0.6123880232543195
+          }
+        },
+        "ResponseAgent": {
+          "USD": {
+            "knownAmount": "0.002938368",
+            "shareOfKnownCost": 0.34967733275069013
+          }
+        },
+        "ContextAgent": {
+          "USD": {
+            "knownAmount": "0.00024390",
+            "shareOfKnownCost": 0.029025057943012352
+          }
+        },
+        "EmbeddingService": {
+          "CNY": {
+            "knownAmount": "0.0000890",
+            "shareOfKnownCost": 1.0
+          }
+        },
+        "UnderstandingAgent": {
+          "USD": {
+            "knownAmount": "0.000074868",
+            "shareOfKnownCost": 0.00890958605197806
+          }
+        }
+      },
+      "byStage": [
+        {
+          "agent": "ContextAgent",
+          "stage": "query.rewrite",
+          "schemaVersion": 1,
+          "logicalCalls": 8,
+          "httpAttempts": 8,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 8,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 1174,
+            "outputTokens": 113,
+            "totalTokens": 1287,
+            "cacheHitTokens": 0,
+            "cacheMissTokens": 1174,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 8,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.0,
+          "providerCacheInputTokensCovered": 1174,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.00024390"
+            },
+            "pricedAttempts": 8,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 8,
+            "p50Ms": 714.093,
+            "p95Ms": 877.331
+          }
+        },
+        {
+          "agent": "EmbeddingService",
+          "stage": "embedding.query",
+          "schemaVersion": 1,
+          "logicalCalls": 6,
+          "httpAttempts": 6,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 6,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 178,
+            "outputTokens": 0,
+            "totalTokens": 178,
+            "cacheHitTokens": null,
+            "cacheMissTokens": null,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 6,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 0.0,
+          "providerCacheHitRate": null,
+          "providerCacheInputTokensCovered": 0,
+          "cost": {
+            "knownAmounts": {
+              "CNY": "0.0000890"
+            },
+            "pricedAttempts": 6,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 6,
+            "p50Ms": 2623.49,
+            "p95Ms": 3645.455
+          }
+        },
+        {
+          "agent": "ResponseAgent",
+          "stage": "reply.generate",
+          "schemaVersion": 1,
+          "logicalCalls": 20,
+          "httpAttempts": 20,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 20,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 29060,
+            "outputTokens": 2399,
+            "totalTokens": 31459,
+            "cacheHitTokens": 19456,
+            "cacheMissTokens": 9604,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 20,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.669511355815554,
+          "providerCacheInputTokensCovered": 29060,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.002938368"
+            },
+            "pricedAttempts": 20,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 20,
+            "p50Ms": 1440.45,
+            "p95Ms": 1893.864
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "planning.total",
+          "schemaVersion": 1,
+          "logicalCalls": 16,
+          "httpAttempts": 16,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 16,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 17982,
+            "outputTokens": 787,
+            "totalTokens": 18769,
+            "cacheHitTokens": 14080,
+            "cacheMissTokens": 3902,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 16,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.7830052274496719,
+          "providerCacheInputTokensCovered": 17982,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.001099740"
+            },
+            "pricedAttempts": 16,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 16,
+            "p50Ms": 913.395,
+            "p95Ms": 1596.4
+          }
+        },
+        {
+          "agent": "SafetyAgent",
+          "stage": "reply.review",
+          "schemaVersion": 1,
+          "logicalCalls": 23,
+          "httpAttempts": 23,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 23,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 73688,
+            "outputTokens": 2810,
+            "totalTokens": 76498,
+            "cacheHitTokens": 59136,
+            "cacheMissTokens": 14552,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 23,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.8025187276082945,
+          "providerCacheInputTokensCovered": 73688,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.004046208"
+            },
+            "pricedAttempts": 23,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 23,
+            "p50Ms": 1084.468,
+            "p95Ms": 1796.475
+          }
+        },
+        {
+          "agent": "UnderstandingAgent",
+          "stage": "planning.total",
+          "schemaVersion": 1,
+          "logicalCalls": 2,
+          "httpAttempts": 2,
+          "retryAttempts": 0,
+          "attemptStatuses": {
+            "started": 0,
+            "completed": 2,
+            "failed": 0,
+            "cancelled": 0
+          },
+          "tokens": {
+            "inputTokens": 686,
+            "outputTokens": 16,
+            "totalTokens": 702,
+            "cacheHitTokens": 256,
+            "cacheMissTokens": 430,
+            "reasoningTokens": null
+          },
+          "reportedUsageAttempts": 2,
+          "unknownUsageAttempts": 0,
+          "usageCoverage": 1.0,
+          "tokensComplete": true,
+          "cacheTokenCoverage": 1.0,
+          "providerCacheHitRate": 0.37317784256559766,
+          "providerCacheInputTokensCovered": 686,
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.000074868"
+            },
+            "pricedAttempts": 2,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "cacheLayers": {},
+          "unimplementedCaches": [
+            "query_embedding",
+            "retrieval_result",
+            "final_answer"
+          ],
+          "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency.",
+          "duration": {
+            "samples": 2,
+            "p50Ms": 589.274,
+            "p95Ms": 694.684
+          }
+        }
+      ],
+      "labelledInjectedAttempts": 0,
+      "actualNetworkAttempts": 75,
+      "databaseDiagnostics": {}
+    }
+  },
+  "afterAdmission": {
+    "event_driven": {
+      "offered": 5,
+      "admitted": 4,
+      "capacityRejected": 1,
+      "passed": true
+    },
+    "sequential": {
+      "offered": 5,
+      "admitted": 4,
+      "capacityRejected": 1,
+      "passed": true
+    }
+  },
+  "afterPhysicalEvidence": {
+    "reports": 48,
+    "jobStatuses": {
+      "SUCCESS": 72
+    },
+    "excelReportsWrittenOnce": 48,
+    "highRiskReports": 12,
+    "mailpitReceipts": 12,
+    "smtpMeans": "Receipt by local Mailpit, not a human or real emergency service"
+  },
+  "graderEvaluation": {
+    "originalV1": {
+      "evaluations": 100,
+      "valid": 90
+    },
+    "originalObservationsRegraded": {
+      "evaluations": 100,
+      "valid": 100,
+      "invalidAttempts": 27
+    },
+    "after": {
+      "evaluations": 100,
+      "valid": 100
+    }
+  },
+  "regradeCost": {
+    "knownAmounts": {
+      "USD": "0.024277074"
+    },
+    "pricedAttempts": 127,
+    "unknownPriceAttempts": 0,
+    "complete": true,
+    "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+  },
+  "afterCostScopes": {
+    "online_chat": {
+      "schemaVersion": 1,
+      "logicalCalls": 467,
+      "httpAttempts": 471,
+      "retryAttempts": 4,
+      "attemptStatuses": {
+        "started": 0,
+        "completed": 465,
+        "failed": 6,
+        "cancelled": 0
+      },
+      "tokens": {
+        "inputTokens": 695346,
+        "outputTokens": 38239,
+        "totalTokens": 733585,
+        "cacheHitTokens": 519168,
+        "cacheMissTokens": 175102,
+        "reasoningTokens": null
+      },
+      "reportedUsageAttempts": 465,
+      "unknownUsageAttempts": 6,
+      "usageCoverage": 0.9872611464968153,
+      "tokensComplete": false,
+      "cacheTokenCoverage": 0.910828025477707,
+      "providerCacheHitRate": 0.747789764788915,
+      "providerCacheInputTokensCovered": 694270,
+      "cost": {
+        "knownAmounts": {
+          "USD": "0.050766204",
+          "CNY": "0.0005380"
+        },
+        "pricedAttempts": 465,
+        "unknownPriceAttempts": 6,
+        "complete": false,
+        "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+      },
+      "cacheLayers": {},
+      "unimplementedCaches": [
+        "query_embedding",
+        "retrieval_result",
+        "final_answer"
+      ],
+      "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency."
+    },
+    "offline_judge": {
+      "schemaVersion": 1,
+      "logicalCalls": 124,
+      "httpAttempts": 124,
+      "retryAttempts": 0,
+      "attemptStatuses": {
+        "started": 0,
+        "completed": 124,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tokens": {
+        "inputTokens": 173757,
+        "outputTokens": 18218,
+        "totalTokens": 191975,
+        "cacheHitTokens": 70656,
+        "cacheMissTokens": 103101,
+        "reasoningTokens": null
+      },
+      "reportedUsageAttempts": 124,
+      "unknownUsageAttempts": 0,
+      "usageCoverage": 1.0,
+      "tokensComplete": true,
+      "cacheTokenCoverage": 1.0,
+      "providerCacheHitRate": 0.4066368549180752,
+      "providerCacheInputTokensCovered": 173757,
+      "cost": {
+        "knownAmounts": {
+          "USD": "0.026607918"
+        },
+        "pricedAttempts": 124,
+        "unknownPriceAttempts": 0,
+        "complete": true,
+        "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+      },
+      "cacheLayers": {},
+      "unimplementedCaches": [
+        "query_embedding",
+        "retrieval_result",
+        "final_answer"
+      ],
+      "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency."
+    },
+    "knowledge_index": {
+      "schemaVersion": 1,
+      "logicalCalls": 11,
+      "httpAttempts": 11,
+      "retryAttempts": 0,
+      "attemptStatuses": {
+        "started": 0,
+        "completed": 11,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tokens": {
+        "inputTokens": 7437,
+        "outputTokens": 0,
+        "totalTokens": 7437,
+        "cacheHitTokens": null,
+        "cacheMissTokens": null,
+        "reasoningTokens": null
+      },
+      "reportedUsageAttempts": 11,
+      "unknownUsageAttempts": 0,
+      "usageCoverage": 1.0,
+      "tokensComplete": true,
+      "cacheTokenCoverage": 0.0,
+      "providerCacheHitRate": null,
+      "providerCacheInputTokensCovered": 0,
+      "cost": {
+        "knownAmounts": {
+          "CNY": "0.0037185"
+        },
+        "pricedAttempts": 11,
+        "unknownPriceAttempts": 0,
+        "complete": true,
+        "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+      },
+      "cacheLayers": {},
+      "unimplementedCaches": [
+        "query_embedding",
+        "retrieval_result",
+        "final_answer"
+      ],
+      "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency."
+    },
+    "training_data_generation": {
+      "status": "not_run",
+      "cost": null
+    }
+  },
+  "artifactHashes": {
+    "beforeObservations": "ccc095a9d4b9d1fde450271ebe5c00ac84df00c1601fdbed488ee1f4482fbcee",
+    "beforePlan": "134a987fb3e03962b8e173bf17b9a397c9c5f8b7cd6e0726c145e68b4776f23d",
+    "sameGraderRegrade": "c570ef0543b2a65cfd634392e012c153dfd058e001267360905fc1518e6416b4",
+    "afterReport": "4ab35f7416fcca7744ec52cb1ba675e62d95c29ca2264edf4c952a6c98d08edc",
+    "afterObservations": "56407231ee757bdc99003035a93722c4381982bf366f12bb0a16e0b12c55494e",
+    "afterPlan": "c8debc7e7139b05c9ffa05fd31081828010f313151358231ff973e05093345f8",
+    "memoryBefore": "903835410d1eb99f519c7fd077bef8966e20c1bf3e8ab1abdd0188ac5174dad6",
+    "memoryAfter": "558936401c6c16acd91152bcae135bd9d7ca060c53eb0fa8a6f72cb0a8b24e05"
+  },
+  "limitations": [
+    "Synthetic developer-visible benchmark; repeated trials are not independent unseen questions.",
+    "Same-provider model grader, no expert safety certification.",
+    "Shared cloud caches/provider load and different outputs confound cost and latency attribution.",
+    "Native deadlock probe intentionally synchronizes reads; not a production deadlock probability."
+  ]
+}

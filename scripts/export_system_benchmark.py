@@ -82,6 +82,8 @@ def export(folder, destination):
                                 for path,checksum in plan['sourceHashes'].items())
     artifact_names = ['plan.json','report.json','turns.csv','attempts.csv','private/observations.json','private/judgments.json']
     summary = {'protocol':report['protocol'],'createdAt':plan['createdAt'],'datasetVersion':plan['datasetVersion'],
+               'graderVersion':report.get('graderVersion','system-baseline-judge-v1'),
+               'replyPolicyVersion':report.get('replyPolicyVersion','reply-safety-v3'),
                'datasetSha256':digest,'smoke':plan['smoke'],'mock':plan['mock'],
                'plannedScenarios':len(expected),'capturedScenarios':len(observations),
                'capturedHttpRequests':sum(len(row['turns']) for row in observations),

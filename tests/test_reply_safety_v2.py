@@ -148,7 +148,7 @@ class ReplyPipelineAndPlanTests(ToolRuntimeFixture):
         self.assertEqual(len(reviews),2)
         self.assertFalse(reviews[0]['approved'])
         self.assertTrue(reviews[0]['ruleFindings'])
-        self.assertEqual(reviews[0]['policyVersion'],'reply-safety-v3')
+        self.assertEqual(reviews[0]['policyVersion'],'reply-safety-v4')
         self.assertEqual(self.db.query(ToolJob).count(),3)
 
     def test_duplicate_unknown_and_extra_review_fields_fail_closed(self):
