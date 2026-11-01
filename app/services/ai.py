@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+from contextlib import aclosing
 from urllib.parse import urlparse
 from typing import Iterable
 
@@ -14,6 +15,7 @@ from app.services.model_usage import record_model_call
 from app.services.intent_contract import INTENT_MARKER
 from app.services.observability import model_operation
 from app.services.turn_budget import bounded_timeout
+from app.services.model_gateway import ModelAttempt
 
 
 class PromptTemplates:
@@ -109,12 +111,14 @@ class AiClient:
         provider = self.settings.ai_provider.lower()
         record_model_call(provider, "stream")
         if provider == "ollama":
-            async for token in self._ollama_stream(messages):
-                yield token
+            async with aclosing(self._ollama_stream(messages)) as source:
+                async for token in source:
+                    yield token
             return
         if provider == "openai":
-            async for token in self._openai_stream(messages):
-                yield token
+            async with aclosing(self._openai_stream(messages)) as source:
+                async for token in source:
+                    yield token
             return
         text = self._mock(messages)
         for chunk in split_text(text, 12):
@@ -141,10 +145,18 @@ class AiClient:
                 payload["format"] = "json"
             url = f"{self.settings.ollama_base_url}/api/chat"
             headers = {}
+        with ModelAttempt(self.settings, provider=provider,
+                          base_url=self.settings.openai_base_url if provider == 'openai' else self.settings.ollama_base_url,
+                          model=payload['model']) as attempt:
+            return await self._complete_async_request(payload, url, headers, provider, attempt)
+
+    async def _complete_async_request(self, payload, url, headers, provider, attempt):
         async with httpx.AsyncClient(timeout=bounded_timeout(self.settings.reply_timeout_seconds)) as client:
             response = await client.post(url, json=payload, headers=headers)
+            attempt.response(response)
             response.raise_for_status()
             data = response.json()
+            attempt.capture(data)
             if provider == "openai":
                 choice = data["choices"][0]
                 if choice.get("finish_reason") == "length":
@@ -170,9 +182,14 @@ class AiClient:
         }
         if json_mode:
             payload['format'] = 'json'
-        response = httpx.post(f"{self.settings.ollama_base_url}/api/chat", json=payload, timeout=bounded_timeout(60))
-        response.raise_for_status()
-        return response.json()["message"]["content"]
+        with ModelAttempt(self.settings, provider='ollama', base_url=self.settings.ollama_base_url,
+                          model=self.settings.ollama_model) as attempt:
+            response = httpx.post(f"{self.settings.ollama_base_url}/api/chat", json=payload, timeout=bounded_timeout(60))
+            attempt.response(response)
+            response.raise_for_status()
+            data = response.json()
+            attempt.capture(data)
+            return data["message"]["content"]
 
     async def _ollama_stream(self, messages: list[AiMessage]):
         payload = {
@@ -181,15 +198,25 @@ class AiClient:
             "stream": True,
             "options": {"temperature": self.settings.ai_temperature, "num_predict": self.settings.ai_max_tokens},
         }
+        with ModelAttempt(self.settings, provider='ollama', base_url=self.settings.ollama_base_url,
+                          model=self.settings.ollama_model) as attempt:
+            async with aclosing(self._ollama_stream_request(payload, attempt)) as source:
+                async for token in source:
+                    yield token
+
+    async def _ollama_stream_request(self, payload, attempt):
         async with httpx.AsyncClient(timeout=bounded_timeout(60)) as client:
             async with client.stream("POST", f"{self.settings.ollama_base_url}/api/chat", json=payload) as response:
+                attempt.response(response)
                 response.raise_for_status()
                 async for line in response.aiter_lines():
                     if not line:
                         continue
                     data = json.loads(line)
+                    attempt.capture(data)
                     token = data.get("message", {}).get("content", "")
                     if token:
+                        attempt.first_token()
                         yield token
 
     def _openai(self, messages: list[AiMessage], stream: bool, json_mode: bool = False) -> str:
@@ -204,12 +231,17 @@ class AiClient:
         payload.update(self._openai_options())
         if json_mode:
             payload['response_format'] = {'type': 'json_object'}
-        response = httpx.post(f"{self.settings.openai_base_url}/chat/completions", headers=headers, json=payload, timeout=bounded_timeout(60))
-        response.raise_for_status()
-        choice = response.json()["choices"][0]
-        if choice.get("finish_reason") == "length":
-            raise RuntimeError("Model output truncated by token budget")
-        return choice["message"]["content"]
+        with ModelAttempt(self.settings, provider='openai', base_url=self.settings.openai_base_url,
+                          model=self.settings.openai_model) as attempt:
+            response = httpx.post(f"{self.settings.openai_base_url}/chat/completions", headers=headers, json=payload, timeout=bounded_timeout(60))
+            attempt.response(response)
+            response.raise_for_status()
+            data = response.json()
+            attempt.capture(data)
+            choice = data["choices"][0]
+            if choice.get("finish_reason") == "length":
+                raise RuntimeError("Model output truncated by token budget")
+            return choice["message"]["content"]
 
     async def _openai_stream(self, messages: list[AiMessage]):
         headers = {"Authorization": f"Bearer {self.settings.openai_api_key}"}
@@ -221,9 +253,20 @@ class AiClient:
             "stream": True,
         }
         payload.update(self._openai_options())
+        if self.settings.model_stream_include_usage:
+            payload['stream_options'] = {'include_usage': True}
+        with ModelAttempt(self.settings, provider='openai', base_url=self.settings.openai_base_url,
+                          model=self.settings.openai_model) as attempt:
+            async with aclosing(self._openai_stream_request(payload, headers, attempt)) as source:
+                async for token in source:
+                    yield token
+
+    async def _openai_stream_request(self, payload, headers, attempt):
         finished = False
+        finish_error = None
         async with httpx.AsyncClient(timeout=bounded_timeout(60)) as client:
             async with client.stream("POST", f"{self.settings.openai_base_url}/chat/completions", headers=headers, json=payload) as response:
+                attempt.response(response)
                 response.raise_for_status()
                 async for line in response.aiter_lines():
                     if not line.startswith("data: "):
@@ -233,18 +276,24 @@ class AiClient:
                         finished = True
                         break
                     data = json.loads(raw)
+                    attempt.capture(data)
                     if not data.get("choices"):
                         continue
-                    if data["choices"][0].get("finish_reason") == "length":
-                        raise RuntimeError("Model output truncated by token budget")
                     reason = data['choices'][0].get('finish_reason')
-                    if reason not in {None, 'stop'}:
-                        raise RuntimeError('Model did not finish a normal reply')
-                    if reason == 'stop':
+                    if reason is not None:
                         finished = True
+                    if reason == 'length':
+                        finish_error = 'Model output truncated by token budget'
+                    elif reason not in {None, 'stop'}:
+                        finish_error = 'Model did not finish a normal reply'
                     token = data["choices"][0].get("delta", {}).get("content", "")
                     if token:
+                        attempt.first_token()
                         yield token
+        # A rejected finish can precede a separate usage-only chunk. Drain the
+        # bounded stream before raising so billable truncated output is kept.
+        if finish_error:
+            raise RuntimeError(finish_error)
         if not finished:
             # An apparently clean TCP EOF can still be an incomplete SSE
             # response. Buffered callers discard it before a bounded retry.

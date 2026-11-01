@@ -17,6 +17,8 @@ class OwnedTurnWork:
         self.sessions = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
         self.settings = settings; self.user_id = user_id; self.request = request
         self.control = control; self.observation = observation; self.runtime_factory = runtime_factory
+        self.observation.usage_user_id = user_id
+        self.observation.usage_deferred = True
         self.outcome = None
 
     def plan(self):
@@ -68,5 +70,7 @@ class OwnedTurnWork:
             log_event('turn.finalization_failed', status='failed', reason_code='TELEMETRY_PERSISTENCE_FAILED')
             raise
         finally:
+            from app.services.model_gateway import persist_run
+            persist_run(self.observation, finalized=True)
             log_event('chat.completed', stream_status=self.observation.stream_status,
                       duration_ms=round(self.observation.elapsed_ms(), 3), reason_code=self.control.reason)

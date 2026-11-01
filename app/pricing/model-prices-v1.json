@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "version": "public-list-prices-2026-11-01",
+  "validFrom": "2026-11-01T00:00:00+08:00",
+  "validUntil": "2026-11-08T00:00:00+08:00",
+  "notice": "Public list-price estimates, not invoices; excludes free quota, promotions, tax and exchange conversion. Reverify before extending validity.",
+  "entries": [
+    {
+      "host": "api.deepseek.com",
+      "models": ["deepseek-flash", "deepseek-v4-flash", "deepseek-v4-flash-vision-exp", "DeepSeek-V4.1-Flash-1017"],
+      "operation": "chat",
+      "currency": "USD",
+      "source": "https://api-docs.deepseek.com/quick_start/pricing/",
+      "schedule": "deepseek_utc_peak_excluding_cn_holidays",
+      "verifiedHolidayDatesUtc": [],
+      "verifiedPeakDatesUtc": [],
+      "offPeak": {"inputHit": "0.003", "inputMiss": "0.15", "output": "0.6"},
+      "peak": {"inputHit": "0.006", "inputMiss": "0.3", "output": "1.2"}
+    },
+    {
+      "host": "dashscope.aliyuncs.com",
+      "models": ["qwen3.7-text-embedding"],
+      "operation": "embedding",
+      "currency": "CNY",
+      "source": "https://help.aliyun.com/zh/model-studio/text-embedding-synchronous-api/",
+      "rates": {"input": "0.5"}
+    }
+  ]
+}

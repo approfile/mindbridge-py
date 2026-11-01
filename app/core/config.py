@@ -7,6 +7,8 @@ from pydantic import Field
 
 
 class Settings(BaseSettings):
+    model_pricing_file: str = 'app/pricing/model-prices-v1.json'
+    model_stream_include_usage: bool = True
     privacy_key_file: str = 'data/privacy.key'
     privacy_trace_retention_days: int = Field(default=30, ge=1, le=3650)
     privacy_content_retention_days: int = Field(default=90, ge=1, le=3650)

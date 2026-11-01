@@ -15,7 +15,8 @@ PURPOSES = {'case_followup', 'incident_review', 'data_subject_request'}
 DETAIL_ROUTES = {'/api/admin/reports/{report_id}', '/api/admin/agent-traces/{trace_id}',
                  '/api/admin/conversations/{session_id}', '/api/admin/cases/{case_id}/notes', '/api/admin/cases/{case_id}'}
 RESOURCES = {'reports', 'agent-traces', 'conversations', 'cases', 'excel-records',
-             'alerts', 'tool-jobs', 'dead-letters', 'tool-audits', 'data-access-audits'}
+             'alerts', 'tool-jobs', 'dead-letters', 'tool-audits', 'data-access-audits',
+             'model-usage', 'model-usage-summary'}
 
 
 def audit_target(request):

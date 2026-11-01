@@ -1,6 +1,6 @@
-from typing import Annotated
+from typing import Annotated, Literal
 
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, Query
 from fastapi.responses import StreamingResponse
 from contextlib import aclosing
 from sqlalchemy.orm import Session
@@ -25,6 +25,31 @@ from app.models.entities import DataAccessAudit
 from fastapi import Request
 
 router = APIRouter()
+
+
+@router.get('/api/admin/model-usage-summary')
+def model_usage_summary(access: Annotated[ReadAccess, Depends(admin_read)], db: Annotated[Session, Depends(get_db)],
+                        hours: Annotated[int, Query(ge=1, le=720)] = 24,
+                        scope: Literal['online_chat', 'knowledge_index', 'http_model_operation', 'all'] = 'online_chat'):
+    from app.services.usage_reporting import usage_report
+    return exposed(access, usage_report(db, hours, scope))
+
+
+@router.get('/api/admin/model-usage')
+def model_usage_runs(access: Annotated[ReadAccess, Depends(admin_read)], db: Annotated[Session, Depends(get_db)],
+                     limit: Annotated[int, Query(ge=1, le=100)] = 20,
+                     scope: Literal['online_chat', 'knowledge_index', 'http_model_operation', 'all'] = 'online_chat'):
+    from app.services.usage_reporting import list_usage_runs
+    return exposed(access, list_usage_runs(db, limit, scope))
+
+
+@router.get('/api/admin/model-usage/{run_id}')
+def model_usage_detail(run_id: str, access: Annotated[ReadAccess, Depends(admin_read)], db: Annotated[Session, Depends(get_db)]):
+    from app.services.usage_reporting import usage_run_detail
+    result = usage_run_detail(db, run_id)
+    if result is None:
+        raise HTTPException(404, '用量记录不存在。')
+    return exposed(access, result)
 
 
 @router.get("/actuator/health")

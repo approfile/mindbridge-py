@@ -746,3 +746,14 @@ textarea {
     max-height: none;
   }
 }
+/* Metadata-only usage ledger; wide tables scroll without widening the page. */
+.usage-panel { min-width: 0; }
+.usage-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin: 16px 0; }
+.usage-metrics .metric strong { font-size: 18px; overflow-wrap: anywhere; }
+.usage-scroll { overflow-x: auto; margin: 18px 0; }
+.usage-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+.usage-table caption { text-align: left; font-weight: 700; padding: 10px 0; }
+.usage-table th, .usage-table td { border-bottom: 1px solid #e4e9ed; padding: 10px 12px; vertical-align: top; min-width: 110px; }
+.usage-table th { color: #52626b; font-weight: 600; }
+.usage-panel pre { max-height: 460px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; padding: 12px; background: #f4f7f8; border-radius: 8px; }
+.usage-panel summary { cursor: pointer; font-weight: 600; }

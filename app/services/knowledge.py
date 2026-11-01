@@ -4,6 +4,7 @@ import json
 import logging
 import math
 import re
+import time
 from dataclasses import dataclass
 from typing import Hashable
 
@@ -245,6 +246,8 @@ class KnowledgeService:
         return results
 
     def _ensure_vector_index(self) -> None:
+        from app.services.model_gateway import record_cache
+        started = time.perf_counter()
         rows = self.db.query(KnowledgeChunk).order_by(KnowledgeChunk.source.asc(), KnowledgeChunk.source_index.asc()).all()
         if not rows:
             return
@@ -253,6 +256,8 @@ class KnowledgeService:
             and all(row.embedding_json for row in rows)
             and self.vector_store.has_exact_chunk_ids(rows)
         ):
+            record_cache('document_embedding_reuse', hits=len(rows), reason='index_already_complete', unit='chunks',
+                         duration_ms=(time.perf_counter() - started) * 1000)
             return
         self._sync_vector_chunks(rows)
         self.db.commit()
@@ -288,6 +293,8 @@ class KnowledgeService:
             self._handle_vector_error("sync", exc)
 
     def _embeddings_for_chunks(self, chunks: list[KnowledgeChunk]) -> list[list[float]]:
+        from app.services.model_gateway import record_cache, stage_scope
+        started = time.perf_counter()
         embeddings: list[list[float] | None] = []
         missing_indexes = []
         missing_texts = []
@@ -297,8 +304,12 @@ class KnowledgeService:
             if embedding is None:
                 missing_indexes.append(index)
                 missing_texts.append(chunk.content)
+        record_cache('document_embedding_reuse', hits=len(chunks) - len(missing_texts),
+                     misses=len(missing_texts), reason='stored_vector_lookup', unit='chunks',
+                     duration_ms=(time.perf_counter() - started) * 1000)
         if missing_texts:
-            new_embeddings = self.vector_store.embed_texts(missing_texts)
+            with stage_scope('embedding.document'):
+                new_embeddings = self.vector_store.embed_texts(missing_texts)
             for index, embedding in zip(missing_indexes, new_embeddings):
                 embeddings[index] = embedding
         resolved = [embedding for embedding in embeddings if embedding is not None]

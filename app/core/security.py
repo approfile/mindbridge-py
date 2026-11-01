@@ -59,6 +59,8 @@ def current_user(request: Request, db: Annotated[Session, Depends(get_db)]) -> U
                         raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'Bad credentials')
                     principal = ChatPrincipal(user.id, frozenset(user.roles))
                 checkpoint()
+                from app.services.model_gateway import bind_user
+                bind_user(principal.id)
                 return principal
         finally:
             control.lease.external_finished()
@@ -66,6 +68,8 @@ def current_user(request: Request, db: Annotated[Session, Depends(get_db)]) -> U
     if user is None or not verify_password(password, user.password_hash):
         _audit_auth_denial(request,db)
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Bad credentials")
+    from app.services.model_gateway import bind_user
+    bind_user(user.id)
     return user
 
 

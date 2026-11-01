@@ -62,6 +62,23 @@
       </div>
     </section>
 
+    <section class="panel usage-panel" aria-label="模型用量与缓存观测">
+      <div class="section-head">
+        <div><p class="panel-label">MODEL USAGE</p><h2>模型用量与缓存观测</h2></div>
+        <label>最近 <select id="usageHours"><option value="24">24 小时</option><option value="168">7 天</option><option value="720">30 天</option></select></label>
+      </div>
+      <p id="usageState" class="hint" role="status">正在读取用量账本…</p>
+      <div id="usageMetrics" class="usage-metrics"></div>
+      <p id="usageCaches" class="hint"></p>
+      <div class="usage-scroll"><table class="usage-table"><caption>Agent / 阶段统计（在线对话）</caption>
+        <thead><tr><th>Agent / 阶段</th><th>调用 / 尝试 / 重试</th><th>输入 / 输出 token</th><th>已知估算费用</th><th>耗时 P50 / P95</th></tr></thead>
+        <tbody id="usageStages"></tbody></table></div>
+      <div class="usage-scroll"><table class="usage-table"><caption>最近 20 轮 · 点击核对请求明细</caption>
+        <thead><tr><th>时间 / 轮次</th><th>状态</th><th>token / 覆盖率</th><th>已知估算费用</th><th>总耗时 / 首 token</th></tr></thead>
+        <tbody id="usageRuns"></tbody></table></div>
+      <details id="usageDetail"><summary>单轮请求明细（仅元数据）</summary><pre id="usageDetailBody">选择一轮查看。</pre></details>
+    </section>
+
     <section class="admin-columns">
       <div class="admin-stack">
         <section class="panel">

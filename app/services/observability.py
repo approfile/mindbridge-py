@@ -136,11 +136,23 @@ class Observation:
         self.dropped_spans = 0
         self.server_first_token_ms = None
         self.stream_status = 'not_started'
+        self.usage_calls = {}
+        self.usage_attempts = []
+        self.usage_cache_events = []
+        self.usage_ledger_errors = 0
+        self.usage_session_factory = None
+        self.usage_scope = 'unbound'
+        self.usage_user_id = None
+        self.usage_db_lock = threading.RLock()
+        self.usage_finalized = False
+        self.usage_deferred = False
 
     def elapsed_ms(self):
         return (time.perf_counter_ns() - self.started_ns) / 1_000_000
 
     def snapshot(self, phase='complete'):
+        from app.services.model_gateway import usage_snapshot
+        usage = usage_snapshot(self)
         with self.lock:
             rows = [dict(row) for row in self.spans]
             for row in rows:
@@ -159,7 +171,8 @@ class Observation:
                     'serverFirstTokenMs': self.server_first_token_ms, 'streamStatus': self.stream_status,
                     'logicalModelCalls': sum(r['stage'] in {'model.complete', 'model.stream', 'model.review'} for r in rows),
                     'degradations': list(self.degradations), 'droppedSpans': self.dropped_spans,
-                    'tokenUsage': None, 'currencyCost': None}
+                    'tokenUsage': usage['tokens'], 'currencyCost': usage['cost'] if usage['httpAttempts'] else None,
+                    'modelUsage': usage}
 
 
 @contextmanager
@@ -193,9 +206,12 @@ class Span:
 
 @contextmanager
 def span(stage, **attributes):
+    from app.services.model_gateway import stage_scope
     node = Span(stage, attributes); state = _CURRENT.get()
     parent_id = _PARENT.get(); token = _PARENT.set(node.span_id)
     started = time.perf_counter_ns()
+    stage_context = stage_scope(stage)
+    stage_context.__enter__()
     try:
         yield node
     except BaseException as exc:
@@ -204,6 +220,7 @@ def span(stage, **attributes):
         raise
     finally:
         ended = time.perf_counter_ns(); _PARENT.reset(token)
+        stage_context.__exit__(None, None, None)
         duration = (ended - started) / 1_000_000
         if state is not None:
             with state.lock:
@@ -250,6 +267,7 @@ def observed_run(function):
 
 
 def model_operation(stage):
+    from app.services.model_gateway import model_call
     def decorate(function):
         def attributes(client):
             settings = client.settings; provider = settings.ai_provider.lower()
@@ -259,7 +277,7 @@ def model_operation(stage):
             @functools.wraps(function)
             async def stream(client, *args, **kwargs):
                 start = time.perf_counter(); first = True
-                with span(stage, **attributes(client)) as node:
+                with model_call(client, stage), span(stage, **attributes(client)) as node:
                     checkpoint()
                     async with aclosing(function(client, *args, **kwargs)) as source:
                         async for value in source:
@@ -271,7 +289,7 @@ def model_operation(stage):
         if inspect.iscoroutinefunction(function):
             @functools.wraps(function)
             async def asynchronous(client, *args, **kwargs):
-                with span(stage, **attributes(client)):
+                with model_call(client, stage), span(stage, **attributes(client)):
                     checkpoint()
                     try:
                         value = await function(client, *args, **kwargs)
@@ -283,7 +301,7 @@ def model_operation(stage):
             return asynchronous
         @functools.wraps(function)
         def synchronous(client, *args, **kwargs):
-            with span(stage, **attributes(client)):
+            with model_call(client, stage), span(stage, **attributes(client)):
                 checkpoint()
                 try:
                     value = function(client, *args, **kwargs)
@@ -298,14 +316,18 @@ def model_operation(stage):
 
 class ObservationMiddleware:
     """Pure ASGI wrapper: request timing includes the streaming body lifecycle."""
-    def __init__(self, app):
+    def __init__(self, app, session_factory=None):
         self.app = app
+        self.session_factory = session_factory
 
     async def __call__(self, scope, receive, send):
         if scope['type'] != 'http':
             return await self.app(scope, receive, send)
         # Always server-generated; a caller cannot merge two independent runs.
         with observation_scope(ids={'request_id': uuid.uuid4().hex}, reuse=False) as state:
+            from app.services.model_gateway import bind_ledger, persist_run
+            bind_ledger(state, self.session_factory,
+                        scope='online_chat' if scope.get('path') == '/api/chat/stream' else 'http_model_operation')
             status = None; first_body = None; failure = None
             async def observed_send(message):
                 nonlocal status, first_body
@@ -327,6 +349,8 @@ class ObservationMiddleware:
                 failure = type(exc).__name__
                 raise
             finally:
+                if not state.usage_deferred:
+                    persist_run(state, finalized=True)
                 route = getattr(scope.get('route'), 'path', 'unmatched')
                 log_event('http.completed', method=scope.get('method'), route=route,
                           http_status=status, duration_ms=round(state.elapsed_ms(), 3),

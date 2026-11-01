@@ -1,0 +1,339 @@
+{
+  "verifiedOn": "2026-11-01 Asia/Singapore",
+  "tests": 321,
+  "harnessGroups": 6,
+  "notice": "Synthetic smoke checks only; no controlled before/after optimization claim. Raw artifacts remain local and ignored.",
+  "iterations": [
+    {
+      "artifact": "target/model-usage-verification/20261031T173655Z/report.json",
+      "sha256": "d0ff3c5005c4f3cb94492b952f31beadba048d304c4bc75f1875b8834cb2dc82",
+      "passed": true,
+      "onlineSummary": {
+        "schemaVersion": 1,
+        "logicalCalls": 16,
+        "httpAttempts": 16,
+        "retryAttempts": 0,
+        "attemptStatuses": {
+          "started": 0,
+          "completed": 16,
+          "failed": 0,
+          "cancelled": 0
+        },
+        "tokens": {
+          "inputTokens": 23137,
+          "outputTokens": 1056,
+          "totalTokens": 24193,
+          "cacheHitTokens": 14592,
+          "cacheMissTokens": 8524,
+          "reasoningTokens": null
+        },
+        "reportedUsageAttempts": 16,
+        "unknownUsageAttempts": 0,
+        "usageCoverage": 1.0,
+        "tokensComplete": true,
+        "cacheTokenCoverage": 0.9375,
+        "providerCacheHitRate": 0.6312510815019899,
+        "providerCacheInputTokensCovered": 23116,
+        "cost": {
+          "knownAmounts": {
+            "USD": "0.001955976",
+            "CNY": "0.0000105"
+          },
+          "pricedAttempts": 16,
+          "unknownPriceAttempts": 0,
+          "complete": true,
+          "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+        },
+        "cacheLayers": {
+          "redis_session_history": {
+            "hits": 1,
+            "misses": 2,
+            "errors": 0,
+            "bypasses": 0,
+            "durationMs": 7.313,
+            "unit": "requests",
+            "hitRate": 0.3333333333333333
+          },
+          "document_embedding_reuse": {
+            "hits": 34,
+            "misses": 0,
+            "errors": 0,
+            "bypasses": 0,
+            "durationMs": 0,
+            "unit": "chunks",
+            "hitRate": 1.0
+          }
+        },
+        "unimplementedCaches": [
+          "query_embedding",
+          "retrieval_result",
+          "final_answer"
+        ],
+        "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency."
+      },
+      "rawUsageComparisons": [
+        {
+          "operation": "chat",
+          "model": "deepseek-flash",
+          "matched": true
+        },
+        {
+          "operation": "chat",
+          "model": "deepseek-flash",
+          "matched": true
+        },
+        {
+          "operation": "embedding",
+          "model": "qwen3.7-text-embedding",
+          "matched": true
+        }
+      ],
+      "runs": [
+        {
+          "verificationCase": "chat",
+          "runId": "694d96032d744ce8a069842787a57f57",
+          "httpAttempts": 4,
+          "tokens": {
+            "inputTokens": 2033,
+            "outputTokens": 82,
+            "totalTokens": 2115,
+            "cacheHitTokens": 1024,
+            "cacheMissTokens": 1009,
+            "reasoningTokens": null
+          },
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.000203622"
+            },
+            "pricedAttempts": 4,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "durationMs": 4295.881,
+          "serverFirstTokenMs": 4264.564,
+          "sseOutcome": "done"
+        },
+        {
+          "verificationCase": "follow_up",
+          "runId": "b7cb04d60c564b85ab602895e9c46ed2",
+          "httpAttempts": 4,
+          "tokens": {
+            "inputTokens": 2293,
+            "outputTokens": 88,
+            "totalTokens": 2381,
+            "cacheHitTokens": 1280,
+            "cacheMissTokens": 1013,
+            "reasoningTokens": null
+          },
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.000208590"
+            },
+            "pricedAttempts": 4,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "durationMs": 4546.728,
+          "serverFirstTokenMs": 4513.43,
+          "sseOutcome": "done"
+        },
+        {
+          "verificationCase": "consult",
+          "runId": "cc5c8e08d5284dd99005c21886759e5a",
+          "httpAttempts": 8,
+          "tokens": {
+            "inputTokens": 18811,
+            "outputTokens": 886,
+            "totalTokens": 19697,
+            "cacheHitTokens": 12288,
+            "cacheMissTokens": 6502,
+            "reasoningTokens": null
+          },
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.001543764",
+              "CNY": "0.0000105"
+            },
+            "pricedAttempts": 8,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "durationMs": 11780.974,
+          "serverFirstTokenMs": 11726.724,
+          "sseOutcome": "done"
+        }
+      ]
+    },
+    {
+      "artifact": "target/model-usage-verification/20261031T174109Z/report.json",
+      "sha256": "f94fdc6f642b04607c5e21b5db6559110aa3c97e3a0bd189e720cfae79700340",
+      "passed": true,
+      "onlineSummary": {
+        "schemaVersion": 1,
+        "logicalCalls": 13,
+        "httpAttempts": 13,
+        "retryAttempts": 0,
+        "attemptStatuses": {
+          "started": 0,
+          "completed": 13,
+          "failed": 0,
+          "cancelled": 0
+        },
+        "tokens": {
+          "inputTokens": 11609,
+          "outputTokens": 608,
+          "totalTokens": 12217,
+          "cacheHitTokens": 8448,
+          "cacheMissTokens": 3140,
+          "reasoningTokens": null
+        },
+        "reportedUsageAttempts": 13,
+        "unknownUsageAttempts": 0,
+        "usageCoverage": 1.0,
+        "tokensComplete": true,
+        "cacheTokenCoverage": 0.9230769230769231,
+        "providerCacheHitRate": 0.7290300310666207,
+        "providerCacheInputTokensCovered": 11588,
+        "cost": {
+          "knownAmounts": {
+            "USD": "0.000861144",
+            "CNY": "0.0000105"
+          },
+          "pricedAttempts": 13,
+          "unknownPriceAttempts": 0,
+          "complete": true,
+          "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+        },
+        "cacheLayers": {
+          "redis_session_history": {
+            "hits": 1,
+            "misses": 2,
+            "errors": 0,
+            "bypasses": 0,
+            "durationMs": 7.281,
+            "unit": "requests",
+            "hitRate": 0.3333333333333333
+          },
+          "document_embedding_reuse": {
+            "hits": 34,
+            "misses": 0,
+            "errors": 0,
+            "bypasses": 0,
+            "durationMs": 19.234,
+            "unit": "chunks",
+            "hitRate": 1.0
+          }
+        },
+        "unimplementedCaches": [
+          "query_embedding",
+          "retrieval_result",
+          "final_answer"
+        ],
+        "durationSemantics": "HTTP attempt durations can overlap; their sum is not end-to-end latency."
+      },
+      "rawUsageComparisons": [
+        {
+          "operation": "chat",
+          "model": "deepseek-flash",
+          "matched": true
+        },
+        {
+          "operation": "chat",
+          "model": "deepseek-flash",
+          "matched": true
+        },
+        {
+          "operation": "embedding",
+          "model": "qwen3.7-text-embedding",
+          "matched": true
+        }
+      ],
+      "runs": [
+        {
+          "verificationCase": "chat",
+          "runId": "3d1a398ef2944639b7a70e9335651268",
+          "httpAttempts": 4,
+          "tokens": {
+            "inputTokens": 2033,
+            "outputTokens": 82,
+            "totalTokens": 2115,
+            "cacheHitTokens": 1024,
+            "cacheMissTokens": 1009,
+            "reasoningTokens": null
+          },
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.000203622"
+            },
+            "pricedAttempts": 4,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "durationMs": 4542.147,
+          "serverFirstTokenMs": 4507.878,
+          "sseOutcome": "done"
+        },
+        {
+          "verificationCase": "follow_up",
+          "runId": "62e56a36538143de831ce7ad9ee0f337",
+          "httpAttempts": 4,
+          "tokens": {
+            "inputTokens": 2299,
+            "outputTokens": 92,
+            "totalTokens": 2391,
+            "cacheHitTokens": 1280,
+            "cacheMissTokens": 1019,
+            "reasoningTokens": null
+          },
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.000211890"
+            },
+            "pricedAttempts": 4,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "durationMs": 4312.112,
+          "serverFirstTokenMs": 4276.906,
+          "sseOutcome": "done"
+        },
+        {
+          "verificationCase": "consult",
+          "runId": "f8da487235ba4ac19ca116e293e9529b",
+          "httpAttempts": 5,
+          "tokens": {
+            "inputTokens": 7277,
+            "outputTokens": 434,
+            "totalTokens": 7711,
+            "cacheHitTokens": 6144,
+            "cacheMissTokens": 1112,
+            "reasoningTokens": null
+          },
+          "cost": {
+            "knownAmounts": {
+              "USD": "0.000445632",
+              "CNY": "0.0000105"
+            },
+            "pricedAttempts": 5,
+            "unknownPriceAttempts": 0,
+            "complete": true,
+            "semantics": "Public list-price estimate; currencies are separate; unknown is not zero. Reasoning tokens are included in output, not added again."
+          },
+          "durationMs": 6457.436,
+          "serverFirstTokenMs": 6423.863,
+          "sseOutcome": "done"
+        }
+      ]
+    }
+  ],
+  "screenshot": {
+    "path": "docs/screenshots/model-usage-admin-20261101.jpg",
+    "sha256": "199c2cf4709eeea1061ab4578eaf078b3553e97aadd3030ee73f61fba927911a",
+    "source": "Actual browser capture of the model-usage panel after both synthetic live smoke runs; no DOM modification."
+  }
+}

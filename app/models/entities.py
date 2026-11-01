@@ -245,6 +245,35 @@ class DataAccessAudit(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=now, index=True)
 
 
+class ModelUsageRun(Base):
+    __tablename__ = 'model_usage_runs'
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    user_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True, index=True)
+    scope: Mapped[str] = mapped_column(String(40))
+    finalized: Mapped[bool] = mapped_column(Boolean, default=False)
+    payload_json: Mapped[str] = mapped_column(MEDIUMTEXT().with_variant(Text, 'sqlite'))
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=now, index=True)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=now)
+
+
+class ModelUsageAttempt(Base):
+    __tablename__ = 'model_usage_attempts'
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    run_id: Mapped[str] = mapped_column(String(64), index=True)
+    logical_call_id: Mapped[str] = mapped_column(String(64), index=True)
+    user_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True, index=True)
+    payload_json: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=now, index=True)
+
+
+class UsageCacheEvent(Base):
+    __tablename__ = 'usage_cache_events'
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    run_id: Mapped[str] = mapped_column(String(64), index=True)
+    payload_json: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=now, index=True)
+
+
 class PrivacyErasureMarker(Base):
     """Server-owned tombstones; user text can never assert erasure state."""
     __tablename__ = 'privacy_erasure_markers'

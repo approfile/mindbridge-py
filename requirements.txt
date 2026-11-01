@@ -6,6 +6,8 @@ cryptography>=42.0.0
 redis==5.2.1
 pydantic-settings==2.7.1
 chromadb==0.5.23
+# Chroma 0.5.x calls the pre-v6 PostHog capture API.
+posthog>=2.4.0,<6.0.0
 python-multipart==0.0.20
 httpx==0.28.1
 openpyxl==3.1.5

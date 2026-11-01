@@ -1,4 +1,5 @@
 import json
+import os
 from datetime import datetime, timedelta
 from pathlib import Path
 import tempfile
@@ -62,6 +63,18 @@ class EncryptionTests(unittest.TestCase):
         encrypt_text(PRIVATE);key=Path(self.settings.privacy_key_file);key.chmod(0o644)
         with self.assertRaises(PrivacyStorageError):encrypt_text(PRIVATE)
         key.chmod(0o600);target=key.with_name('target.key');key.rename(target);key.symlink_to(target)
+        with self.assertRaises(PrivacyStorageError):encrypt_text(PRIVATE)
+
+    def test_key_change_with_restored_file_metadata_is_rejected(self):
+        from cryptography.fernet import Fernet
+        value=encrypt_text(PRIVATE)
+        key=Path(self.settings.privacy_key_file)
+        before=key.stat()
+        key.write_bytes(Fernet.generate_key())
+        os.utime(key, ns=(before.st_atime_ns,before.st_mtime_ns))
+        self.assertEqual((key.stat().st_ino,key.stat().st_mtime_ns,key.stat().st_size),
+                         (before.st_ino,before.st_mtime_ns,before.st_size))
+        with self.assertRaises(PrivacyStorageError):decrypt_text(value)
         with self.assertRaises(PrivacyStorageError):encrypt_text(PRIVATE)
 
     def legacy_database(self):

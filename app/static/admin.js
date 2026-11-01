@@ -31,6 +31,73 @@ const els = {
   accessPurpose: document.querySelector('#accessPurpose')
 };
 
+const usageEls = Object.fromEntries(['usageHours', 'usageState', 'usageMetrics', 'usageCaches', 'usageStages', 'usageRuns', 'usageDetail', 'usageDetailBody'].map(id => [id, document.getElementById(id)]));
+const usageNumber = value => value == null ? '未知' : Number(value).toLocaleString('zh-CN', {maximumFractionDigits: 1});
+const usagePercent = value => value == null ? '无样本' : `${(value * 100).toFixed(1)}%`;
+const usageMoney = cost => {
+  const parts = Object.entries(cost?.knownAmounts || {}).map(([currency, amount]) => `${currency} ${Number(amount).toFixed(8)}`);
+  return `${parts.join(' + ') || '无已知费用'}${cost?.unknownPriceAttempts ? ` · ${cost.unknownPriceAttempts} 笔未知` : ''}`;
+};
+
+function usageRow(body, values) {
+  const row = document.createElement('tr');
+  values.forEach(value => {
+    const cell = document.createElement('td');
+    if (value instanceof Node) cell.append(value); else cell.textContent = value;
+    row.append(cell);
+  });
+  body.append(row);
+}
+
+async function loadModelUsage() {
+  usageEls.usageState.textContent = '正在读取用量账本…';
+  try {
+    const [summaryResponse, runsResponse] = await Promise.all([
+      api(`/api/admin/model-usage-summary?hours=${usageEls.usageHours.value}`), api('/api/admin/model-usage?limit=20')
+    ]);
+    const summary = await summaryResponse.json(), runs = await runsResponse.json();
+    usageEls.usageState.textContent = `在线对话 · ${summary.runCount} 轮 · 用量覆盖 ${usagePercent(summary.usageCoverage)} · ${summary.unknownUsageAttempts} 笔用量未知 · ${summary.unfinishedRuns} 轮未完成${summary.truncated ? ' · 已达查询上限，统计不完整' : ''}${summary.ledgerWriteErrorsInFinalizedRuns ? ` · 检出 ${summary.ledgerWriteErrorsInFinalizedRuns} 次账本写入错误，请核对服务日志` : ''}。费用为有版本的公开价估算，USD / CNY 分开；未知不计为零。`;
+    usageEls.usageMetrics.replaceChildren();
+    const cards = [
+      ['逻辑调用 / HTTP 尝试 / 重试', `${summary.logicalCalls} / ${summary.httpAttempts} / ${summary.retryAttempts}`],
+      ['已知输入 / 输出 token', `${usageNumber(summary.tokens?.inputTokens)} / ${usageNumber(summary.tokens?.outputTokens)}`],
+      ['已知费用（估算）', usageMoney(summary.cost)],
+      ['轮次耗时 P50 / P95', `${usageNumber(summary.endToEndLatency.p50Ms)} / ${usageNumber(summary.endToEndLatency.p95Ms)} ms`]
+    ];
+    for (const [label, value] of cards) {
+      const card = document.createElement('div'); card.className = 'metric';
+      const title = document.createElement('span'), number = document.createElement('strong');
+      title.textContent = label; number.textContent = value; card.append(title, number); usageEls.usageMetrics.append(card);
+    }
+    const cacheLabel = (key, label) => {
+      const layer = summary.cacheLayers[key];
+      return layer ? `${label} ${usagePercent(layer.hitRate)}（命中 ${layer.hits} / 未命中 ${layer.misses} / 错误 ${layer.errors} / 不可用 ${layer.bypasses}，${layer.unit}）` : `${label} 无样本`;
+    };
+    usageEls.usageCaches.textContent = `服务商前缀缓存 ${usagePercent(summary.providerCacheHitRate)}（用量覆盖 ${usagePercent(summary.cacheTokenCoverage)}，按输入 token 加权）；${cacheLabel('redis_session_history', 'Redis 历史')}；${cacheLabel('document_embedding_reuse', '文档向量复用')}。查询向量 / 检索结果 / 最终答案缓存：未实现。`;
+    usageEls.usageStages.replaceChildren();
+    for (const row of summary.byStage) usageRow(usageEls.usageStages, [
+      `${row.agent} / ${row.stage}`, `${row.logicalCalls} / ${row.httpAttempts} / ${row.retryAttempts}`,
+      `${usageNumber(row.tokens?.inputTokens)} / ${usageNumber(row.tokens?.outputTokens)}`, usageMoney(row.cost),
+      `${usageNumber(row.latency.p50Ms)} / ${usageNumber(row.latency.p95Ms)} ms`
+    ]);
+    if (!summary.byStage.length) usageRow(usageEls.usageStages, ['暂无真实模型调用', '—', '—', '—', '—']);
+    usageEls.usageRuns.replaceChildren();
+    for (const row of runs) {
+      const button = document.createElement('button'); button.className = 'ghost';
+      button.textContent = `${displayTime(row.createdAt)} · ${row.runId.slice(0, 10)}`;
+      button.addEventListener('click', async () => {
+        usageEls.usageDetail.open = true; usageEls.usageDetailBody.textContent = '读取中…';
+        try { const response = await api(`/api/admin/model-usage/${encodeURIComponent(row.runId)}`); usageEls.usageDetailBody.textContent = JSON.stringify(await response.json(), null, 2); }
+        catch (error) { usageEls.usageDetailBody.textContent = `读取失败：${error.message}`; }
+      });
+      usageRow(usageEls.usageRuns, [button, row.finalized ? row.streamStatus : '未完成 / 待核对',
+        `${usageNumber(row.tokens?.totalTokens)} / ${usagePercent(row.usageCoverage)}`, usageMoney(row.cost),
+        `${usageNumber(row.durationMs)} / ${usageNumber(row.serverFirstTokenMs)} ms`]);
+    }
+    if (!runs.length) usageRow(usageEls.usageRuns, ['暂无账本记录', '—', '—', '—', '—']);
+  } catch (error) { usageEls.usageState.textContent = `用量账本读取失败：${error.message}`; }
+}
+
 function readAuth() {
   try {
     return JSON.parse(sessionStorage.getItem(AUTH_KEY) || "null");
@@ -356,6 +423,7 @@ function logout() {
 
 els.switchAccount.addEventListener("click", logout);
 els.refreshAdmin.addEventListener("click", () => {
+  loadModelUsage();
   loadAdminDashboard();
   loadKnowledgeStatus();
 });
@@ -364,9 +432,11 @@ els.rebuildVector.addEventListener("click", () => runKnowledgeAction("rebuild"))
 els.backupVector.addEventListener("click", () => runKnowledgeAction("backup"));
 
 checkHealth();
+usageEls.usageHours.addEventListener('change', loadModelUsage);
 loadProfile().then((profile) => {
   if (!profile) return;
   loadAgentStatus();
+  loadModelUsage();
   loadAdminDashboard();
   loadKnowledgeStatus();
 });

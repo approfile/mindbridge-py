@@ -52,11 +52,22 @@ def cipher(settings=None, *, create=True):
             info = path.lstat()
         if not stat.S_ISREG(info.st_mode) or info.st_mode & 0o077:
             raise PrivacyStorageError('Sensitive storage key must be a private regular file (0600)')
-        stamp = (str(path), info.st_ino, info.st_mtime_ns, info.st_size)
+        # Metadata can be reused after rapid replacement, or restored after an
+        # in-place write. Verify the actual key on every use before reusing a
+        # cached cipher, so a changed key never silently uses the old one.
+        try:
+            raw = path.read_bytes().strip()
+        except OSError:
+            raise PrivacyStorageError('Sensitive storage key unavailable or invalid') from None
+        fingerprint = hashlib.sha256(raw).hexdigest()
+        key_id = fingerprint[:24]
+        expected = _EXPECTED_KEYS.get(str(path))
+        if expected is not None and expected != key_id:
+            raise PrivacyStorageError('Sensitive storage key changed; explicit offline rotation required')
+        stamp = (str(path), fingerprint)
         if stamp not in _CIPHERS:
             try:
-                raw = path.read_bytes().strip()
-                _CIPHERS[stamp] = (Fernet(raw), hashlib.sha256(raw).hexdigest()[:24])
+                _CIPHERS[stamp] = (Fernet(raw), key_id)
             except (ValueError, OSError):
                 raise PrivacyStorageError('Sensitive storage key unavailable or invalid') from None
         value=_CIPHERS[stamp]

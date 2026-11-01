@@ -78,3 +78,6 @@ span收集上限512，超出会计入droppedSpans，不能把丢失后计数当�
 ```
 
 公开汇总：docs/benchmarks/observability-v1-summary.json。真实评测逐条结果：target/observability/。本机完整证据及未删除的第一候选：.local-runtime/observability-20261025/；其中包含私有数据库备份，不用于公开发布。
+## 版本说明
+
+本文保留 10 月 25 日的阶段耗时验收记录；2026-11-01 已新增真实 token/费用与缓存账本，当前实现与验收见 [模型用量与缓存观测](MODEL-USAGE.md)。下文 tokenUsage/currencyCost 为 null 的描述仅指当时版本。

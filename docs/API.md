@@ -12,6 +12,8 @@
 | GET /api/admin/reports、/cases、/alerts | 管理元数据列表 |
 | GET /api/admin/reports/{id}、/cases/{id} | 受用途与权限控制的详情 |
 | GET /api/admin/agent-traces、/agent-traces/{id} | 运行观测 |
+| GET /api/admin/model-usage-summary | 用量/费用/缓存汇总；hours=1..720、scope，默认在线24小时 |
+| GET /api/admin/model-usage、/model-usage/{run_id} | 最近轮次（limit=1..100）与逐次模型请求明细；元数据读取留审计，学生禁止访问 |
 | GET /api/admin/tool-jobs、/tool-audits、/dead-letters | 后处理与审计 |
 | GET /api/admin/conversations/{session_id} | 权限控制的会话查看 |
 | GET /api/admin/data-access-audits | 独立隐私审计权限 |

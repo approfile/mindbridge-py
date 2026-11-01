@@ -8,7 +8,8 @@ from app.core.bootstrap import create_schema, seed_data
 from app.core.config import get_settings
 from app.core.database import SessionLocal
 from app.services.tool_queue import get_tool_queue_worker
-from app.services.observability import ObservationMiddleware, configure_logging
+from app.services.observability import ObservationMiddleware, configure_logging, observation_scope
+from app.services.model_gateway import bind_ledger, persist_run
 from app.services.turn_execution import TurnRuntime
 from app.services.turn_middleware import TurnBudgetMiddleware
 from app.core.privacy_crypto import PrivacyStorageError
@@ -37,11 +38,13 @@ def create_app() -> FastAPI:
     @app.on_event("startup")
     def startup() -> None:
         create_schema()
-        db = SessionLocal()
-        try:
-            seed_data(db)
-        finally:
-            db.close()
+        with observation_scope(ensure_run=True, reuse=False) as observation:
+            bind_ledger(observation, SessionLocal, scope='knowledge_index')
+            with SessionLocal() as db:
+                try:
+                    seed_data(db)
+                finally:
+                    persist_run(observation, finalized=True)
         from app.services.memory import RedisShortTermMemoryStore
         RedisShortTermMemoryStore(get_settings()).upgrade_legacy_cache()
         worker = get_tool_queue_worker(get_settings())
@@ -56,7 +59,7 @@ def create_app() -> FastAPI:
             worker.stop()
 
     app.add_middleware(TurnBudgetMiddleware, settings=get_settings(), runtime=app.state.turn_runtime)
-    app.add_middleware(ObservationMiddleware)
+    app.add_middleware(ObservationMiddleware, session_factory=SessionLocal)
     app.include_router(router)
     static_dir = Path(__file__).resolve().parent / "static"
     app.mount("/", StaticFiles(directory=static_dir, html=True), name="static")

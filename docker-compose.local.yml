@@ -1,0 +1,75 @@
+# Isolated local development services; does not reuse historical project volumes.
+name: mindbridge-local
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: local-root
+      MYSQL_DATABASE: mindbridge
+      MYSQL_USER: mindbridge
+      MYSQL_PASSWORD: mindbridge
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    ports: ["127.0.0.1:23306:3306"]
+    volumes: ["mysql-local:/var/lib/mysql"]
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -plocal-root --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 40
+    restart: unless-stopped
+  redis:
+    image: redis:7.2-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports: ["127.0.0.1:16379:6379"]
+    volumes: ["redis-local:/data"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+  mailpit:
+    image: axllent/mailpit:latest
+    ports: ["127.0.0.1:8025:8025", "127.0.0.1:1025:1025"]
+    environment:
+      MP_DATABASE: /data/mailpit.db
+    volumes: ["mailpit-local:/data"]
+    restart: unless-stopped
+  app:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: mysql+pymysql://mindbridge:mindbridge@mysql:3306/mindbridge?charset=utf8mb4
+      AI_PROVIDER: ${MINDBRIDGE_LOCAL_PROVIDER:-mock}
+      KNOWLEDGE_VECTOR_ENABLED: ${MINDBRIDGE_LOCAL_VECTOR:-false}
+      KNOWLEDGE_VECTOR_REQUIRED: ${MINDBRIDGE_LOCAL_VECTOR:-false}
+      ANONYMIZED_TELEMETRY: "false"
+      REDIS_URL: redis://redis:6379/0
+      SMTP_HOST: mailpit
+      SMTP_PORT: "1025"
+      SMTP_USE_TLS: "false"
+      SMTP_USE_SSL: "false"
+      ALERT_EMAIL_DELIVERY_MODE: smtp
+      EXCEL_PATH: data/mindbridge-risk-ledger.xlsx
+    ports: ["127.0.0.1:8080:8080"]
+    volumes: [".:/app", "app-data-local:/app/data", "harness-local:/app/target/harness"]
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/actuator/health', timeout=3)"]
+      interval: 5s
+      timeout: 5s
+      retries: 40
+      start_period: 30s
+volumes:
+  mysql-local:
+  redis-local:
+  mailpit-local:
+  app-data-local:
+  harness-local:

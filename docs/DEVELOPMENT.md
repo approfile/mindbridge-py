@@ -2,6 +2,8 @@
 
 ## 本机演示
 
+Windows + Docker Desktop 的本机安装、端口、真实 SMTP 收件和验证命令见 [Windows 本机运行](LOCAL-WINDOWS.md)。
+
 Python 3.12，安装 requirements.txt，按[首页](../README.md)的 SQLite + mock 命令启动。Redis 不可用时近期记忆降级；log 预警只记录模拟投递。不要把这些结果当作真实 embedding、SMTP 或模型验证。
 
 真实 API 的聊天和 embedding 配置分开；.env.example 提供空密钥模板。角色级 AGENT_MODEL_* 可覆盖默认 provider/model。可选 Ollama 只需配置 AI_PROVIDER=ollama、OLLAMA_BASE_URL 和本机实际存在的 OLLAMA_MODEL；仓库没有 GGUF 权重。
@@ -39,7 +41,7 @@ scripts/run_agent_results.py、run_agent_layered.py 和 judge_agent_layers.py �
 
 ```bash
 python3.12 -m venv .venv-ragas
-.venv-ragas/bin/pip install -r requirements.txt -r requirements-ragas-evaluation.txt
+.venv-ragas/bin/pip install -r requirements-ragas-evaluation.txt
 .venv-ragas/bin/pip check
 # 先满足上述采样前置条件，生成新的 samples 后：
 .venv-ragas/bin/python scripts/score_ragas_layers.py \
@@ -48,3 +50,13 @@ python3.12 -m venv .venv-ragas
 ```
 
 RAGAS、独立模型评审与真实生成会调用付费 API。该依赖环境与业务环境分开，避免 LangChain 等可选依赖改变线上环境。历史报告公开的是固定合成实验，不含 API 凭据、私有数据库或密钥。
+
+该环境用于给已经采集的 samples 评分；采样与应用运行使用业务环境。
+不要把 `requirements.txt` 和评分依赖合装：业务固定 `pydantic-settings==2.7.1`，而评分侧 `langchain-community==0.3.31` 要求 `>=2.10.1`。
+## 模型用量与缓存
+
+2026-11-01 新增三张元数据账本表，随应用启动自动创建。管理员页面可查看在线用量、按 Agent/阶段汇总与逐轮明细；导出和真实验收命令、价格维护、统计分母见 [模型用量与缓存观测](MODEL-USAGE.md)。缺失用量与未配置价格保留 unknown。
+
+## 系统基准
+
+`scripts/run_system_benchmark.py` 在专用空白 `mindbridge_bench_*` 数据库、Redis db14 与独立子进程中运行，不清理业务数据。`scripts/export_system_benchmark.py` 离线核对试次、账本与真实会话延续，导出公开摘要。完整创建/运行命令、指标口径和已发现问题见 [系统基准](SYSTEM-BENCHMARK.md)。

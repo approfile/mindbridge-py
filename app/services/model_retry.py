@@ -12,6 +12,7 @@ import httpx
 
 from app.services.observability import log_event
 from app.services.turn_budget import checkpoint, current_turn
+from app.services.model_gateway import retry_group
 
 
 def retry_delay(error, attempt, settings):
@@ -39,6 +40,11 @@ def retry_delay(error, attempt, settings):
 
 
 async def retry_transport(operation, settings, *, deadline, stage, events):
+    with retry_group():
+        return await _retry_transport(operation, settings, deadline=deadline, stage=stage, events=events)
+
+
+async def _retry_transport(operation, settings, *, deadline, stage, events):
     for attempt in range(1, settings.model_transport_max_attempts + 1):
         checkpoint()
         try:

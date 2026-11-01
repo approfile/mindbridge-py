@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import time
 from dataclasses import dataclass
 from datetime import datetime
 
@@ -107,7 +108,20 @@ class SessionMemoryService:
         cursor = memory.last_message_id
         # End the state transaction before Redis I/O and model calls.
         self.db.commit()
+        lookup_start = time.perf_counter()
         history, version = self.store.load_snapshot(session.public_id)
+        lookup_ms = (time.perf_counter() - lookup_start) * 1000
+        from app.services.model_gateway import record_cache
+        cache_status = getattr(self.store, 'snapshot_status', 'ok')
+        valid = version == cursor and not (cursor and not history)
+        if cache_status == 'unavailable':
+            record_cache('redis_session_history', bypasses=1, reason='unavailable', duration_ms=lookup_ms)
+        elif cache_status == 'error':
+            record_cache('redis_session_history', errors=1, reason='read_error', duration_ms=lookup_ms)
+        else:
+            record_cache('redis_session_history', hits=int(valid), misses=int(not valid),
+                         reason='version_valid' if valid else 'absent' if version is None else 'stale_or_incomplete',
+                         duration_ms=lookup_ms)
         source = "redis"
         if version != cursor or (cursor and not history):
             rows = self.db.query(ChatMessage).filter(

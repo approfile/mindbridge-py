@@ -1,5 +1,7 @@
 # 评测入口与口径（2026-10-30）
 
+2026-11-01 新增[系统基准](SYSTEM-BENCHMARK.md)与[公开摘要](benchmarks/system-baseline-v1-20261101.json)：冻结 1/2/4 并发、两种编排、费用/缓存、故障及容量探针，共 110 个试次、122 次 HTTP；发现会话记忆死锁与空证据兜底。它保留失败与未知，独立于下方历史分层成绩，不替换原成绩。
+
 当前主报告：[Agent 分层真实评测](agent-layered-evaluation-v1.md)。冻结任务：[60 场景契约](../app/evaluation/data/agent-tasks-v1/CASES.md)。指标：[20 项比率与 10 项分布](agent-metrics-v1.md)。公开提要：[JSON](benchmarks/latest-release-summary.json)。
 
 | 评测 | 结果与范围 |

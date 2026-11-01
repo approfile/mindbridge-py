@@ -11,6 +11,7 @@ from app.core.config import Settings
 from app.models.entities import KnowledgeChunk
 from app.services.observability import timed
 from app.services.turn_budget import bounded_timeout, checkpoint
+from app.services.model_gateway import ModelAttempt, embedding_stage
 
 
 PRIMARY_RETRIEVAL_LABEL = "Chroma vector + BM25 hybrid + local reranker"
@@ -161,19 +162,22 @@ class ChromaKnowledgeStore:
             "input": [text if text.strip() else " " for text in texts],
         }
         headers = {"Authorization": f"Bearer {api_key}"}
-        response = httpx.post(
-            f"{base_url}/embeddings",
-            headers=headers,
-            json=payload,
-            timeout=bounded_timeout(self.settings.embedding_timeout_seconds),
-        )
-        response.raise_for_status()
-        checkpoint()
-        rows = sorted(response.json().get("data", []), key=lambda item: item.get("index", 0))
-        embeddings = [row.get("embedding") for row in rows]
-        if len(embeddings) != len(texts) or any(not embedding for embedding in embeddings):
-            raise VectorStoreUnavailable("OpenAI embeddings 接口返回向量数量不匹配")
-        return [[float(value) for value in embedding] for embedding in embeddings]
+        with ModelAttempt(self.settings, provider='openai', base_url=base_url,
+                          model=self.settings.openai_embedding_model, operation='embedding', stage=embedding_stage()) as attempt:
+            response = httpx.post(
+                f"{base_url}/embeddings", headers=headers, json=payload,
+                timeout=bounded_timeout(self.settings.embedding_timeout_seconds),
+            )
+            attempt.response(response)
+            response.raise_for_status()
+            data = response.json()
+            attempt.capture(data)
+            checkpoint()
+            rows = sorted(data.get("data", []), key=lambda item: item.get("index", 0))
+            embeddings = [row.get("embedding") for row in rows]
+            if len(embeddings) != len(texts) or any(not embedding for embedding in embeddings):
+                raise VectorStoreUnavailable("OpenAI embeddings 接口返回向量数量不匹配")
+            return [[float(value) for value in embedding] for embedding in embeddings]
 
     def _resolve_path(self, value: str) -> Path:
         path = Path(value)

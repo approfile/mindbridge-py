@@ -80,6 +80,7 @@ class RedisShortTermMemoryStore:
         return self._decode(raw_items)
 
     def load_snapshot(self, session_public_id: str) -> tuple[list[AiMessage], int | None]:
+        self.snapshot_status = 'unavailable' if self.client is None else 'ok'
         if self.client is None:
             return [], None
         try:
@@ -90,6 +91,7 @@ class RedisShortTermMemoryStore:
             messages, version = pipe.execute()
             return self._decode(messages), int(version) if version is not None else None
         except Exception as exc:
+            self.snapshot_status = 'error'
             logger.warning("Redis memory snapshot unavailable: %s", exc)
             return [], None
 
