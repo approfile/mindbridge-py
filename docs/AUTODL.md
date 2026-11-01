@@ -52,6 +52,21 @@ bash deploy/autodl/start.sh
 
 只监听服务器回环地址 8000 / 8001，不开公网端口。Key 在 `/root/autodl-tmp/mindbridge-models/service.key`，日志和 manifest 也在该目录。不要把 Key 贴到聊天或 GitHub。启动失败查看 `chat.log` / `embedding.log`，分享前确认没有私有内容。
 
+### FlashInfer 采样器启动失败
+
+如果聊天服务在采样器预热时出现 `FlashInfer requires GPUs with sm75 or higher`，不能仅凭这条错误认定 5090 不受支持。需结合堆栈检查 FlashInfer JIT 与镜像内 CUDA toolkit 的兼容性；目前实例尚未完成真实双服务验收。
+
+本预设默认设置 `VLLM_USE_FLASHINFER_SAMPLER=0`，使用 vLLM 的 PyTorch 原生采样路径，仍然在 GPU 上推理，模型大小与显存预算不变。开关依据 [vLLM 0.29.0 官方说明](https://docs.vllm.ai/en/v0.29.0/configuration/env_vars/)。这属于启动兼容设置，吞吐和延迟仍需后续实测；确认 CUDA toolkit 兼容后可显式设置为 `1` 再对比。
+
+旧版源码包无需重新安装依赖或下载模型，在没有现存 tmux 会话时直接执行：
+
+```bash
+tmux new-session -s mindbridge-models -c /root/autodl-tmp/mindbridge-py \
+  'env -u http_proxy -u https_proxy -u HTTP_PROXY -u HTTPS_PROXY -u all_proxy -u ALL_PROXY VLLM_USE_FLASHINFER_SAMPLER=0 bash deploy/autodl/start.sh; exec bash'
+```
+
+上述命令会创建 tmux 会话并启动服务。等待 `Both services ready` 后，再按一次 Ctrl+B、松开后按 D；若仍失败，在另一个终端查看 `tail -n 100 /root/autodl-tmp/mindbridge-models/chat.log`。新版 readiness 检查始终直连回环地址，避免下载代理接收服务鉴权信息；旧版通过上面命令清除代理变量达到相同目的。
+
 ## 第二步：在你本机建立 SSH 隧道
 
 返回 **Windows 本机 PowerShell**，进入本项目：

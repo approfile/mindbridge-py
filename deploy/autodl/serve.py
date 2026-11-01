@@ -27,7 +27,18 @@ def command(role, model):
                      '--default-chat-template-kwargs', '{"enable_thinking":false}']
 
 
+def service_environment(key):
+    # AutoDL images can expose a CUDA toolkit incompatible with FlashInfer's
+    # sampling JIT on Blackwell. Keep GPU inference, use native sampling first.
+    return {**os.environ, 'VLLM_API_KEY': key, 'HF_HUB_OFFLINE': '1', 'TRANSFORMERS_OFFLINE': '1',
+            'VLLM_NO_USAGE_STATS': '1', 'DO_NOT_TRACK': '1', 'CUDA_VISIBLE_DEVICES': '0',
+            'VLLM_USE_FLASHINFER_SAMPLER': os.environ.get('VLLM_USE_FLASHINFER_SAMPLER', '0')}
+
+
 def wait_ready(process, port, key, timeout=900):
+    # Readiness is loopback-only: never send the private Bearer token to an
+    # HTTP proxy inherited from the platform's model-download accelerator.
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
     deadline = time.monotonic() + timeout
     while time.monotonic() < deadline:
         if process.poll() is not None:
@@ -35,7 +46,7 @@ def wait_ready(process, port, key, timeout=900):
         try:
             request = urllib.request.Request(f'http://127.0.0.1:{port}/v1/models',
                                              headers={'Authorization': f'Bearer {key}'})
-            with urllib.request.urlopen(request, timeout=3) as response:
+            with opener.open(request, timeout=3) as response:
                 if response.status == 200:
                     return
         except (OSError, ValueError):
@@ -56,8 +67,7 @@ def main():
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     except BlockingIOError:
         raise SystemExit('The model supervisor is already running.')
-    env = {**os.environ, 'VLLM_API_KEY': key, 'HF_HUB_OFFLINE': '1', 'TRANSFORMERS_OFFLINE': '1',
-           'VLLM_NO_USAGE_STATS': '1', 'DO_NOT_TRACK': '1', 'CUDA_VISIBLE_DEVICES': '0'}
+    env = service_environment(key)
     children, logs = [], []
 
     def stop(signum, frame):
